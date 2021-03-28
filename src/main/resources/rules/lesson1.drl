@@ -1,0 +1,41 @@
+//created on: 8 mar 2021
+package com.sample
+
+//list any import classes here.
+import com.sample.Account
+import com.sample.CashFlow
+import com.sample.AccountingPeriod
+
+
+//declare any global variables here
+
+
+
+/*rule "Your First Rule"
+
+    when
+    	Account(  )
+        //conditions
+    then
+        System.out.println("rule1: The account exists");
+
+end
+
+rule "Your Second Rule"
+
+    when
+        CashFlow(  )
+    then
+        System.out.println("rule2: The cash flow exists, inserting an account period");
+        AccountingPeriod newPeriod = new AccountingPeriod();
+        insert (newPeriod);
+
+end
+
+rule "Your Third Rule"
+    when
+        AccountingPeriod(  )
+    then
+        System.out.println("rule3: Accounting period exists");
+
+end*/

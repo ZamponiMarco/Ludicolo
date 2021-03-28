@@ -1,0 +1,78 @@
+//created on: 8 mar 2021
+package com.sample
+
+//list any import classes here.
+import com.sample.Account
+import com.sample.CashFlow
+import com.sample.AccountingPeriod
+
+
+//declare any global variables here
+
+
+
+// Step 5.1
+/*rule "Credit rule"
+
+    when
+        $cash : CashFlow(type == CashFlow.CREDIT )
+        $acc : Account(  )
+    then
+    	// If the cashflow is credit update the balance of the account by adding
+    	// the amount of the cashflow
+        $acc.setBalance($acc.getBalance() + $cash.getAmount());
+        System.out.println("Account no " + $acc.getAccountNumber()+ 
+        "has now a balance of " + $acc.getBalance());
+end
+
+// Step 5.2
+rule "Debit rule"
+
+    when
+        $cash :CashFlow(type == CashFlow.DEBIT )
+        $acc : Account(  )
+    then
+        $acc.setBalance($acc.getBalance()-$cash.getAmount());
+        System.out.println("Account no "+$acc.getAccountNumber()+ " has now a balance of "+$acc.getBalance());
+
+end*/
+
+// Step 5.3 rule with accounts numbers bindings
+/*rule "Credit rule with binding"
+
+    when
+        $cash : CashFlow( $no : accountNumber, type == CashFlow.CREDIT )
+        $acc : Account(accountNumber == $no  )
+    then
+		$acc.setBalance($acc.getBalance() + $cash.getAmount());
+        System.out.println("Account no " + $acc.getAccountNumber() + " has now a balance of "+$acc.getBalance());
+
+end*/
+
+// Step 5.4 rules with period bindings
+
+rule "Credit rule"
+
+    when
+        $cash : CashFlow( $aDate : mvtDate, $no : accountNumber, type == CashFlow.CREDIT )
+        $acc : Account(accountNumber == $no  )
+        $period : AccountingPeriod(startDate <= $aDate && endDate >= $aDate)
+    then
+		$acc.setBalance($acc.getBalance() + $cash.getAmount());
+        System.out.println("Account no "+$acc.getAccountNumber() + " has now a balance of "+$acc.getBalance());
+
+end
+
+rule "Debit rule"
+
+    when
+        $cash : CashFlow( $aDate : mvtDate, $no : accountNumber, type == CashFlow.DEBIT )
+        $acc : Account(accountNumber == $no  )
+        $period : AccountingPeriod( startDate <= $aDate && endDate >= $aDate)
+    then
+        $acc.setBalance($acc.getBalance() - $cash.getAmount());
+        System.out.println("Account no " + $acc.getAccountNumber() + " has now a balance of " + $acc.getBalance());
+
+end
+
+
