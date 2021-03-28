@@ -1,4 +1,4 @@
-package sample;
+package it.unicam.lcp.ludicolo;
 
 public class Account {
 	

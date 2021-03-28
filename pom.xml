@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.unicam.lcp</groupId>
-    <artifactId>Ludicolo</artifactId>
+    <artifactId>ludicolo</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
