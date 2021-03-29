@@ -12,8 +12,8 @@ function float calculateBattleStat(int baseStat, int level){
     return ((2*baseStat * level)/100) + 10;
 }
 
-function int calculateDamage(){
-return 0;
+function int calculateDamage(int power){
+    return power;
 }
 
 function float multiplier(int stage){
@@ -43,8 +43,9 @@ then
 
 rule "MovePound"
 when
-    moveAction : MoveAction(moveAction.getMove() == Move.POUND)
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL)
 then
     Utility.helper(drools);
-    System.out.println(moveAction);
+    moveAction.getDefender().setBattleLife(moveAction.getDefender().getBattleLife() - calculateDamage(moveAction.getMove().getPower()));
+    update(moveAction.getDefender())
 end
