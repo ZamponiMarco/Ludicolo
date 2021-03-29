@@ -1,0 +1,50 @@
+//created on: 8 mar 2021
+package rules
+
+//list any import classes here.
+import it.unicam.lcp.lotad.*;
+
+function int calculateBattleLife (int baseLife, int level){
+    return ((2*baseLife * level)/100) + level + 10;
+}
+
+function float calculateBattleStat(int baseStat, int level){
+    return ((2*baseStat * level)/100) + 10;
+}
+
+function int calculateDamage(){
+return 0;
+}
+
+function float multiplier(int stage){
+    return (float) (1.0 + stage*(1.0/2.0));
+}
+
+rule "SetBattleStats"
+salience 90
+when
+    pkmn: Pokemon(!pkmn.isBattleStats())
+then
+    Utility.helper(drools);
+    pkmn.setBattleLife(calculateBattleLife(pkmn.getBaseLife(), pkmn.getLevel()));
+
+    pkmn.setBattleAttack(calculateBattleStat(pkmn.getBaseAttack(), pkmn.getLevel()));
+    pkmn.setBattleDefense(calculateBattleStat(pkmn.getBaseDefense(), pkmn.getLevel()));
+
+    pkmn.setBattleSpeed(calculateBattleStat(pkmn.getBaseSpeed(), pkmn.getLevel()));
+
+    pkmn.setBattleSpecialAttack(calculateBattleStat(pkmn.getBaseSpecialAttack(), pkmn.getLevel()));
+    pkmn.setBattleSpecialDefense(calculateBattleStat(pkmn.getBaseSpecialDefense(), pkmn.getLevel()));
+
+    pkmn.setBattleStats(true);
+    update(pkmn);
+
+ end
+
+rule "MovePound"
+when
+    moveAction : MoveAction(moveAction.getMove() == Move.POUND)
+then
+    Utility.helper(drools);
+    System.out.println(moveAction);
+end
