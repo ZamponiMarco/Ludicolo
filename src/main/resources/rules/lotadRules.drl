@@ -8,17 +8,18 @@ function int calculateBattleLife (int baseLife, int level){
     return ((2*baseLife * level)/100) + level + 10;
 }
 
-function float calculateBattleStat(int baseStat, int level){
-    return ((2*baseStat * level)/100) + 10;
+function int calculateBattleStat(int baseStat, int level){
+    return Math.round(((2*baseStat * level)/100) + 10);
 }
 
-function int calculateDamage(int power){
-    return power;
+function int calculateDamage(int level, int power, int attack, int defense){
+    return Math.round(((((((2*level)/5)+2)*power)*(attack/defense))/50)+2);
 }
 
-function float multiplier(int stage){
-    return (float) (1.0 + stage*(1.0/2.0));
-}
+/*function int multiplier(int stage){
+    float fStage = (float) stage;
+    return Math.round((1.0 + fStage*(1.0/2.0)));
+}*/
 
 rule "SetBattleStats"
 salience 90
@@ -41,11 +42,24 @@ then
 
  end
 
-rule "MovePound"
+rule "PhysicalMove"
 when
     moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL)
 then
     Utility.helper(drools);
-    moveAction.getDefender().setBattleLife(moveAction.getDefender().getBattleLife() - calculateDamage(moveAction.getMove().getPower()));
+    System.out.println("Damage");
+    System.out.println(calculateDamage(moveAction.getAttacker().getLevel(), moveAction.getMove().getPower(), moveAction.getAttacker().getBattleAttack(), moveAction.getDefender().getBattleDefense()));
+    moveAction.getDefender().setBattleLife(moveAction.getDefender().getBattleLife() - calculateDamage(moveAction.getAttacker().getLevel(), moveAction.getMove().getPower(), moveAction.getAttacker().getBattleAttack(), moveAction.getDefender().getBattleDefense()));
+    update(moveAction.getDefender())
+end
+
+rule "SpecialMove"
+when
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL)
+then
+    Utility.helper(drools);
+    System.out.println("Damage");
+    System.out.println(calculateDamage(moveAction.getAttacker().getLevel(), moveAction.getMove().getPower(), moveAction.getAttacker().getBattleSpecialAttack(), moveAction.getDefender().getBattleSpecialDefense()));
+    moveAction.getDefender().setBattleLife(moveAction.getDefender().getBattleLife() - calculateDamage(moveAction.getAttacker().getLevel(), moveAction.getMove().getPower(), moveAction.getAttacker().getBattleSpecialAttack(), moveAction.getDefender().getBattleSpecialDefense()));
     update(moveAction.getDefender())
 end

@@ -19,11 +19,11 @@ public class Pokemon {
 
     private boolean battleStats;
     private int battleLife;
-    private float battleAttack;
-    private float battleDefense;
-    private float battleSpecialAttack;
-    private float battleSpecialDefense;
-    private float battleSpeed;
+    private int battleAttack;
+    private int battleDefense;
+    private int battleSpecialAttack;
+    private int battleSpecialDefense;
+    private int battleSpeed;
 
     public Pokemon(String name, List<Move> learnedMoves, int level, int baseLife, int baseAttack, int baseDefense, int baseSpecialAttack, int baseSpecialDefense, int baseSpeed) {
         this.name = name;
@@ -91,43 +91,43 @@ public class Pokemon {
         this.battleLife = battleLife;
     }
 
-    public float getBattleAttack() {
+    public int getBattleAttack() {
         return battleAttack;
     }
 
-    public void setBattleAttack(float battleAttack) {
+    public void setBattleAttack(int battleAttack) {
         this.battleAttack = battleAttack;
     }
 
-    public float getBattleDefense() {
+    public int getBattleDefense() {
         return battleDefense;
     }
 
-    public void setBattleDefense(float battleDefense) {
+    public void setBattleDefense(int battleDefense) {
         this.battleDefense = battleDefense;
     }
 
-    public float getBattleSpecialAttack() {
+    public int getBattleSpecialAttack() {
         return battleSpecialAttack;
     }
 
-    public void setBattleSpecialAttack(float battleSpecialAttack) {
+    public void setBattleSpecialAttack(int battleSpecialAttack) {
         this.battleSpecialAttack = battleSpecialAttack;
     }
 
-    public float getBattleSpecialDefense() {
+    public int getBattleSpecialDefense() {
         return battleSpecialDefense;
     }
 
-    public void setBattleSpecialDefense(float battleSpecialDefense) {
+    public void setBattleSpecialDefense(int battleSpecialDefense) {
         this.battleSpecialDefense = battleSpecialDefense;
     }
 
-    public float getBattleSpeed() {
+    public int getBattleSpeed() {
         return battleSpeed;
     }
 
-    public void setBattleSpeed(float battleSpeed) {
+    public void setBattleSpeed(int battleSpeed) {
         this.battleSpeed = battleSpeed;
     }
 

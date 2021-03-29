@@ -23,11 +23,11 @@ public class Main {
             Pokemon pokeTwo = new Pokemon("Two", moves, 5, 10, 10, 10, 10, 10, 10);
 
             Action moveAction = new MoveAction(Move.POUND, pokeOne, pokeTwo);
-
+            Action moveActionTwo = new MoveAction(Move.RAZOR_WIND, pokeTwo, pokeOne);
             kSession.insert(pokeOne);
             kSession.insert(pokeTwo);
             kSession.insert(moveAction);
-
+            kSession.insert(moveActionTwo);
             kSession.fireAllRules();
         } catch (Throwable t) {
             t.printStackTrace();
