@@ -19,16 +19,32 @@ public class Main {
 
             List<Move> moves = Lists.newArrayList(Move.POUND, Move.RAZOR_WIND, Move.SWORDS_DANCE);
 
-            Pokemon pokeOne = new Pokemon("One", moves, 5, 10, 10, 10, 10, 10, 10);
-            Pokemon pokeTwo = new Pokemon("Two", moves, 5, 10, 10, 10, 10, 10, 10);
 
-            Action moveAction = new MoveAction(Move.POUND, pokeOne, pokeTwo);
-            Action moveActionTwo = new MoveAction(Move.RAZOR_WIND, pokeTwo, pokeOne);
+            Pokemon pokeOne = new Pokemon("One", moves, 5, 10, 10, 10, 10, 10, 10);
+            Pokemon pokeTwo = new Pokemon("Two", moves, 5, 10, 10, 10, 10, 10, 100);
+
+            Player playerOne = new Player("PlayerOne", Lists.newArrayList(pokeOne));
+            Player playerTwo = new Player("PlayerTwo", Lists.newArrayList(pokeTwo));
+
             kSession.insert(pokeOne);
             kSession.insert(pokeTwo);
-            kSession.insert(moveAction);
+
+            Action moveAction = new MoveAction(playerOne, Move.POUND, pokeTwo);
+            Action moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, pokeOne);
+
             kSession.insert(moveActionTwo);
+            kSession.insert(moveAction);
+
+
+            Battle battle = new Battle();
+            battle.setPlayerOne(playerOne);
+            battle.setPlayerTwo(playerTwo);
+            battle.setActionsFired(false);
+
+            kSession.insert(battle);
+
             kSession.fireAllRules();
+
         } catch (Throwable t) {
             t.printStackTrace();
         }

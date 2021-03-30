@@ -2,13 +2,12 @@ package it.unicam.lcp.lotad;
 
 public class MoveAction extends Action {
     private Move move;
-    private Pokemon attacker;
-    private Pokemon defender;
+    private Pokemon target;
 
-    public MoveAction(Move move, Pokemon attacker, Pokemon defender) {
+    public MoveAction(Player player, Move move, Pokemon target) {
+        super(player);
         this.move = move;
-        this.attacker = attacker;
-        this.defender = defender;
+        this.target = target;
     }
 
     public Move getMove() {
@@ -19,28 +18,21 @@ public class MoveAction extends Action {
         this.move = move;
     }
 
-    public Pokemon getAttacker() {
-        return attacker;
+
+
+    public Pokemon getTarget() {
+        return target;
     }
 
-    public void setAttacker(Pokemon attacker) {
-        this.attacker = attacker;
-    }
-
-    public Pokemon getDefender() {
-        return defender;
-    }
-
-    public void setDefender(Pokemon defender) {
-        this.defender = defender;
+    public void setTarget(Pokemon target) {
+        this.target = target;
     }
 
     @Override
     public String toString() {
         return "MoveAction{" +
                 "move=" + move +
-                ", attacker=" + attacker +
-                ", defender=" + defender +
+                ", defender=" + target +
                 '}';
     }
 }
