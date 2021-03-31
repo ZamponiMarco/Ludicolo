@@ -32,14 +32,14 @@ public class Main {
             Action moveAction = new MoveAction(playerOne, Move.POUND, pokeTwo);
             Action moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, pokeOne);
 
-            kSession.insert(moveActionTwo);
             kSession.insert(moveAction);
+            kSession.insert(moveActionTwo);
+
 
 
             Battle battle = new Battle();
             battle.setPlayerOne(playerOne);
             battle.setPlayerTwo(playerTwo);
-            battle.setActionsFired(false);
 
             kSession.insert(battle);
 

@@ -44,48 +44,75 @@ then
 
 rule "DefineOrder"
 when
-    battle: Battle(!battle.actionsFired)
-    playerOneAction: Action(playerOneAction.source == battle.playerOne, !playerOneAction.readyToFire)
-    playerTwoAction: Action(playerTwoAction.source == battle.playerTwo, !playerTwoAction.readyToFire)
+    playerOneAction: Action(!playerOneAction.readyToFire, !playerOneAction.fired)
+    playerTwoAction: Action(!playerTwoAction.readyToFire, !playerTwoAction.fired, playerTwoAction.source != playerOneAction.source)
 then
     Utility.helper(drools);
+
     if(playerOneAction.getSource().getCurrentPokemon().getBattleSpeed() > playerTwoAction.getSource().getCurrentPokemon().getBattleSpeed()){
+
         playerOneAction.setReadyToFire(true);
         update(playerOneAction);
-
-        playerTwoAction.setReadyToFire(true);
-        update(playerTwoAction);
     }  else {
         playerTwoAction.setReadyToFire(true);
         update(playerTwoAction);
-
-        playerOneAction.setReadyToFire(true);
-        update(playerOneAction);
   }
-
-    battle.setActionsFired(true);
-    update(battle);
 end
+
+rule "SetupNextAction"
+    salience 10
+when
+    firstAction : Action(firstAction.readyToFire, firstAction.fired)
+    secondAction : Action(!secondAction.readyToFire, !secondAction.fired)
+then
+    Utility.helper(drools);
+    secondAction.setReadyToFire(true);
+    update(secondAction);
+ end
+
+rule "EndAction"
+    salience 9
+when
+    actionDone : Action(actionDone.readyToFire, actionDone.fired)
+then
+    Utility.helper(drools);
+    retract(actionDone);
+ end
 
 
 rule "PhysicalMove"
 when
-    moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.readyToFire)
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.readyToFire, !moveAction.fired)
 then
     Utility.helper(drools);
-    System.out.println("Damage");
-    System.out.println(calculateDamage(moveAction.getSource().getCurrentPokemon().getLevel(), moveAction.getMove().getPower(), moveAction.getSource().getCurrentPokemon().getBattleAttack(), moveAction.getTarget().getBattleDefense()));
+
     moveAction.getTarget().setBattleLife(moveAction.getTarget().getBattleLife() - calculateDamage(moveAction.getSource().getCurrentPokemon().getLevel(), moveAction.getMove().getPower(), moveAction.getSource().getCurrentPokemon().getBattleAttack(), moveAction.getTarget().getBattleDefense()));
-    update(moveAction.getTarget())
+
+    update(moveAction.getTarget());
+
+        moveAction.setFired(true);
+        update(moveAction);
 end
 
 rule "SpecialMove"
 when
-    moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.readyToFire)
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.readyToFire, !moveAction.fired)
 then
     Utility.helper(drools);
-    System.out.println("Damage");
-    System.out.println(calculateDamage(moveAction.getSource().getCurrentPokemon().getLevel(), moveAction.getMove().getPower(), moveAction.getSource().getCurrentPokemon().getBattleSpecialAttack(), moveAction.getTarget().getBattleSpecialDefense()));
+
     moveAction.getTarget().setBattleLife(moveAction.getTarget().getBattleLife() - calculateDamage(moveAction.getSource().getCurrentPokemon().getLevel(), moveAction.getMove().getPower(), moveAction.getSource().getCurrentPokemon().getBattleSpecialAttack(), moveAction.getTarget().getBattleSpecialDefense()));
-    update(moveAction.getTarget())
+
+
+    update(moveAction.getTarget());
+
+        moveAction.setFired(true);
+        update(moveAction);
 end
+
+rule "TurnReady"
+when
+    not Action()
+then
+    Utility.helper(drools);
+    System.out.println("There are no actions left: ready for the next turn");
+ end

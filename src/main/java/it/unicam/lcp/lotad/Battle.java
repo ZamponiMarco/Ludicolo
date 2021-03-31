@@ -18,20 +18,11 @@ public class Battle {
         this.playerTwo = playerTwo;
     }
 
-    public boolean isActionsFired() {
-        return actionsFired;
-    }
-
-    public void setActionsFired(boolean actionsFired) {
-        this.actionsFired = actionsFired;
-    }
 
     private Player playerOne;
     private Player playerTwo;
 
     private boolean hasStarted;
-
-    private boolean actionsFired;
 
     public boolean isHasStarted() {
         return hasStarted;
@@ -47,7 +38,6 @@ public class Battle {
                 "playerOne=" + playerOne +
                 ", playerTwo=" + playerTwo +
                 ", hasStarted=" + hasStarted +
-                ", actionsFired=" + actionsFired +
                 '}';
     }
 }

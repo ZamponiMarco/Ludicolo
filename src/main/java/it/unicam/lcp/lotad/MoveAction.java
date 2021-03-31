@@ -32,7 +32,11 @@ public class MoveAction extends Action {
     public String toString() {
         return "MoveAction{" +
                 "move=" + move +
-                ", defender=" + target +
+                ", target=" + target +
+                ", readyToFire=" + readyToFire +
+                ", fired=" + fired +
+                ", source=" + source +
                 '}';
     }
+
 }
