@@ -42,20 +42,42 @@ then
 
  end
 
-rule "DefineOrder"
+
+rule "ItemActionPriority"
+    salience 80
 when
-    playerOneAction: Action(!playerOneAction.readyToFire, !playerOneAction.fired)
-    playerTwoAction: Action(!playerTwoAction.readyToFire, !playerTwoAction.fired, playerTwoAction.source != playerOneAction.source)
+    itemAction: ItemAction(!itemAction.readyToFire, !itemAction.fired)
+then
+Utility.helper(drools);
+    itemAction.setReadyToFire(true);
+    update(itemAction);
+end
+
+rule "SwapActionPriority"
+     salience 80
+when
+     swapAction: SwapAction(!swapAction.readyToFire, !swapAction.fired)
+then
+Utility.helper(drools);
+     swapAction.setReadyToFire(true);
+     update(swapAction);
+end
+
+rule "MoveActionsPriority"
+    salience 80
+when
+    playerOneMoveAction: MoveAction(!playerOneMoveAction.readyToFire, !playerOneMoveAction.fired)
+    playerTwoMoveAction: MoveAction(!playerTwoMoveAction.readyToFire, !playerTwoMoveAction.fired, playerTwoMoveAction.source != playerOneMoveAction.source)
 then
     Utility.helper(drools);
 
-    if(playerOneAction.getSource().getCurrentPokemon().getBattleSpeed() > playerTwoAction.getSource().getCurrentPokemon().getBattleSpeed()){
+    if(playerOneMoveAction.getSource().getCurrentPokemon().getBattleSpeed() > playerTwoMoveAction.getSource().getCurrentPokemon().getBattleSpeed()){
 
-        playerOneAction.setReadyToFire(true);
-        update(playerOneAction);
+        playerOneMoveAction.setReadyToFire(true);
+        update(playerOneMoveAction);
     }  else {
-        playerTwoAction.setReadyToFire(true);
-        update(playerTwoAction);
+        playerTwoMoveAction.setReadyToFire(true);
+        update(playerTwoMoveAction);
   }
 end
 
@@ -80,7 +102,7 @@ then
  end
 
 
-rule "PhysicalMove"
+rule "PhysicalMoveActionFire"
 when
     moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.readyToFire, !moveAction.fired)
 then
@@ -94,7 +116,7 @@ then
         update(moveAction);
 end
 
-rule "SpecialMove"
+rule "SpecialMoveActionFire"
 when
     moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.readyToFire, !moveAction.fired)
 then
@@ -107,6 +129,30 @@ then
 
         moveAction.setFired(true);
         update(moveAction);
+end
+
+rule "ItemActionFire"
+
+when
+itemAction: ItemAction(itemAction.readyToFire, !itemAction.fired)
+then
+    Utility.helper(drools);
+    System.out.println("Item action fired");
+
+    itemAction.setFired(true);
+    update(itemAction)
+end
+
+rule "SwapActionFire"
+
+when
+swapAction: SwapAction(swapAction.readyToFire, !swapAction.fired)
+then
+    Utility.helper(drools);
+    System.out.println("Swap action fired");
+
+    swapAction.setFired(true);
+    update(swapAction)
 end
 
 rule "TurnReady"
