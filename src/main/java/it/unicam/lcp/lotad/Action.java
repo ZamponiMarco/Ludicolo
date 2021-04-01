@@ -2,32 +2,21 @@ package it.unicam.lcp.lotad;
 
 public abstract class Action implements Comparable<Action> {
 
-    protected boolean readyToFire;
-
-    protected boolean fired;
+    protected ActionStatus status;
 
     protected final Player source;
 
     public Action(Player source) {
         this.source = source;
-        this.readyToFire = false;
-        this.fired = false;
+        this.status = ActionStatus.DEFINED;
     }
 
-    public boolean isReadyToFire() {
-        return readyToFire;
+    public ActionStatus getStatus() {
+        return status;
     }
 
-    public void setReadyToFire(boolean readyToFire) {
-        this.readyToFire = readyToFire;
-    }
-
-    public boolean isFired() {
-        return fired;
-    }
-
-    public void setFired(boolean fired) {
-        this.fired = fired;
+    public void setStatus(ActionStatus status) {
+        this.status = status;
     }
 
     public Player getSource() {

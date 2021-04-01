@@ -10,6 +10,7 @@ import java.util.stream.Collectors
 import java.util.AbstractMap
 import it.unicam.lcp.lotad.Stat
 import java.lang.Integer;
+import java.util.HashMap;
 
 function int calculateBattleLife (int baseLife, int level){
     return ((2*baseLife * level)/100) + level + 10;
@@ -28,76 +29,108 @@ function int calculateDamage(int level, int power, int attack, int defense){
     return Math.round((1.0 + fStage*(1.0/2.0)));
 }*/
 
+
 rule "SetBattleStats"
-salience 90
+salience 100
 when
     pkmn: Pokemon(!pkmn.battleStatsComputed)
 then
     Utility.helper(drools);
 
-    Map<Stat, Integer> battleStats = pkmn.getBattleStats();
-    battleStats.put(Stat.LIFE, calculateBattleLife(pkmn.getBaseStats().get(Stat.LIFE), pkmn.getLevel()));
-    battleStats.put(Stat.ATTACK, calculateBattleStat(pkmn.getBaseStats().get(Stat.ATTACK), pkmn.getLevel()));
-    battleStats.put(Stat.DEFENSE, calculateBattleStat(pkmn.getBaseStats().get(Stat.DEFENSE), pkmn.getLevel()));
-    battleStats.put(Stat.SPECIAL_ATTACK, calculateBattleStat(pkmn.getBaseStats().get(Stat.SPECIAL_ATTACK), pkmn.getLevel()));
-    battleStats.put(Stat.SPECIAL_DEFENSE, calculateBattleStat(pkmn.getBaseStats().get(Stat.SPECIAL_DEFENSE), pkmn.getLevel()));
-    battleStats.put(Stat.SPEED, calculateBattleStat(pkmn.getBaseStats().get(Stat.SPEED), pkmn.getLevel()));
+    Map<Stat, Integer> lifeStats = new HashMap<>();
+    lifeStats.put(Stat.LIFE, calculateBattleLife(pkmn.getBaseStatValue(Stat.LIFE), pkmn.getLevel()));
+    pkmn.setBattleStat(lifeStats);
+    pkmn.setStage(lifeStats);
+
+    Map<Stat, Integer> battleStats = new HashMap<>();
+    battleStats.put(Stat.ATTACK, calculateBattleStat(pkmn.getBaseStatValue(Stat.ATTACK), pkmn.getLevel()));
+    battleStats.put(Stat.DEFENSE, calculateBattleStat(pkmn.getBaseStatValue(Stat.DEFENSE), pkmn.getLevel()));
+    battleStats.put(Stat.SPECIAL_ATTACK, calculateBattleStat(pkmn.getBaseStatValue(Stat.SPECIAL_ATTACK), pkmn.getLevel()));
+    battleStats.put(Stat.SPECIAL_DEFENSE, calculateBattleStat(pkmn.getBaseStatValue(Stat.SPECIAL_DEFENSE), pkmn.getLevel()));
+    battleStats.put(Stat.SPEED, calculateBattleStat(pkmn.getBaseStatValue(Stat.SPEED), pkmn.getLevel()));
+    pkmn.setBattleStat(battleStats);
 
     pkmn.setBattleStatsComputed(true);
     update(pkmn);
 end
 
+rule "PokemonFaintedWithMove"
+salience 90
+when
+    toRemove: Pokemon(toRemove.getStageValue(Stat.LIFE) == 0)
+    toRemovePlayer: Player(toRemovePlayer.getCurrentPokemon() == toRemove)
+    toRemoveAction: Action(toRemoveAction.source == toRemovePlayer)
+then
+Utility.helper(drools);
+    System.out.println(toRemove + "HAS FAINTED");
+    toRemovePlayer.addFainted(toRemovePlayer.getCurrentPokemon());
+    retract(toRemove);
+    retract(toRemoveAction);
+ end
+
+rule "PokemonFainted"
+salience 89
+when
+    toRemove: Pokemon(toRemove.getStageValue(Stat.LIFE) == 0)
+    toRemovePlayer: Player(toRemovePlayer.getCurrentPokemon() == toRemove)
+then
+Utility.helper(drools);
+    System.out.println(toRemove + "HAS FAINTED");
+    toRemovePlayer.addFainted(toRemovePlayer.getCurrentPokemon());
+    retract(toRemove);
+ end
+
+
 
 rule "ItemActionPriority"
     salience 80
 when
-    itemAction: ItemAction(!itemAction.readyToFire, !itemAction.fired)
+    itemAction: ItemAction(itemAction.status == ActionStatus.DEFINED)
 then
 Utility.helper(drools);
-    itemAction.setReadyToFire(true);
+    itemAction.setStatus(ActionStatus.READYTOFIRE);
     update(itemAction);
 end
 
 rule "SwapActionPriority"
      salience 80
 when
-     swapAction: SwapAction(!swapAction.readyToFire, !swapAction.fired)
+     swapAction: SwapAction(swapAction.status == ActionStatus.DEFINED)
 then
 Utility.helper(drools);
-     swapAction.setReadyToFire(true);
+    swapAction.setStatus(ActionStatus.READYTOFIRE);
      update(swapAction);
 end
 
 rule "MoveActionsPriority"
     salience 80
 when
-    playerOneMoveAction: MoveAction(!playerOneMoveAction.readyToFire, !playerOneMoveAction.fired)
-    playerTwoMoveAction: MoveAction(!playerTwoMoveAction.readyToFire, !playerTwoMoveAction.fired,
+    playerOneMoveAction: MoveAction(playerOneMoveAction.status == ActionStatus.DEFINED)
+    playerTwoMoveAction: MoveAction(playerTwoMoveAction.status == ActionStatus.DEFINED,
         playerTwoMoveAction.source != playerOneMoveAction.source)
 then
     Utility.helper(drools);
-    Action priorityAction = Comparator.<MoveAction>comparingInt(move -> move.getSource().getCurrentPokemon().
-    getBattleStats().get(Stat.SPEED)).
+    Action priorityAction = Comparator.<MoveAction>comparingInt(move -> move.getSource().getCurrentPokemon().getBattleStatValue(Stat.SPEED)).
         compare(playerOneMoveAction, playerTwoMoveAction) > 0 ? playerOneMoveAction : playerTwoMoveAction;
-        priorityAction.setReadyToFire(true);
+        priorityAction.setStatus(ActionStatus.READYTOFIRE);
         update(priorityAction);
 end
 
 rule "SetupNextAction"
     salience 10
 when
-    firstAction : Action(firstAction.readyToFire, firstAction.fired)
-    secondAction : Action(!secondAction.readyToFire, !secondAction.fired)
+    firstAction : Action(firstAction.status == ActionStatus.FIRED)
+    secondAction : Action(secondAction.status == ActionStatus.DEFINED)
 then
     Utility.helper(drools);
-    secondAction.setReadyToFire(true);
+    secondAction.setStatus(ActionStatus.READYTOFIRE);
     update(secondAction);
  end
 
 rule "EndAction"
     salience 9
 when
-    actionDone : Action(actionDone.readyToFire, actionDone.fired)
+    actionDone : Action(actionDone.status == ActionStatus.FIRED)
 then
     Utility.helper(drools);
     retract(actionDone);
@@ -106,66 +139,89 @@ then
 
 rule "PhysicalMoveActionFire"
 when
-    moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.readyToFire, !moveAction.fired)
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.status == ActionStatus.READYTOFIRE)
 then
     Utility.helper(drools);
 
-    moveAction.getTarget().getBattleStats().put(Stat.LIFE, moveAction.getTarget().getBattleStats().get(Stat.LIFE) -
-        calculateDamage(moveAction.getSource().getCurrentPokemon().getLevel(), moveAction.getMove().getPower(),
-        moveAction.getSource().getCurrentPokemon().getBattleStats().get(Stat.ATTACK), moveAction.getTarget().
-        getBattleStats().get(Stat.DEFENSE)));
+    Map<Stat, Integer> lifeStageStats = new HashMap<>();
+    int targetLife = moveAction.getTarget().getCurrentPokemon().getStageValue(Stat.LIFE);
+    int dmg = calculateDamage(
+            moveAction.getSource().getCurrentPokemon().getLevel(),
+            moveAction.getMove().getPower(),
+            moveAction.getSource().getCurrentPokemon().getBattleStatValue(Stat.ATTACK),
+            moveAction.getTarget().getCurrentPokemon().getBattleStatValue(Stat.DEFENSE));
+    lifeStageStats.put(Stat.LIFE, (targetLife - dmg) < 0 ? 0 : (targetLife - dmg));
 
-    update(moveAction.getTarget());
+    moveAction.getTarget().getCurrentPokemon().setStage(lifeStageStats);
 
-    moveAction.setFired(true);
+    update(moveAction.getTarget().getCurrentPokemon());
+
+    moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
 end
 
 rule "SpecialMoveActionFire"
 when
-    moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.readyToFire, !moveAction.fired)
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.status == ActionStatus.READYTOFIRE)
 then
     Utility.helper(drools);
 
-    moveAction.getTarget().getBattleStats().put(Stat.LIFE, moveAction.getTarget().getBattleStats().get(Stat.LIFE) -
-        calculateDamage(moveAction.getSource().getCurrentPokemon().getLevel(), moveAction.getMove().getPower(),
-        moveAction.getSource().getCurrentPokemon().getBattleStats().get(Stat.SPECIAL_ATTACK), moveAction.getTarget().
-        getBattleStats().get(Stat.SPECIAL_DEFENSE)));
+    Map<Stat, Integer> lifeStageStats = new HashMap<>();
+    int targetLife = moveAction.getTarget().getCurrentPokemon().getStageValue(Stat.LIFE);
+    int dmg = calculateDamage(
+            moveAction.getSource().getCurrentPokemon().getLevel(),
+            moveAction.getMove().getPower(),
+            moveAction.getSource().getCurrentPokemon().getBattleStatValue(Stat.SPECIAL_ATTACK),
+            moveAction.getTarget().getCurrentPokemon().getBattleStatValue(Stat.SPECIAL_DEFENSE));
+    lifeStageStats.put(Stat.LIFE, (targetLife - dmg) < 0 ? 0 : (targetLife - dmg));
 
-    update(moveAction.getTarget());
+    moveAction.getTarget().getCurrentPokemon().setStage(lifeStageStats);
 
-    moveAction.setFired(true);
+    update(moveAction.getTarget().getCurrentPokemon());
+
+    moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
 end
 
 rule "ItemActionFire"
 
 when
-    itemAction: ItemAction(itemAction.readyToFire, !itemAction.fired)
+    itemAction: ItemAction(itemAction.status == ActionStatus.READYTOFIRE)
 then
     Utility.helper(drools);
     System.out.println("Item action fired");
 
-    itemAction.setFired(true);
+    itemAction.setStatus(ActionStatus.FIRED);
     update(itemAction)
 end
 
 rule "SwapActionFire"
 
 when
-    swapAction: SwapAction(swapAction.readyToFire, !swapAction.fired)
+    swapAction: SwapAction(swapAction.status == ActionStatus.READYTOFIRE)
 then
     Utility.helper(drools);
     System.out.println("Swap action fired");
-
-    swapAction.setFired(true);
+    swapAction.setStatus(ActionStatus.FIRED);
     update(swapAction)
 end
-
+ rule "PlayerLose"
+ salience 110
+ when
+     losingPlayer: Player(losingPlayer.areAllFainted())
+     winningPlayer: Player(!winningPlayer.areAllFainted())
+     leftAction: Action()
+ then
+     Utility.helper(drools);
+     retract(leftAction);
+  end
 rule "TurnReady"
+    salience 109
 when
     not Action()
 then
     Utility.helper(drools);
     System.out.println("There are no actions left: ready for the next turn");
  end
+
+

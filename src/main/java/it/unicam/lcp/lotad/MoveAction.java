@@ -3,9 +3,9 @@ package it.unicam.lcp.lotad;
 public class MoveAction extends Action {
 
     private Move move;
-    private Pokemon target;
+    private Player target;
 
-    public MoveAction(Player player, Move move, Pokemon target) {
+    public MoveAction(Player player, Move move, Player target) {
         super(player);
         this.move = move;
         this.target = target;
@@ -19,11 +19,11 @@ public class MoveAction extends Action {
         this.move = move;
     }
 
-    public Pokemon getTarget() {
+    public Player getTarget() {
         return target;
     }
 
-    public void setTarget(Pokemon target) {
+    public void setTarget(Player target) {
         this.target = target;
     }
 
@@ -32,10 +32,8 @@ public class MoveAction extends Action {
         return "MoveAction{" +
                 "move=" + move +
                 ", target=" + target +
-                ", readyToFire=" + readyToFire +
-                ", fired=" + fired +
+                ", status=" + status +
                 ", source=" + source +
                 '}';
     }
-
 }

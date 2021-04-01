@@ -14,21 +14,21 @@ public class Utility {
 
             // Listen to the update event
             public void objectUpdated(ObjectUpdatedEvent arg0) {
-                System.out.println("*****Object Updated*****\n"
+                System.out.println("_______Object Updated__________________________________________________________\n"
                         +arg0.getObject().toString());
                 System.out.println();
             }
 
             // Listen to the insert event
             public void objectInserted(ObjectInsertedEvent arg0) {
-                System.out.println("*****Object inserted***** \n"
+                System.out.println("_______Object Inserted__________________________________________________________\n"
                         + arg0.getObject().toString());
                 System.out.println();
             }
 
             // Listen to the delete event
             public void objectDeleted(ObjectDeletedEvent arg0) {
-                System.out.println("*****Object Retracted*****\n"
+                System.out.println("_______Object Retracted__________________________________________________________\n"
                         + arg0.getOldObject().toString());
                 System.out.println();
             }
@@ -41,11 +41,11 @@ public class Utility {
 
     public static void help(final KnowledgeHelper drools, final String message){
         System.out.println(message);
-        System.out.println("*****Rule triggered*****\n" + drools.getRule().getName());
+        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName());
         System.out.println();
     }
     public static void helper(final KnowledgeHelper drools){
-        System.out.println("*****Rule triggered*****\n" + drools.getRule().getName());
+        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName());
         System.out.println();
     }
 

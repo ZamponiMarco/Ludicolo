@@ -4,7 +4,7 @@ package it.unicam.lcp.lotad;
 public enum Move {
 
     POUND(MoveType.PHYSICAL, Type.NORMAL, 35, 40, 100),
-    RAZOR_WIND(MoveType.SPECIAL, Type.NORMAL, 10, 80, 100),
+    RAZOR_WIND(MoveType.SPECIAL, Type.NORMAL, 10, 800, 100),
     SWORDS_DANCE(MoveType.STATUS, Type.NORMAL, 20, -1, -1);
 
     private Move(MoveType moveType, Type type, int pp, int power, int accuracy) {

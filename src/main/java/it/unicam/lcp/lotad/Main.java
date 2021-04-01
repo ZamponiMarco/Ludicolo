@@ -30,25 +30,29 @@ public class Main {
             pokeOneStats.put(Stat.SPECIAL_ATTACK, 10);
             pokeOneStats.put(Stat.SPECIAL_DEFENSE, 10);
             pokeOneStats.put(Stat.SPEED, 10);
-            Pokemon pokeOne = new Pokemon("One", moves, 5, pokeOneStats);
+            Pokemon pokeOne = new Pokemon("Nidorino", moves, 5, pokeOneStats);
 
             Map<Stat, Integer> pokeTwoStats = Maps.newEnumMap(Stat.class);
-            pokeTwoStats.put(Stat.LIFE, 10);
+            pokeTwoStats.put(Stat.LIFE, 100);
             pokeTwoStats.put(Stat.ATTACK, 12);
             pokeTwoStats.put(Stat.DEFENSE, 8);
             pokeTwoStats.put(Stat.SPECIAL_ATTACK, 12);
             pokeTwoStats.put(Stat.SPECIAL_DEFENSE, 8);
-            pokeTwoStats.put(Stat.SPEED, 20);
-            Pokemon pokeTwo = new Pokemon("Two", moves, 5, pokeTwoStats);
+            pokeTwoStats.put(Stat.SPEED, 200);
+            Pokemon pokeTwo = new Pokemon("Gengar", moves, 5, pokeTwoStats);
 
-            Player playerOne = new Player("PlayerOne", Lists.newArrayList(pokeOne));
-            Player playerTwo = new Player("PlayerTwo", Lists.newArrayList(pokeTwo));
+            Player playerOne = new Player("Red", Lists.newArrayList(pokeOne));
+            Player playerTwo = new Player("Blue", Lists.newArrayList(pokeTwo));
+
+            kSession.insert(playerOne);
+            kSession.insert(playerTwo);
 
             kSession.insert(pokeOne);
             kSession.insert(pokeTwo);
 
-            Action moveAction = new MoveAction(playerOne, Move.POUND, pokeTwo);
-            Action moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, pokeOne);
+
+            Action moveAction = new MoveAction(playerOne, Move.POUND, playerTwo);
+            Action moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne);
 
             kSession.insert(moveAction);
             kSession.insert(moveActionTwo);

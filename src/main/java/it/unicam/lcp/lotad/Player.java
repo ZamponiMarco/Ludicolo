@@ -1,15 +1,18 @@
 package it.unicam.lcp.lotad;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
     private String name;
     private List<Pokemon> pokemonTeam;
+    private List<Pokemon> faintedPokemon;
     private int currentPokemon;
 
     public Player(String name, List<Pokemon> pokemonTeam) {
         this.name = name;
         this.pokemonTeam = pokemonTeam;
+        this.faintedPokemon = new ArrayList<>();
         this.currentPokemon = 0;
     }
 
@@ -35,6 +38,14 @@ public class Player {
 
     public void setCurrentPokemon(int currentPokemon) {
         this.currentPokemon = currentPokemon;
+    }
+
+    public void addFainted(Pokemon fainted){
+        this.faintedPokemon.add(fainted);
+    }
+
+    public boolean areAllFainted(){
+        return this.faintedPokemon.containsAll(this.pokemonTeam);
     }
 
     @Override
