@@ -7,15 +7,6 @@ public class Player {
     private List<Pokemon> pokemonTeam;
     private int currentPokemon;
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "name='" + name + '\'' +
-                ", pokemonTeam=" + pokemonTeam +
-                ", currentPokemon=" + currentPokemon +
-                '}';
-    }
-
     public Player(String name, List<Pokemon> pokemonTeam) {
         this.name = name;
         this.pokemonTeam = pokemonTeam;
@@ -44,5 +35,14 @@ public class Player {
 
     public void setCurrentPokemon(int currentPokemon) {
         this.currentPokemon = currentPokemon;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", pokemonTeam=" + pokemonTeam +
+                ", currentPokemon=" + currentPokemon +
+                '}';
     }
 }

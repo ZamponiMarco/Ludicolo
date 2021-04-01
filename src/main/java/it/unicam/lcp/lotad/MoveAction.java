@@ -1,6 +1,7 @@
 package it.unicam.lcp.lotad;
 
 public class MoveAction extends Action {
+
     private Move move;
     private Pokemon target;
 
@@ -17,8 +18,6 @@ public class MoveAction extends Action {
     public void setMove(Move move) {
         this.move = move;
     }
-
-
 
     public Pokemon getTarget() {
         return target;

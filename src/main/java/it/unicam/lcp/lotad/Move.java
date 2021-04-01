@@ -14,11 +14,12 @@ public enum Move {
         this.power = power;
         this.accuracy = accuracy;
     }
-    private MoveType moveType;
-    private Type type;
-    private int maxPp;
-    private int power;
-    private int accuracy;
+
+    private final MoveType moveType;
+    private final Type type;
+    private final int maxPp;
+    private final int power;
+    private final int accuracy;
 
     public MoveType getMoveType() {
         return moveType;

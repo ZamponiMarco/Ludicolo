@@ -2,6 +2,11 @@ package it.unicam.lcp.lotad;
 
 public class Battle {
 
+    private Player playerOne;
+    private Player playerTwo;
+
+    private boolean hasStarted;
+
     public Player getPlayerOne() {
         return playerOne;
     }
@@ -17,12 +22,6 @@ public class Battle {
     public void setPlayerTwo(Player playerTwo) {
         this.playerTwo = playerTwo;
     }
-
-
-    private Player playerOne;
-    private Player playerTwo;
-
-    private boolean hasStarted;
 
     public boolean isHasStarted() {
         return hasStarted;
