@@ -87,7 +87,7 @@ rule "ItemActionPriority"
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.DEFINED)
 then
-Utility.helper(drools);
+    Utility.helper(drools);
     itemAction.setStatus(ActionStatus.READYTOFIRE);
     update(itemAction);
 end
@@ -98,7 +98,7 @@ when
      swapAction: SwapAction(swapAction.status == ActionStatus.DEFINED)
 then
 Utility.helper(drools);
-    swapAction.setStatus(ActionStatus.READYTOFIRE);
+     swapAction.setStatus(ActionStatus.READYTOFIRE);
      update(swapAction);
 end
 
@@ -110,10 +110,11 @@ when
         playerTwoMoveAction.source != playerOneMoveAction.source)
 then
     Utility.helper(drools);
-    Action priorityAction = Comparator.<MoveAction>comparingInt(move -> move.getSource().getCurrentPokemon().getBattleStatValue(Stat.SPEED)).
+    MoveAction priorityAction = Comparator.<MoveAction>comparingInt(action -> action.getMove().getPriority()).
+        thenComparingInt(move -> move.getSource().getCurrentPokemon().getBattleStatValue(Stat.SPEED)).
         compare(playerOneMoveAction, playerTwoMoveAction) > 0 ? playerOneMoveAction : playerTwoMoveAction;
-        priorityAction.setStatus(ActionStatus.READYTOFIRE);
-        update(priorityAction);
+    priorityAction.setStatus(ActionStatus.READYTOFIRE);
+    update(priorityAction);
 end
 
 rule "SetupNextAction"
@@ -205,16 +206,18 @@ then
     swapAction.setStatus(ActionStatus.FIRED);
     update(swapAction)
 end
- rule "PlayerLose"
- salience 110
- when
+
+rule "PlayerLose"
+    salience 110
+when
      losingPlayer: Player(losingPlayer.areAllFainted())
      winningPlayer: Player(!winningPlayer.areAllFainted())
      leftAction: Action()
  then
      Utility.helper(drools);
      retract(leftAction);
-  end
+end
+
 rule "TurnReady"
     salience 109
 when

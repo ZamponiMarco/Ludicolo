@@ -2,9 +2,8 @@ package it.unicam.lcp.lotad;
 
 public abstract class Action implements Comparable<Action> {
 
-    protected ActionStatus status;
-
     protected final Player source;
+    protected ActionStatus status;
 
     public Action(Player source) {
         this.source = source;
@@ -23,9 +22,11 @@ public abstract class Action implements Comparable<Action> {
         return source;
     }
 
+    protected abstract ActionPriority getActionPriority();
+
     @Override
     public int compareTo(Action action) {
-        return 0;
+        return getActionPriority().compareTo(action.getActionPriority());
     }
 
 

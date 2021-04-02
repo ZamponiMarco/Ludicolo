@@ -4,7 +4,7 @@ package it.unicam.lcp.lotad;
 public enum Type {
     NORMAL, FIGHTING, FLYING, POISON, GROUND, ROCK, BUG, GHOST, STEEL, FIRE, WATER, GRASS, ELECTRIC, PSYCHIC, ICE,
         DRAGON, DARK, FAIRY;
-    
+
 public static double[][] damageMatrix = new double[][]{
         {1, 1, 1, 1, 1, .5, 1, 0, .5, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         {2, 1, .5, .5, 1, 2, .5, 0, 2, 1, 1, 1, 1, .5, 2, 1, 2, .5},

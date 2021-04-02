@@ -36,4 +36,9 @@ public class MoveAction extends Action {
                 ", source=" + source +
                 '}';
     }
+
+    @Override
+    protected ActionPriority getActionPriority() {
+        return ActionPriority.LOW;
+    }
 }
