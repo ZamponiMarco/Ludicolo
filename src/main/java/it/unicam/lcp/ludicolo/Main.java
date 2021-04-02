@@ -1,13 +1,16 @@
-package it.unicam.lcp.lotad;
+package it.unicam.lcp.ludicolo;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import it.unicam.lcp.ludicolo.actions.Action;
+import it.unicam.lcp.ludicolo.actions.moves.Move;
+import it.unicam.lcp.ludicolo.actions.moves.MoveAction;
+import it.unicam.lcp.ludicolo.pkmn.Pokemon;
+import it.unicam.lcp.ludicolo.pkmn.Stat;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +27,7 @@ public class Main {
             List<Move> moves = Lists.newArrayList(Move.POUND, Move.RAZOR_WIND, Move.SWORDS_DANCE, Move.SUCKER_PUNCH);
 
             Map<Stat, Integer> pokeOneStats = Maps.newEnumMap(Stat.class);
-            pokeOneStats.put(Stat.LIFE, 10);
+            pokeOneStats.put(Stat.LIFE, 100);
             pokeOneStats.put(Stat.ATTACK, 10);
             pokeOneStats.put(Stat.DEFENSE, 10);
             pokeOneStats.put(Stat.SPECIAL_ATTACK, 10);
@@ -51,12 +54,11 @@ public class Main {
             kSession.insert(pokeTwo);
 
 
-            Action moveAction = new MoveAction(playerOne, Move.SUCKER_PUNCH, playerTwo);
+            Action moveAction = new MoveAction(playerOne, Move.SNARL, playerTwo);
             Action moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne);
 
             kSession.insert(moveAction);
             kSession.insert(moveActionTwo);
-
 
 
             Battle battle = new Battle();

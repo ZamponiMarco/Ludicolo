@@ -1,4 +1,6 @@
-package it.unicam.lcp.lotad;
+package it.unicam.lcp.ludicolo;
+
+import it.unicam.lcp.ludicolo.pkmn.Pokemon;
 
 import java.util.ArrayList;
 import java.util.List;

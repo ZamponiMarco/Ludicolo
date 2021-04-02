@@ -1,0 +1,210 @@
+
+package rules
+
+//list any import classes here.
+import java.util.Comparator
+import it.unicam.lcp.ludicolo.*
+import it.unicam.lcp.ludicolo.Utility
+import it.unicam.lcp.ludicolo.pkmn.Stat
+import it.unicam.lcp.ludicolo.actions.moves.MoveAction
+import it.unicam.lcp.ludicolo.actions.moves.MoveType
+import it.unicam.lcp.ludicolo.actions.moves.SideEffectType
+import it.unicam.lcp.ludicolo.actions.ActionStatus
+import it.unicam.lcp.ludicolo.pkmn.Pokemon
+import it.unicam.lcp.ludicolo.actions.items.ItemAction
+import it.unicam.lcp.ludicolo.actions.Action
+import java.util.HashMap
+import java.util.Map
+import java.util.Random
+
+
+function int calculateDamage(int level, int power, int attack, int defense){
+    return Math.round(((((((2*level)/5.0f)+2)*power)*(attack/defense))/50)+2);
+}
+
+rule "AccuracyCheck"
+    salience 60
+when
+    moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+then
+    Utility.helper(drools);
+    int accuracy = moveAction.getMove().getAccuracy();
+    int randomValue = new Random().nextInt(100) + 1;
+    System.out.println(randomValue + "/" + accuracy);
+    if(randomValue > accuracy){
+        moveAction.setStatus(ActionStatus.FAILED);
+        update(moveAction);
+    };
+ end
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+rule "PhysicalMoveActionFire"
+    salience 50
+when
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.status == ActionStatus.READYTOFIRE)
+then
+    Utility.helper(drools);
+
+    Map<Stat, Integer> lifeStageStats = new HashMap<>();
+    int targetLife = moveAction.getTarget().getCurrentPokemon().getStageValue(Stat.LIFE);
+    int dmg = calculateDamage(
+            moveAction.getSource().getCurrentPokemon().getLevel(),
+            moveAction.getMove().getPower(),
+            moveAction.getSource().getCurrentPokemon().getBattleStatValue(Stat.ATTACK),
+            moveAction.getTarget().getCurrentPokemon().getBattleStatValue(Stat.DEFENSE));
+    lifeStageStats.put(Stat.LIFE, (targetLife - dmg) < 0 ? 0 : (targetLife - dmg));
+    System.out.println("DMG: "+dmg);
+    moveAction.getTarget().getCurrentPokemon().setStage(lifeStageStats);
+
+    update(moveAction.getTarget().getCurrentPokemon());
+
+    moveAction.setStatus(ActionStatus.FIRED);
+    update(moveAction);
+end
+
+rule "SpecialMoveActionFire"
+    salience 50
+when
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.status == ActionStatus.READYTOFIRE)
+then
+    Utility.helper(drools);
+
+    Map<Stat, Integer> lifeStageStats = new HashMap<>();
+    int targetLife = moveAction.getTarget().getCurrentPokemon().getStageValue(Stat.LIFE);
+    int dmg = calculateDamage(
+            moveAction.getSource().getCurrentPokemon().getLevel(),
+            moveAction.getMove().getPower(),
+            moveAction.getSource().getCurrentPokemon().getBattleStatValue(Stat.SPECIAL_ATTACK),
+            moveAction.getTarget().getCurrentPokemon().getBattleStatValue(Stat.SPECIAL_DEFENSE));
+    System.out.println("DMG: "+dmg);
+    lifeStageStats.put(Stat.LIFE, (targetLife - dmg) < 0 ? 0 : (targetLife - dmg));
+
+    moveAction.getTarget().getCurrentPokemon().setStage(lifeStageStats);
+
+    update(moveAction.getTarget().getCurrentPokemon());
+
+    moveAction.setStatus(ActionStatus.FIRED);
+    update(moveAction);
+end
+
+rule "StatusMoveActionFire"
+    salience 50
+when
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.STATUS, moveAction.status == ActionStatus.READYTOFIRE)
+then
+    Utility.helper(drools);
+
+    moveAction.setStatus(ActionStatus.FIRED);
+    update(moveAction);
+end
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+rule "SourceStageIncreaseEffect"
+    salience 40
+when
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.SOURCE_STAGE_INCREASE))
+then
+    Utility.helper(drools);
+ end
+
+rule "SourceStageDecreaseEffect"
+    salience 40
+when
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.SOURCE_STAGE_DECREASE))
+then
+    Utility.helper(drools);
+ end
+
+rule "TargetStageIncreaseEffect"
+    salience 40
+when
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.TARGET_STAGE_INCREASE))
+then
+    Utility.helper(drools);
+ end
+
+rule "TargetStageDecreaseEffect"
+    salience 40
+when
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.TARGET_STAGE_DECREASE))
+then
+    Utility.helper(drools);
+ end
+
+
+//Tentennamento
+rule "FlinchEffect"
+    salience 40
+when
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.FLINCH))
+then
+    Utility.helper(drools);
+ end
+
+//Bruciatura
+rule "BurnEffect"
+    salience 40
+when
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.BURN))
+then
+    Utility.helper(drools);
+ end
+
+ //Congelamento
+ rule "FreezeEffect"
+     salience 40
+ when
+     moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.FREEZE))
+ then
+     Utility.helper(drools);
+  end
+
+  //Paralisi
+rule "ParalysisEffect"
+  salience 40
+when
+  moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.PARALYSIS))
+then
+  Utility.helper(drools);
+end
+
+   //Confusione
+rule "ConfusionEffect"
+   salience 40
+when
+   moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.CONFUSION))
+then
+   Utility.helper(drools);
+end
+
+   //Addormentamento
+rule "SleepEffect"
+   salience 40
+when
+   moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.SLEEP))
+then
+   Utility.helper(drools);
+end
+
+   //Avvelenamento
+rule "PoisonEffect"
+   salience 40
+when
+   moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.POISON))
+then
+   Utility.helper(drools);
+end
+
+   //Iperavvelenamento
+rule "BadPoisonEffect"
+   salience 40
+when
+   moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.BAD_POISON))
+then
+   Utility.helper(drools);
+end

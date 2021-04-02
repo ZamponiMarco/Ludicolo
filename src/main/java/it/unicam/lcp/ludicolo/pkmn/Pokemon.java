@@ -1,7 +1,8 @@
-package it.unicam.lcp.lotad;
+package it.unicam.lcp.ludicolo.pkmn;
 
 
 import com.google.common.collect.Maps;
+import it.unicam.lcp.ludicolo.actions.moves.Move;
 
 import java.util.List;
 import java.util.Map;

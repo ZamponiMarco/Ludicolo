@@ -1,4 +1,6 @@
-package it.unicam.lcp.lotad;
+package it.unicam.lcp.ludicolo.actions;
+
+import it.unicam.lcp.ludicolo.Player;
 
 public abstract class Action implements Comparable<Action> {
 

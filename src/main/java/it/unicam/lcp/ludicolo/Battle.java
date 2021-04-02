@@ -1,4 +1,4 @@
-package it.unicam.lcp.lotad;
+package it.unicam.lcp.ludicolo;
 
 public class Battle {
 

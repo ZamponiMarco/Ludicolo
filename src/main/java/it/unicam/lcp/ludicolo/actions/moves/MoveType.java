@@ -1,4 +1,4 @@
-package it.unicam.lcp.lotad;
+package it.unicam.lcp.ludicolo.actions.moves;
 
 public enum MoveType {
     PHYSICAL, STATUS, SPECIAL

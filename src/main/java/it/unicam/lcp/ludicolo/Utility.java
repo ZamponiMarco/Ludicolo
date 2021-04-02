@@ -1,4 +1,4 @@
-package it.unicam.lcp.lotad;
+package it.unicam.lcp.ludicolo;
 
 import org.drools.core.spi.KnowledgeHelper;
 import org.kie.api.event.rule.ObjectDeletedEvent;

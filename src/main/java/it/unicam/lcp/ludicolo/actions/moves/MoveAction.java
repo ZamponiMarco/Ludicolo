@@ -1,4 +1,8 @@
-package it.unicam.lcp.lotad;
+package it.unicam.lcp.ludicolo.actions.moves;
+
+import it.unicam.lcp.ludicolo.Player;
+import it.unicam.lcp.ludicolo.actions.Action;
+import it.unicam.lcp.ludicolo.actions.ActionPriority;
 
 public class MoveAction extends Action {
 

@@ -1,4 +1,4 @@
-package it.unicam.lcp.lombre;
+package it.unicam.lcp.ludicolo.actions;
 
 public enum PlayerChoice {
     MOVE, POKEMON, BAG
