@@ -2,7 +2,6 @@ package it.unicam.lcp.ludicolo.actions.moves;
 
 import it.unicam.lcp.ludicolo.Player;
 import it.unicam.lcp.ludicolo.actions.Action;
-import it.unicam.lcp.ludicolo.actions.ActionPriority;
 
 public class MoveAction extends Action {
 
@@ -42,7 +41,7 @@ public class MoveAction extends Action {
     }
 
     @Override
-    protected ActionPriority getActionPriority() {
-        return ActionPriority.LOW;
+    protected int getActionPriority() {
+        return move.getPriority();
     }
 }

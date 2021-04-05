@@ -2,6 +2,8 @@ package it.unicam.lcp.ludicolo.actions;
 
 import it.unicam.lcp.ludicolo.Player;
 
+import java.util.Comparator;
+
 public abstract class Action implements Comparable<Action> {
 
     protected final Player source;
@@ -24,11 +26,11 @@ public abstract class Action implements Comparable<Action> {
         return source;
     }
 
-    protected abstract ActionPriority getActionPriority();
+    protected abstract int getActionPriority();
 
     @Override
     public int compareTo(Action action) {
-        return getActionPriority().compareTo(action.getActionPriority());
+        return getActionPriority() - action.getActionPriority();
     }
 
 

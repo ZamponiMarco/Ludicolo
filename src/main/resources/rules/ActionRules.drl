@@ -10,35 +10,15 @@ import it.unicam.lcp.ludicolo.actions.ActionStatus
 import it.unicam.lcp.ludicolo.actions.items.ItemAction
 import it.unicam.lcp.ludicolo.actions.Action
 
-rule "ItemActionPriority"
-    salience 80
-when
-    itemAction: ItemAction(itemAction.status == ActionStatus.DEFINED)
-then
-    Utility.helper(drools);
-    itemAction.setStatus(ActionStatus.READYTOFIRE);
-    update(itemAction);
-end
-
-rule "SwapActionPriority"
-     salience 80
-when
-     swapAction: SwapAction(swapAction.status == ActionStatus.DEFINED)
-then
-Utility.helper(drools);
-     swapAction.setStatus(ActionStatus.READYTOFIRE);
-     update(swapAction);
-end
-
 rule "MoveActionsPriority"
     salience 80
 when
-    playerOneMoveAction: MoveAction(playerOneMoveAction.status == ActionStatus.DEFINED)
-    playerTwoMoveAction: MoveAction(playerTwoMoveAction.status == ActionStatus.DEFINED,
+    playerOneMoveAction: Action(playerOneMoveAction.status == ActionStatus.DEFINED)
+    playerTwoMoveAction: Action(playerTwoMoveAction.status == ActionStatus.DEFINED,
         playerTwoMoveAction.source != playerOneMoveAction.source)
 then
     Utility.helper(drools);
-    MoveAction priorityAction = Comparator.<MoveAction>comparingInt(action -> action.getMove().getPriority()).
+        Action priorityAction = Comparator.<Action, Action>comparing(action -> action).
         thenComparingInt(move -> move.getSource().getCurrentPokemon().getBattleStatValue(Stat.SPEED)).
         compare(playerOneMoveAction, playerTwoMoveAction) > 0 ? playerOneMoveAction : playerTwoMoveAction;
     priorityAction.setStatus(ActionStatus.READYTOFIRE);

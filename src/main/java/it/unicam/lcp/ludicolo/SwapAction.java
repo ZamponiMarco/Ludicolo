@@ -1,7 +1,6 @@
 package it.unicam.lcp.ludicolo;
 
 import it.unicam.lcp.ludicolo.actions.Action;
-import it.unicam.lcp.ludicolo.actions.ActionPriority;
 
 public class SwapAction extends Action {
     public SwapAction(Player source) {
@@ -9,7 +8,7 @@ public class SwapAction extends Action {
     }
 
     @Override
-    protected ActionPriority getActionPriority() {
-        return ActionPriority.HIGH;
+    protected int getActionPriority() {
+        return 9;
     }
 }

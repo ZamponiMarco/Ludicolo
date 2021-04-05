@@ -3,6 +3,7 @@ package it.unicam.lcp.ludicolo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import it.unicam.lcp.ludicolo.actions.Action;
+import it.unicam.lcp.ludicolo.actions.items.ItemAction;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
 import it.unicam.lcp.ludicolo.actions.moves.MoveAction;
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
@@ -52,7 +53,6 @@ public class Main {
 
             kSession.insert(pokeOne);
             kSession.insert(pokeTwo);
-
 
             Action moveAction = new MoveAction(playerOne, Move.SNARL, playerTwo);
             Action moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne);
