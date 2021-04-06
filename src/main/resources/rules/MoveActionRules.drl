@@ -31,10 +31,10 @@ then
     int accuracy = moveAction.getMove().getAccuracy();
     int randomValue = new Random().nextInt(100) + 1;
     System.out.println(randomValue + "/" + accuracy);
-    if(randomValue > accuracy){
+    if(randomValue > accuracy) {
         moveAction.setStatus(ActionStatus.FAILED);
         update(moveAction);
-    };
+    }
  end
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
