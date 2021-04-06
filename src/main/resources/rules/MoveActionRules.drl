@@ -54,7 +54,7 @@ then
             moveAction.getMove().getPower(),
             moveAction.getSource().getCurrentPokemon().getBattleStatValue(Stat.ATTACK),
             moveAction.getTarget().getCurrentPokemon().getBattleStatValue(Stat.DEFENSE));
-    lifeStageStats.put(Stat.LIFE, (targetLife - dmg) < 0 ? 0 : (targetLife - dmg));
+    lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
     System.out.println("DMG: "+dmg);
     moveAction.getTarget().getCurrentPokemon().setStage(lifeStageStats);
 
@@ -79,7 +79,7 @@ then
             moveAction.getSource().getCurrentPokemon().getBattleStatValue(Stat.SPECIAL_ATTACK),
             moveAction.getTarget().getCurrentPokemon().getBattleStatValue(Stat.SPECIAL_DEFENSE));
     System.out.println("DMG: "+dmg);
-    lifeStageStats.put(Stat.LIFE, (targetLife - dmg) < 0 ? 0 : (targetLife - dmg));
+    lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
 
     moveAction.getTarget().getCurrentPokemon().setStage(lifeStageStats);
 
@@ -104,37 +104,21 @@ end
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-rule "SourceStageIncreaseEffect"
+rule "StageIncreaseEffect"
     salience 40
 when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.SOURCE_STAGE_INCREASE))
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.STAGE_INCREASE))
 then
     Utility.helper(drools);
- end
+end
 
-rule "SourceStageDecreaseEffect"
+rule "StageDecreaseEffect"
     salience 40
 when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.SOURCE_STAGE_DECREASE))
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.STAGE_DECREASE))
 then
     Utility.helper(drools);
- end
-
-rule "TargetStageIncreaseEffect"
-    salience 40
-when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.TARGET_STAGE_INCREASE))
-then
-    Utility.helper(drools);
- end
-
-rule "TargetStageDecreaseEffect"
-    salience 40
-when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.TARGET_STAGE_DECREASE))
-then
-    Utility.helper(drools);
- end
+end
 
 
 //Tentennamento
