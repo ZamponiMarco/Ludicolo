@@ -14,7 +14,7 @@ public class Pokemon {
 
     private final int level;
 
-    private final Map<Stat, StatValues> life;
+    private final StatValues life;
 
     private final Map<Stat, StatValues> stats;
 
@@ -25,12 +25,10 @@ public class Pokemon {
         this.learnedMoves = learnedMoves.stream().collect(Collectors.toMap(move -> move, Move::getMaxPp));
         this.level = level;
         this.battleStatsComputed = false;
-        this.life = Maps.newEnumMap(Stat.class);
+        this.life = new StatValues(baseStats.get(Stat.LIFE));
         this.stats = Maps.newEnumMap(Stat.class);
         for (Map.Entry<Stat, Integer> entry : baseStats.entrySet()) {
-            if (entry.getKey() == Stat.LIFE) {
-                this.life.put(entry.getKey(), new StatValues(entry.getValue()));
-            } else {
+            if (entry.getKey() != Stat.LIFE) {
                 this.stats.put(entry.getKey(), new StatValues(entry.getValue()));
             }
         }
@@ -49,15 +47,15 @@ public class Pokemon {
     }
 
     public int getBaseStatValue(Stat stat) {
-        return stat == Stat.LIFE ? this.life.get(stat).getBaseValue() : this.stats.get(stat).getBaseValue();
+        return stat == Stat.LIFE ? this.life.getBaseValue() : this.stats.get(stat).getBaseValue();
     }
 
     public int getBattleStatValue(Stat stat) {
-        return stat == Stat.LIFE ? this.life.get(stat).getBattleValue() : this.stats.get(stat).getBattleValue();
+        return stat == Stat.LIFE ? this.life.getBattleValue() : this.stats.get(stat).getBattleValue();
     }
 
     public int getStageValue(Stat stat) {
-        return stat == Stat.LIFE ? this.life.get(stat).getStage() : this.stats.get(stat).getStage();
+        return stat == Stat.LIFE ? this.life.getStage() : this.stats.get(stat).getStage();
     }
 
     public boolean isBattleStatsComputed() {
@@ -71,7 +69,7 @@ public class Pokemon {
     public void setBattleStat(Map<Stat, Integer> battleStats) {
         for (Map.Entry<Stat, Integer> entry : battleStats.entrySet()) {
             if (entry.getKey() == Stat.LIFE) {
-                this.life.get(entry.getKey()).setBattleValue(entry.getValue());
+                this.life.setBattleValue(entry.getValue());
             } else {
                 this.stats.get(entry.getKey()).setBattleValue(entry.getValue());
             }
@@ -81,7 +79,7 @@ public class Pokemon {
     public void setStage(Map<Stat, Integer> stageMultipliers) {
         for (Map.Entry<Stat, Integer> entry : stageMultipliers.entrySet()) {
             if (entry.getKey() == Stat.LIFE) {
-                this.life.get(entry.getKey()).setStage(entry.getValue());
+                this.life.setStage(entry.getValue());
             } else {
                 this.stats.get(entry.getKey()).setStage(entry.getValue());
             }
@@ -91,17 +89,17 @@ public class Pokemon {
     @Override
     public String toString() {
         return String.format(
-                        "\n%s\n" +
+                "\n%s\n" +
                         "[Lv.: %d ♥ %d/%d] \n" +
                         "\tLIFE:  %d → %d\n" +
                         "\tATTACK:  %d → %d [%d]\n" +
                         "\tDEFENSE: %d → %d [%d]\n" +
                         "\tSP. ATK: %d → %d [%d]\n" +
                         "\tSP. DEF: %d → %d [%d]\n" +
-                        "\tSPEED:   %d → %d [%d]\n", name,this.level, life.get(Stat.LIFE).getStage(), life.get(Stat.LIFE).getBattleValue(),  life.get(Stat.LIFE).getBaseValue(), life.get(Stat.LIFE).getBattleValue(),
+                        "\tSPEED:   %d → %d [%d]\n", name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
                 stats.get(Stat.ATTACK).getBaseValue(), stats.get(Stat.ATTACK).getBattleValue(), stats.get(Stat.ATTACK).getStage(), stats.get(Stat.DEFENSE).getBaseValue(),
                 stats.get(Stat.DEFENSE).getBattleValue(), stats.get(Stat.DEFENSE).getStage(), stats.get(Stat.SPECIAL_ATTACK).getBaseValue(), stats.get(Stat.SPECIAL_ATTACK).getBattleValue(), stats.get(Stat.SPECIAL_ATTACK).getStage(),
-                stats.get(Stat.SPECIAL_DEFENSE).getBaseValue(), stats.get(Stat.SPECIAL_DEFENSE).getBattleValue(), stats.get(Stat.SPECIAL_DEFENSE).getStage(),stats.get(Stat.SPEED).getBaseValue(),
+                stats.get(Stat.SPECIAL_DEFENSE).getBaseValue(), stats.get(Stat.SPECIAL_DEFENSE).getBattleValue(), stats.get(Stat.SPECIAL_DEFENSE).getStage(), stats.get(Stat.SPEED).getBaseValue(),
                 stats.get(Stat.SPEED).getBattleValue(), stats.get(Stat.SPEED).getStage());
     }
 }
