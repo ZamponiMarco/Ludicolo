@@ -10,7 +10,7 @@ import it.unicam.lcp.ludicolo.actions.ActionStatus
 import it.unicam.lcp.ludicolo.actions.items.ItemAction
 import it.unicam.lcp.ludicolo.actions.Action
 
-rule "MoveActionsPriority"
+rule "ActionsPriority"
     salience 80
 when
     playerOneMoveAction: Action(playerOneMoveAction.status == ActionStatus.DEFINED)

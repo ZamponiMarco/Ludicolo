@@ -8,7 +8,6 @@ import it.unicam.lcp.ludicolo.Utility
 import it.unicam.lcp.ludicolo.pkmn.Stat
 import it.unicam.lcp.ludicolo.actions.moves.MoveAction
 import it.unicam.lcp.ludicolo.actions.moves.MoveType
-import it.unicam.lcp.ludicolo.actions.moves.SideEffectType
 import it.unicam.lcp.ludicolo.actions.ActionStatus
 import it.unicam.lcp.ludicolo.pkmn.Pokemon
 import it.unicam.lcp.ludicolo.actions.items.ItemAction
@@ -106,26 +105,30 @@ end
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-rule "StageIncreaseEffect"
+// TODO: Marco sistemare
+rule "StageEffect"
     salience 40
 when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsSideEffect(SideEffectType.STAGE))
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsStageSideEffect())
 then
     Utility.helper(drools);
-    SideEffectTarget target = moveAction.getMove().getSideEffectByType(SideEffectType.STAGE).getTarget();
-    Map<Stat, Integer> stages = new HashMap<>();
-    StageSideEffect stageSideEffect = ((StageSideEffect)moveAction.getMove().getSideEffectByType(SideEffectType.STAGE));
-    stages.put(stageSideEffect.getTargetStat(), stageSideEffect.getNumberOfStages());
-    if (target.equals(SideEffectTarget.TARGET)) {
-        moveAction.getTarget().getCurrentPokemon().setStage(stages);
-        update(moveAction.getTarget().getCurrentPokemon());
-    } else {
-        moveAction.getSource().getCurrentPokemon().setStage(stages);
-        update(moveAction.getSource().getCurrentPokemon());
-    }
+    moveAction.getMove().getStageSideEffects().forEach(stageSideEffect -> {
+        SideEffectTarget target = stageSideEffect.getTarget();
+        Map<Stat, Integer> stages = new HashMap<>();
+        stages.put(stageSideEffect.getTargetStat(), stageSideEffect.getNumberOfStages());
+        if (target.equals(SideEffectTarget.TARGET)) {
+           moveAction.getTarget().getCurrentPokemon().setStage(stages);
+        } else {
+            moveAction.getSource().getCurrentPokemon().setStage(stages);
+        }
+    });
+    update(moveAction.getTarget().getCurrentPokemon());
+    update(moveAction.getSource().getCurrentPokemon());
 end
 
+// Francesco: Una sola regola con lo switch
 //Tentennamento
+/*
 rule "FlinchEffect"
     salience 40
 when
@@ -196,3 +199,4 @@ when
 then
    Utility.helper(drools);
 end
+*/

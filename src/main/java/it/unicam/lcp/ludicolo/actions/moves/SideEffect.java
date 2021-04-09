@@ -1,18 +1,12 @@
 package it.unicam.lcp.ludicolo.actions.moves;
 
-public class SideEffect {
-    protected final SideEffectType type;
+public abstract class SideEffect {
     protected final SideEffectTarget target;
     protected final int chance;
 
-    public SideEffect(SideEffectType type, int chance, SideEffectTarget target) {
-        this.type = type;
+    public SideEffect(int chance, SideEffectTarget target) {
         this.chance = chance;
         this.target = target;
-    }
-
-    public SideEffectType getType() {
-        return type;
     }
 
     public SideEffectTarget getTarget() {
