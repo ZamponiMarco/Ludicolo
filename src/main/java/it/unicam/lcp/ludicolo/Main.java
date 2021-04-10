@@ -55,7 +55,7 @@ public class Main {
             kSession.insert(pokeTwo);
 
             Action moveAction = new MoveAction(playerOne, Move.SNARL, playerTwo);
-            Action moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne);
+            Action moveActionTwo = new MoveAction(playerTwo, Move.CONFUSE_RAY, playerOne);
 
             kSession.insert(moveAction);
             kSession.insert(moveActionTwo);

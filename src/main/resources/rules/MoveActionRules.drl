@@ -27,9 +27,9 @@ function int calculateDamage(int level, int power, int attack, int defense){
 }
 
 function boolean probabilityCheck(int probability){
-    int randomValue = new Random().nextInt(100) + 1;
+    int randomValue = new Random().nextInt(100);
     System.out.println(randomValue + "/" + probability);
-    return (randomValue <= probability);
+    return randomValue < probability;
 }
 
 
@@ -154,7 +154,7 @@ when
 then
     Utility.helper(drools);
     moveAction.getMove().getStatusSideEffects().forEach(effect -> {
-        if(probabilityCheck(effect.getChance())){
+        if(new Random().nextInt(100) < effect.getChance()){
             Pokemon target = effect.getTarget() == SideEffectTarget.SOURCE ? sourcePokemon : effect.getTarget() == SideEffectTarget.TARGET ? targetPokemon : null;
             if(target.getStatus() == null){
                  target.setStatus(effect.getStatus());
