@@ -2,6 +2,7 @@ package it.unicam.lcp.ludicolo.pkmn;
 
 
 import com.google.common.collect.Maps;
+import it.unicam.lcp.ludicolo.Player;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
 
 import java.util.List;
@@ -9,16 +10,34 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Pokemon {
+
+    private Player owner;
+
     private final String name;
     private final Map<Move, Integer> learnedMoves;
-
     private final int level;
-
     private final StatValues life;
-
     private final Map<Stat, StatValues> stats;
-
     private boolean battleStatsComputed;
+
+    private PokemonStatus status;
+    private int statusDuration;
+
+    public PokemonStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PokemonStatus status) {
+        this.status = status;
+    }
+
+    public int getStatusDuration() {
+        return statusDuration;
+    }
+
+    public void setStatusDuration(int statusDuration) {
+        this.statusDuration = statusDuration;
+    }
 
     public Pokemon(String name, List<Move> learnedMoves, int level, Map<Stat, Integer> baseStats) {
         this.name = name;
@@ -32,6 +51,14 @@ public class Pokemon {
                 this.stats.put(entry.getKey(), new StatValues(entry.getValue()));
             }
         }
+    }
+
+    public void setOwner(Player owner){
+        this.owner = owner;
+    }
+
+    public Player getOwner() {
+        return owner;
     }
 
     public String getName() {

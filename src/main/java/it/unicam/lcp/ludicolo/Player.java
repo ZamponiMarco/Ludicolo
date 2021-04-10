@@ -14,6 +14,7 @@ public class Player {
     public Player(String name, List<Pokemon> pokemonTeam) {
         this.name = name;
         this.pokemonTeam = pokemonTeam;
+        this.pokemonTeam.forEach(pkmn -> pkmn.setOwner(this));
         this.faintedPokemon = new ArrayList<>();
         this.currentPokemon = 0;
     }
