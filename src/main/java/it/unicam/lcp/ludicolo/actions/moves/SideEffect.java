@@ -9,6 +9,14 @@ public abstract class SideEffect {
         this.target = target;
     }
 
+    @Override
+    public String toString() {
+        return "SideEffect{" +
+                "target=" + target +
+                ", chance=" + chance +
+                '}';
+    }
+
     public SideEffectTarget getTarget() {
         return target;
     }

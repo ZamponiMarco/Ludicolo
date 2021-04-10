@@ -34,9 +34,9 @@ public class MoveAction extends Action {
     public String toString() {
         return "MoveAction{" +
                 "move=" + move +
-                ", target=" + target +
+                ", target=" + target.getName() +
                 ", status=" + status +
-                ", source=" + source +
+                ", source=" + source.getName() +
                 '}';
     }
 

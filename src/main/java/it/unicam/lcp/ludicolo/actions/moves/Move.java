@@ -89,7 +89,8 @@ public enum Move {
     @Override
     public String toString() {
         return "Move{" +
-                "moveType=" + moveType +
+                "name=" + this.name() +
+                ", moveType=" + moveType +
                 ", type=" + type +
                 ", maxPp=" + maxPp +
                 ", power=" + power +

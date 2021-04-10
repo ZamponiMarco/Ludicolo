@@ -123,10 +123,12 @@ public class Pokemon {
                         "\tDEFENSE: %d → %d [%d]\n" +
                         "\tSP. ATK: %d → %d [%d]\n" +
                         "\tSP. DEF: %d → %d [%d]\n" +
-                        "\tSPEED:   %d → %d [%d]\n", name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
+                        "\tSPEED:   %d → %d [%d]\n" +
+                        "\tSTATUS:  %s [%d]\n" +
+                        "\tOWNER: %s", name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
                 stats.get(Stat.ATTACK).getBaseValue(), stats.get(Stat.ATTACK).getBattleValue(), stats.get(Stat.ATTACK).getStage(), stats.get(Stat.DEFENSE).getBaseValue(),
                 stats.get(Stat.DEFENSE).getBattleValue(), stats.get(Stat.DEFENSE).getStage(), stats.get(Stat.SPECIAL_ATTACK).getBaseValue(), stats.get(Stat.SPECIAL_ATTACK).getBattleValue(), stats.get(Stat.SPECIAL_ATTACK).getStage(),
                 stats.get(Stat.SPECIAL_DEFENSE).getBaseValue(), stats.get(Stat.SPECIAL_DEFENSE).getBattleValue(), stats.get(Stat.SPECIAL_DEFENSE).getStage(), stats.get(Stat.SPEED).getBaseValue(),
-                stats.get(Stat.SPEED).getBattleValue(), stats.get(Stat.SPEED).getStage());
+                stats.get(Stat.SPEED).getBattleValue(), stats.get(Stat.SPEED).getStage(), this.status, this.statusDuration, this.owner.getName());
     }
 }

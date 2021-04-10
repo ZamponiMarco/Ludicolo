@@ -51,6 +51,17 @@ public class StatusSideEffect extends SideEffect{
         return random;
     }
 
+    @Override
+    public String toString() {
+        return "StatusSideEffect{" +
+                "status=" + status +
+                ", duration=" + duration +
+                ", random=" + random +
+                ", target=" + target +
+                ", chance=" + chance +
+                '}';
+    }
+
     public PokemonStatus getStatus() {
         return status;
     }

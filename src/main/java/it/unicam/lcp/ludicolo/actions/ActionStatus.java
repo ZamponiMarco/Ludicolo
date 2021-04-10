@@ -1,5 +1,5 @@
 package it.unicam.lcp.ludicolo.actions;
 
 public enum ActionStatus {
-    DEFINED, READYTOFIRE, FIRED, FAILED
+    DEFINED, READYTOFIRE, FIRED, DONE
 }

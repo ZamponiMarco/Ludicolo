@@ -26,9 +26,9 @@ then
 end
 
 rule "SetupNextAction"
-    salience 31
+    salience 39
 when
-    firstAction : Action(firstAction.status == ActionStatus.FIRED || firstAction.status == ActionStatus.FAILED)
+    firstAction : Action(firstAction.status == ActionStatus.DONE)
     secondAction : Action(secondAction.status == ActionStatus.DEFINED)
 then
     Utility.helper(drools);
@@ -37,9 +37,9 @@ then
  end
 
 rule "EndAction"
-    salience 30
+    salience 38
 when
-    actionDone : Action(actionDone.status == ActionStatus.FIRED || actionDone.status == ActionStatus.FAILED)
+    actionDone : Action(actionDone.status == ActionStatus.DONE)
 then
     Utility.helper(drools);
     retract(actionDone);

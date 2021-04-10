@@ -1,0 +1,183 @@
+package rules
+
+//list any import classes here.
+import java.util.Comparator
+import it.unicam.lcp.ludicolo.*
+import it.unicam.lcp.ludicolo.Utility
+import it.unicam.lcp.ludicolo.pkmn.Stat
+import it.unicam.lcp.ludicolo.actions.moves.MoveAction
+import it.unicam.lcp.ludicolo.actions.moves.MoveType
+import it.unicam.lcp.ludicolo.actions.ActionStatus
+import it.unicam.lcp.ludicolo.pkmn.Pokemon
+import it.unicam.lcp.ludicolo.pkmn.PokemonStatus
+import it.unicam.lcp.ludicolo.actions.items.ItemAction
+import it.unicam.lcp.ludicolo.actions.Action
+import java.util.HashMap
+import java.util.Map
+import java.util.Random
+import it.unicam.lcp.ludicolo.actions.moves.SideEffectTarget
+import it.unicam.lcp.ludicolo.actions.moves.StageSideEffect
+import it.unicam.lcp.ludicolo.actions.moves.StatusSideEffect
+import java.util.List
+
+
+rule "StatusDurationReduction"
+    salience 107
+when
+    not Action()
+    pokemon: Pokemon(pokemon.status != null)
+then
+    Utility.helper(drools);
+    pokemon.setStatusDuration(Math.max((pokemon.getStatusDuration() - 1),0));
+
+    update(pokemon);
+end
+
+rule "EffectTimeUp"
+    salience 108
+when
+    not Action()
+    pokemon : Pokemon(pokemon.status != null, pokemon.statusDuration == 0)
+then
+    Utility.helper(drools);
+    System.out.println(pokemon.getName() + "'s " + pokemon.getStatus() + " status wore off");
+
+    pokemon.setStatus(null);
+    update(pokemon);
+end
+
+rule "BurnedEffect"
+    salience 110
+when
+    not Action()
+    pokemon : Pokemon(pokemon.status == PokemonStatus.BURNED)
+then
+    Utility.helper(drools);
+    System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+    Map<Stat, Integer> lifeStageStats = new HashMap<>();
+    int targetLife = pokemon.getStageValue(Stat.LIFE);
+
+    lifeStageStats.put(Stat.LIFE, Math.max((targetLife - (pokemon.getBattleStatValue(Stat.LIFE)/16)),0));
+    System.out.println(pokemon.getName() + " gets damaged by burn");
+    update(pokemon);
+ end
+
+ rule "PoisonedEffect"
+     salience 110
+ when
+     not Action()
+     pokemon : Pokemon(pokemon.status == PokemonStatus.POISONED)
+ then
+     Utility.helper(drools);
+     System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+     Map<Stat, Integer> lifeStageStats = new HashMap<>();
+     int targetLife = pokemon.getStageValue(Stat.LIFE);
+
+     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - (pokemon.getBattleStatValue(Stat.LIFE)/8)),0));
+     System.out.println(pokemon.getName() + " gets damaged by poison");
+     update(pokemon);
+  end
+
+rule "ConfusedEffect"
+    salience 61
+when
+      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      pokemon : Pokemon(pokemon.status == PokemonStatus.CONFUSED, pokemon.owner.equals(moveAction.getSource()))
+then
+     Utility.helper(drools);
+     System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+     if(Utility.probabilityCheck(33)){
+            Map<Stat, Integer> lifeStageStats = new HashMap<>();
+            int targetLife = pokemon.getStageValue(Stat.LIFE);
+            int dmg = Utility.calculateDamage(
+                    pokemon.getLevel(),
+                    40,
+                    pokemon.getBattleStatValue(Stat.ATTACK),
+                    pokemon.getBattleStatValue(Stat.DEFENSE));
+            lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
+
+
+
+            pokemon.setStage(lifeStageStats);
+            System.out.println(pokemon.getName() + " gets damaged by confusion");
+            System.out.println("DMG: "+dmg);
+            update(pokemon);
+
+            moveAction.setStatus(ActionStatus.DONE);
+            System.out.println(pokemon.getName() + " failed to throw its move");
+            update(moveAction);
+     }
+ end
+
+ rule "FrozenEffect"
+     salience 61
+ when
+      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      pokemon : Pokemon(pokemon.status == PokemonStatus.FROZEN, pokemon.owner.equals(moveAction.getSource()))
+ then
+      Utility.helper(drools);
+      System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+      moveAction.setStatus(ActionStatus.DONE);
+
+      System.out.println(pokemon.getName() + " failed to throw its move");
+      update(moveAction);
+  end
+
+ rule "AsleepEffect"
+     salience 61
+ when
+      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      pokemon : Pokemon(pokemon.status == PokemonStatus.ASLEEP, pokemon.owner.equals(moveAction.getSource()))
+ then
+      Utility.helper(drools);
+      System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+      moveAction.setStatus(ActionStatus.DONE);
+
+      System.out.println(pokemon.getName() + " failed to throw its move");
+      update(moveAction);
+  end
+
+rule "ParalyzedEffect"
+    salience 61
+when
+      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      pokemon : Pokemon(pokemon.status == PokemonStatus.PARALYZED, pokemon.owner.equals(moveAction.getSource()))
+then
+      Utility.helper(drools);
+      System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+    if(!Utility.probabilityCheck(25)) {
+        moveAction.setStatus(ActionStatus.DONE);
+        System.out.println(pokemon.getName() + " failed to throw its move");
+        update(moveAction);
+    }
+ end
+
+  rule "ProtectedEffect"
+      salience 61
+  when
+      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      pokemon : Pokemon(pokemon.status == PokemonStatus.PROTECTED, pokemon.owner.equals(moveAction.getSource()))
+  then
+      Utility.helper(drools);
+      System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+
+      moveAction.setStatus(ActionStatus.DONE);
+      System.out.println(pokemon.getName() + " failed to throw its move");
+      update(moveAction);
+ end
+
+ rule "ProtectedEffectOpponent"
+     salience 59
+ when
+
+      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      pokemonTarget : Pokemon(pokemonTarget.status == PokemonStatus.PROTECTED, pokemonTarget.owner.equals(moveAction.getTarget()))
+      pokemonSource : Pokemon(pokemonSource.owner.equals(moveAction.getSource()))
+ then
+      Utility.helper(drools);
+      System.out.println(pokemonTarget.getName() + " is " + pokemonTarget.getStatus());
+
+     moveAction.setStatus(ActionStatus.DONE);
+     System.out.println(pokemonSource.getName() + " failed to throw its move");
+     update(moveAction);
+end

@@ -7,6 +7,8 @@ import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieSession;
 
+import java.util.Random;
+
 public class Utility {
 
     public static void createEventListener(KieSession kSession) {
@@ -47,6 +49,30 @@ public class Utility {
     public static void helper(final KnowledgeHelper drools){
         System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName());
         System.out.println();
+    }
+
+    public static int calculateBattleLife (int baseLife, int level){
+        return ((2*baseLife * level)/100) + level + 10;
+    }
+
+    public static int calculateBattleStat(int baseStat, int level){
+        return Math.round(((2 * baseStat * level)/100.0f) + 10);
+    }
+
+
+/*static int multiplier(int stage){
+    float fStage = (float) stage;
+    return Math.round((1.0 + fStage*(1.0/2.0)));
+}*/
+
+    public static int calculateDamage(int level, int power, int attack, int defense){
+        return Math.round(((((((2*level)/5.0f)+2)*power)*(attack/defense))/50)+2);
+    }
+
+    public static boolean probabilityCheck(int probability){
+        int randomValue = new Random().nextInt(100);
+        System.out.println(randomValue + "/" + probability);
+        return randomValue < probability;
     }
 
 }

@@ -18,19 +18,7 @@ import it.unicam.lcp.ludicolo.actions.Action
 import java.util.HashMap
 import java.util.Map
 
-function int calculateBattleLife (int baseLife, int level){
-    return ((2*baseLife * level)/100) + level + 10;
-}
 
-function int calculateBattleStat(int baseStat, int level){
-    return Math.round(((2 * baseStat * level)/100.0f) + 10);
-}
-
-
-/*function int multiplier(int stage){
-    float fStage = (float) stage;
-    return Math.round((1.0 + fStage*(1.0/2.0)));
-}*/
 
 
 rule "SetBattleStats"
@@ -41,16 +29,16 @@ then
     Utility.helper(drools);
 
     Map<Stat, Integer> lifeStats = new HashMap<>();
-    lifeStats.put(Stat.LIFE, calculateBattleLife(pkmn.getBaseStatValue(Stat.LIFE), pkmn.getLevel()));
+    lifeStats.put(Stat.LIFE, Utility.calculateBattleLife(pkmn.getBaseStatValue(Stat.LIFE), pkmn.getLevel()));
     pkmn.setBattleStat(lifeStats);
     pkmn.setStage(lifeStats);
 
     Map<Stat, Integer> battleStats = new HashMap<>();
-    battleStats.put(Stat.ATTACK, calculateBattleStat(pkmn.getBaseStatValue(Stat.ATTACK), pkmn.getLevel()));
-    battleStats.put(Stat.DEFENSE, calculateBattleStat(pkmn.getBaseStatValue(Stat.DEFENSE), pkmn.getLevel()));
-    battleStats.put(Stat.SPECIAL_ATTACK, calculateBattleStat(pkmn.getBaseStatValue(Stat.SPECIAL_ATTACK), pkmn.getLevel()));
-    battleStats.put(Stat.SPECIAL_DEFENSE, calculateBattleStat(pkmn.getBaseStatValue(Stat.SPECIAL_DEFENSE), pkmn.getLevel()));
-    battleStats.put(Stat.SPEED, calculateBattleStat(pkmn.getBaseStatValue(Stat.SPEED), pkmn.getLevel()));
+    battleStats.put(Stat.ATTACK, Utility.calculateBattleStat(pkmn.getBaseStatValue(Stat.ATTACK), pkmn.getLevel()));
+    battleStats.put(Stat.DEFENSE, Utility.calculateBattleStat(pkmn.getBaseStatValue(Stat.DEFENSE), pkmn.getLevel()));
+    battleStats.put(Stat.SPECIAL_ATTACK, Utility.calculateBattleStat(pkmn.getBaseStatValue(Stat.SPECIAL_ATTACK), pkmn.getLevel()));
+    battleStats.put(Stat.SPECIAL_DEFENSE, Utility.calculateBattleStat(pkmn.getBaseStatValue(Stat.SPECIAL_DEFENSE), pkmn.getLevel()));
+    battleStats.put(Stat.SPEED, Utility.calculateBattleStat(pkmn.getBaseStatValue(Stat.SPEED), pkmn.getLevel()));
     pkmn.setBattleStat(battleStats);
 
     pkmn.setBattleStatsComputed(true);
@@ -61,12 +49,12 @@ rule "PokemonFaintedWithMove"
 salience 90
 when
     toRemove: Pokemon(toRemove.getStageValue(Stat.LIFE) == 0)
-    toRemovePlayer: Player(toRemovePlayer.getCurrentPokemon() == toRemove)
+    toRemovePlayer: Player(toRemovePlayer.equals(toRemove.getOwner()))
     toRemoveAction: Action(toRemoveAction.source == toRemovePlayer)
 then
 Utility.helper(drools);
     System.out.println(toRemove + "HAS FAINTED");
-    toRemovePlayer.addFainted(toRemovePlayer.getCurrentPokemon());
+    toRemovePlayer.addFainted(toRemove);
     retract(toRemove);
     retract(toRemoveAction);
  end
@@ -75,22 +63,13 @@ rule "PokemonFainted"
 salience 89
 when
     toRemove: Pokemon(toRemove.getStageValue(Stat.LIFE) == 0)
-    toRemovePlayer: Player(toRemovePlayer.getCurrentPokemon() == toRemove)
+    toRemovePlayer: Player(toRemovePlayer.equals(toRemove.getOwner()))
 then
 Utility.helper(drools);
     System.out.println(toRemove + "HAS FAINTED");
-    toRemovePlayer.addFainted(toRemovePlayer.getCurrentPokemon());
+    toRemovePlayer.addFainted(toRemove);
     retract(toRemove);
  end
-
-
-
-
-
-
-
-
-
 
 
 rule "ItemActionFire"
