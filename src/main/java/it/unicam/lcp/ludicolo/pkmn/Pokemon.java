@@ -77,6 +77,8 @@ public class Pokemon {
         return stat == Stat.LIFE ? this.life.getBaseValue() : this.stats.get(stat).getBaseValue();
     }
 
+    // TODO Marco: Add method to get battle stats with stage calculation
+
     public int getBattleStatValue(Stat stat) {
         return stat == Stat.LIFE ? this.life.getBattleValue() : this.stats.get(stat).getBattleValue();
     }

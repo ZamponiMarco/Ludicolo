@@ -2,7 +2,7 @@ package rules
 
 //list any import classes here.
 import java.util.Comparator
-import it.unicam.lcp.ludicolo.*
+import it.unicam.lcp.ludicolo.pkmn.Pokemon
 import it.unicam.lcp.ludicolo.Utility
 import it.unicam.lcp.ludicolo.pkmn.Stat
 import it.unicam.lcp.ludicolo.actions.moves.MoveAction
@@ -16,12 +16,19 @@ when
     playerOneMoveAction: Action(playerOneMoveAction.status == ActionStatus.DEFINED)
     playerTwoMoveAction: Action(playerTwoMoveAction.status == ActionStatus.DEFINED,
         playerTwoMoveAction.source != playerOneMoveAction.source)
+    playerOnePokemon : Pokemon(playerOnePokemon.owner.equals(playerOneMoveAction.getSource()))
+    playerTwoPokemon : Pokemon(playerTwoPokemon.owner.equals(playerTwoMoveAction.getSource()))
 then
     Utility.helper(drools);
-        Action priorityAction = Comparator.<Action, Action>comparing(action -> action).
-        thenComparingInt(move -> move.getSource().getCurrentPokemon().getBattleStatValue(Stat.SPEED)).
-        compare(playerOneMoveAction, playerTwoMoveAction) > 0 ? playerOneMoveAction : playerTwoMoveAction;
-    priorityAction.setStatus(ActionStatus.READYTOFIRE);
+    Action priorityAction;
+    int i = playerOneMoveAction.compareTo(playerTwoMoveAction);
+    if (i == 0) {
+        priorityAction = playerOnePokemon.getBattleStatValue(Stat.SPEED) > playerTwoPokemon.
+            getBattleStatValue(Stat.SPEED) ? playerOneMoveAction : playerTwoMoveAction;
+    } else {
+        priorityAction = i > 0 ? playerOneMoveAction : playerTwoMoveAction;
+    }
+    priorityAction.setStatus(ActionStatus.READY_TO_FIRE);
     update(priorityAction);
 end
 
@@ -32,7 +39,7 @@ when
     secondAction : Action(secondAction.status == ActionStatus.DEFINED)
 then
     Utility.helper(drools);
-    secondAction.setStatus(ActionStatus.READYTOFIRE);
+    secondAction.setStatus(ActionStatus.READY_TO_FIRE);
     update(secondAction);
  end
 

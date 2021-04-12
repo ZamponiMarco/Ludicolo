@@ -65,6 +65,8 @@ public class Utility {
     return Math.round((1.0 + fStage*(1.0/2.0)));
 }*/
 
+    // TODO Marco: Add stub modifiers
+
     public static int calculateDamage(int level, int power, int attack, int defense){
         return Math.round(((((((2*level)/5.0f)+2)*power)*(attack/defense))/50)+2);
     }

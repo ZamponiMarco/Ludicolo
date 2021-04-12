@@ -74,7 +74,7 @@ Utility.helper(drools);
 
 rule "ItemActionFire"
 when
-    itemAction: ItemAction(itemAction.status == ActionStatus.READYTOFIRE)
+    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE)
 then
     Utility.helper(drools);
     System.out.println("Item action fired");
@@ -86,7 +86,7 @@ end
 rule "SwapActionFire"
 
 when
-    swapAction: SwapAction(swapAction.status == ActionStatus.READYTOFIRE)
+    swapAction: SwapAction(swapAction.status == ActionStatus.READY_TO_FIRE)
 then
     Utility.helper(drools);
     System.out.println("Swap action fired");
@@ -107,6 +107,7 @@ when
      retract(leftAction);
 end
 
+//TODO: Francesco aggiungere pokemon done
 rule "TurnReady"
     salience 109
 when

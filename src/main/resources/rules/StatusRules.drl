@@ -20,7 +20,7 @@ import it.unicam.lcp.ludicolo.actions.moves.StageSideEffect
 import it.unicam.lcp.ludicolo.actions.moves.StatusSideEffect
 import java.util.List
 
-
+//TODO: Francesco aggiungere pokemon done
 rule "StatusDurationReduction"
     salience 107
 when
@@ -81,7 +81,7 @@ then
 rule "ConfusedEffect"
     salience 61
 when
-      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.CONFUSED, pokemon.owner.equals(moveAction.getSource()))
 then
      Utility.helper(drools);
@@ -112,7 +112,7 @@ then
  rule "FrozenEffect"
      salience 61
  when
-      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.FROZEN, pokemon.owner.equals(moveAction.getSource()))
  then
       Utility.helper(drools);
@@ -126,7 +126,7 @@ then
  rule "AsleepEffect"
      salience 61
  when
-      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.ASLEEP, pokemon.owner.equals(moveAction.getSource()))
  then
       Utility.helper(drools);
@@ -140,7 +140,7 @@ then
 rule "ParalyzedEffect"
     salience 61
 when
-      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.PARALYZED, pokemon.owner.equals(moveAction.getSource()))
 then
       Utility.helper(drools);
@@ -155,7 +155,7 @@ then
   rule "ProtectedEffect"
       salience 61
   when
-      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.PROTECTED, pokemon.owner.equals(moveAction.getSource()))
   then
       Utility.helper(drools);
@@ -170,7 +170,7 @@ then
      salience 59
  when
 
-      moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+      moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemonTarget : Pokemon(pokemonTarget.status == PokemonStatus.PROTECTED, pokemonTarget.owner.equals(moveAction.getTarget()))
       pokemonSource : Pokemon(pokemonSource.owner.equals(moveAction.getSource()))
  then

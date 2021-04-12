@@ -25,7 +25,7 @@ public class Main {
 
             Utility.createEventListener(kSession);
 
-            List<Move> moves = Lists.newArrayList(Move.POUND, Move.RAZOR_WIND, Move.SWORDS_DANCE, Move.SUCKER_PUNCH);
+            List<Move> moves = Lists.newArrayList(Move.POUND, Move.RAZOR_WIND, Move.SNARL, Move.SUCKER_PUNCH);
 
             Map<Stat, Integer> pokeOneStats = Maps.newEnumMap(Stat.class);
             pokeOneStats.put(Stat.LIFE, 100);
@@ -68,6 +68,8 @@ public class Main {
             kSession.insert(battle);
 
             kSession.fireAllRules();
+
+            // TODO Marco: Simulazione finchè uno dei due pokemon non muore
 
         } catch (Throwable t) {
             t.printStackTrace();

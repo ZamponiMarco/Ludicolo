@@ -2,8 +2,6 @@ package it.unicam.lcp.ludicolo.actions;
 
 import it.unicam.lcp.ludicolo.Player;
 
-import java.util.Comparator;
-
 public abstract class Action implements Comparable<Action> {
 
     protected final Player source;

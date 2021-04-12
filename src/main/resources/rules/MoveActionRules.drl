@@ -3,7 +3,6 @@ package rules
 
 //list any import classes here.
 import java.util.Comparator
-import it.unicam.lcp.ludicolo.*
 import it.unicam.lcp.ludicolo.Utility
 import it.unicam.lcp.ludicolo.pkmn.Stat
 import it.unicam.lcp.ludicolo.actions.moves.MoveAction
@@ -16,19 +15,18 @@ import it.unicam.lcp.ludicolo.actions.Action
 import java.util.HashMap
 import java.util.Map
 import java.util.Random
+import it.unicam.lcp.ludicolo.actions.moves.Move
+import it.unicam.lcp.ludicolo.actions.moves.MoveType
 import it.unicam.lcp.ludicolo.actions.moves.SideEffectTarget
 import it.unicam.lcp.ludicolo.actions.moves.StageSideEffect
 import it.unicam.lcp.ludicolo.actions.moves.StatusSideEffect
 import java.util.List
-
-
-
-
+import java.util.Collections
 
 rule "AccuracyCheck"
     salience 60
 when
-    moveAction: MoveAction(moveAction.status == ActionStatus.READYTOFIRE)
+    moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.owner.equals(moveAction.getSource()))
 then
     Utility.helper(drools);
@@ -38,7 +36,11 @@ then
         System.out.println(sourcePokemon.getName() + " failed to throw its move");
         update(moveAction);
     }
- end
+end
+
+// TODO Marco: add float modifier to move action https://bulbapedia.bulbagarden.net/wiki/Damage
+
+// TODO Francesco: rimozione PP nel fire
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +48,7 @@ then
 rule "PhysicalMoveActionFire"
     salience 50
 when
-    moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.status == ActionStatus.READYTOFIRE)
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.owner.equals(moveAction.getSource()))
     targetPokemon : Pokemon(targetPokemon.owner.equals(moveAction.getTarget()))
 then
@@ -59,9 +61,11 @@ then
             moveAction.getMove().getPower(),
             sourcePokemon.getBattleStatValue(Stat.ATTACK),
             targetPokemon.getBattleStatValue(Stat.DEFENSE));
+
+
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
     System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name() + " against " + targetPokemon.getName());
-    System.out.println("DMG: "+dmg);
+    System.out.println("DMG: " + dmg);
 
     targetPokemon.setStage(lifeStageStats);
     update(targetPokemon);
@@ -73,7 +77,7 @@ end
 rule "SpecialMoveActionFire"
     salience 50
 when
-    moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.status == ActionStatus.READYTOFIRE)
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.owner.equals(moveAction.getSource()))
     targetPokemon : Pokemon(targetPokemon.owner.equals(moveAction.getTarget()))
 then
@@ -100,7 +104,7 @@ end
 rule "StatusMoveActionFire"
     salience 50
 when
-    moveAction: MoveAction(moveAction.move.moveType == MoveType.STATUS, moveAction.status == ActionStatus.READYTOFIRE)
+    moveAction: MoveAction(moveAction.move.moveType == MoveType.STATUS, moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.owner.equals(moveAction.getSource()))
     targetPokemon : Pokemon(targetPokemon.owner.equals(moveAction.getTarget()))
 then
@@ -114,8 +118,7 @@ end
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// TODO: Marco sistemare
-/*rule "StageEffect"
+rule "StageEffect"
     salience 40
 when
     moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsStageSideEffect())
@@ -125,17 +128,20 @@ then
     Utility.helper(drools);
     moveAction.getMove().getStageSideEffects().forEach(stageSideEffect -> {
         SideEffectTarget target = stageSideEffect.getTarget();
-        Map<Stat, Integer> stages = new HashMap<>();
-        stages.put(stageSideEffect.getTargetStat(), stageSideEffect.getNumberOfStages());
+        Stat stat = stageSideEffect.getTargetStat();
         if (target.equals(SideEffectTarget.TARGET)) {
-           targetPokemon.setStage(stages);
+            targetPokemon.setStage(Collections.singletonMap(stat,
+                targetPokemon.getStageValue(stat) + stageSideEffect.getNumberOfStages()));
         } else {
-            sourcePokemon.setStage(stages);
+            sourcePokemon.setStage(Collections.singletonMap(stat,
+                sourcePokemon.getStageValue(stat) + stageSideEffect.getNumberOfStages()));
         }
     });
+    moveAction.setStatus(ActionStatus.DONE);
+    update(moveAction);
     update(targetPokemon);
     update(sourcePokemon);
-end*/
+end;
 
 rule "MoveEnding"
     salience 39
@@ -179,8 +185,8 @@ then
             }
         }
     });
-        moveAction.setStatus(ActionStatus.DONE);
-        update(moveAction);
-        update(targetPokemon);
+    moveAction.setStatus(ActionStatus.DONE);
+    update(moveAction);
+    update(targetPokemon);
 end
 

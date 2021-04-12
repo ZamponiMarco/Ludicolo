@@ -1,7 +1,5 @@
 package it.unicam.lcp.ludicolo;
 
-import java.util.Random;
-
 public class Battle {
 
     private Player playerOne;
@@ -40,16 +38,6 @@ public class Battle {
                 ", playerTwo=" + playerTwo +
                 ", hasStarted=" + hasStarted +
                 '}';
-    }
-
-    static int calculateDamage(int level, int power, int attack, int defense){
-        return Math.round(((((((2*level)/5.0f)+2)*power)*(attack/defense))/50)+2);
-    }
-
-    static boolean probabilityCheck(int probability){
-        int randomValue = new Random().nextInt(100);
-        System.out.println(randomValue + "/" + probability);
-        return randomValue < probability;
     }
 
 }

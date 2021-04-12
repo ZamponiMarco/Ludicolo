@@ -11,17 +11,19 @@ import java.util.stream.Collectors;
 
 public enum Move {
 
+    BUG_BUZZ(MoveType.SPECIAL, Type.BUG, 10, 90, 100, 0),
+    STRUGGLE_BUG(MoveType.SPECIAL, Type.BUG, 20, 50, 100, 0, new StageSideEffect(100, SideEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
+    QUIVER_DANCE(MoveType.STATUS, Type.BUG, 20, 0, 100, 0, new StageSideEffect(100, SideEffectTarget.SOURCE, 1, Stat.SPECIAL_ATTACK), new StageSideEffect(100, SideEffectTarget.SOURCE, 1, Stat.SPECIAL_DEFENSE), new StageSideEffect(100, SideEffectTarget.SOURCE, 1, Stat.SPEED)),
+
     POUND(MoveType.PHYSICAL, Type.NORMAL, 35, 40, 100, 0),
     RAZOR_WIND(MoveType.SPECIAL, Type.NORMAL, 10, 80, 5, 0),
-    SWORDS_DANCE(MoveType.STATUS, Type.NORMAL, 20, 0, 100, 0, new StageSideEffect(100, SideEffectTarget.SOURCE,2, Stat.ATTACK)),
-
+    PROTECT(MoveType.STATUS, Type.NORMAL, 10, 0, 100, 4, new StatusSideEffect(100, SideEffectTarget.SOURCE, PokemonStatus.PROTECTED)),
 
     SUCKER_PUNCH(MoveType.PHYSICAL, Type.DARK, 5, 70, 100, 1),
     SNARL(MoveType.SPECIAL, Type.DARK, 20, 55, 95, 0, new StageSideEffect(100, SideEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
     DARK_VOID(MoveType.STATUS, Type.DARK, 10, 0, 50, 0, new StatusSideEffect(100, SideEffectTarget.TARGET, PokemonStatus.ASLEEP)),
 
-    CONFUSE_RAY(MoveType.STATUS, Type.GHOST, 10, 0, 100, 0, new StatusSideEffect(100, SideEffectTarget.TARGET, PokemonStatus.CONFUSED)),
-    PROTECT(MoveType.STATUS, Type.NORMAL, 10, 0, 100, 4, new StatusSideEffect(100, SideEffectTarget.SOURCE, PokemonStatus.PROTECTED));
+    CONFUSE_RAY(MoveType.STATUS, Type.GHOST, 10, 0, 100, 0, new StatusSideEffect(100, SideEffectTarget.TARGET, PokemonStatus.CONFUSED));
 
     private final MoveType moveType;
     private final Type type;

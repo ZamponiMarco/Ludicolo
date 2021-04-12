@@ -2,7 +2,6 @@ package it.unicam.lcp.ludicolo.pkmn;
 
 public class StatValues {
 
-
     private final int baseValue;
     private int battleValue;
     private int stage;

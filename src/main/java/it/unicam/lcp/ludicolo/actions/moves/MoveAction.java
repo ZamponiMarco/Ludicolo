@@ -5,8 +5,8 @@ import it.unicam.lcp.ludicolo.actions.Action;
 
 public class MoveAction extends Action {
 
-    private Move move;
-    private Player target;
+    private final Move move;
+    private final Player target;
 
     public MoveAction(Player player, Move move, Player target) {
         super(player);
@@ -14,20 +14,17 @@ public class MoveAction extends Action {
         this.target = target;
     }
 
+    @Override
+    protected int getActionPriority() {
+        return move.getPriority();
+    }
+
     public Move getMove() {
         return move;
     }
 
-    public void setMove(Move move) {
-        this.move = move;
-    }
-
     public Player getTarget() {
         return target;
-    }
-
-    public void setTarget(Player target) {
-        this.target = target;
     }
 
     @Override
@@ -40,8 +37,4 @@ public class MoveAction extends Action {
                 '}';
     }
 
-    @Override
-    protected int getActionPriority() {
-        return move.getPriority();
-    }
 }
