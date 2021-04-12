@@ -20,16 +20,15 @@ import it.unicam.lcp.ludicolo.actions.moves.StageSideEffect
 import it.unicam.lcp.ludicolo.actions.moves.StatusSideEffect
 import java.util.List
 
-//TODO: Francesco aggiungere pokemon done
 rule "StatusDurationReduction"
-    salience 107
+    salience 110
 when
     not Action()
-    pokemon: Pokemon(pokemon.status != null)
+    pokemon: Pokemon(pokemon.status != null, !pokemon.statusReductionDone)
 then
     Utility.helper(drools);
     pokemon.setStatusDuration(Math.max((pokemon.getStatusDuration() - 1),0));
-
+    pokemon.setStatusReductionDone(true);
     update(pokemon);
 end
 

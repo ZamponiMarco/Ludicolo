@@ -107,7 +107,6 @@ when
      retract(leftAction);
 end
 
-//TODO: Francesco aggiungere pokemon done
 rule "TurnReady"
     salience 109
 when

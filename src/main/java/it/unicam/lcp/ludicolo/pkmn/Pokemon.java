@@ -20,6 +20,8 @@ public class Pokemon {
     private final Map<Stat, StatValues> stats;
     private boolean battleStatsComputed;
 
+    private boolean statusReductionDone;
+
     private PokemonStatus status;
     private int statusDuration;
 
@@ -51,6 +53,7 @@ public class Pokemon {
                 this.stats.put(entry.getKey(), new StatValues(entry.getValue()));
             }
         }
+        this.statusReductionDone = false;
     }
 
     public void setOwner(Player owner){
@@ -114,6 +117,15 @@ public class Pokemon {
             }
         }
     }
+
+    public boolean isStatusReductionDone() {
+        return statusReductionDone;
+    }
+
+    public void setStatusReductionDone(boolean statusReductionDone) {
+        this.statusReductionDone = statusReductionDone;
+    }
+
 
     @Override
     public String toString() {
