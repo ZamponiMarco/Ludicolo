@@ -90,15 +90,6 @@ public enum Move {
 
     @Override
     public String toString() {
-        return "Move{" +
-                "name=" + this.name() +
-                ", moveType=" + moveType +
-                ", type=" + type +
-                ", maxPp=" + maxPp +
-                ", power=" + power +
-                ", accuracy=" + accuracy +
-                ", priority=" + priority +
-                ", sideEffectList=" + sideEffectList +
-                '}';
+        return String.format("%s [%s - %s - PP %d - PWR %d - ACR %d - PR %d]\n", this.name(), this.moveType.name(), this.type.name(), this.maxPp, this.power, this.accuracy, this.priority);
     }
 }

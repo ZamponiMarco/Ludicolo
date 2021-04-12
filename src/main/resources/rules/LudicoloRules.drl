@@ -108,7 +108,7 @@ when
 end
 
 rule "TurnReady"
-    salience 109
+    salience 108
 when
     not Action()
 then

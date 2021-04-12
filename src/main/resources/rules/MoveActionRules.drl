@@ -40,7 +40,6 @@ end
 
 // TODO Marco: add float modifier to move action https://bulbapedia.bulbagarden.net/wiki/Damage
 
-// TODO Francesco: rimozione PP nel fire
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,11 +63,14 @@ then
 
 
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
-    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name() + " against " + targetPokemon.getName());
+    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name());
     System.out.println("DMG: " + dmg);
 
     targetPokemon.setStage(lifeStageStats);
     update(targetPokemon);
+
+    sourcePokemon.reducePP(moveAction.getMove());
+    update(sourcePokemon);
 
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
@@ -90,12 +92,15 @@ then
             moveAction.getMove().getPower(),
             sourcePokemon.getBattleStatValue(Stat.SPECIAL_ATTACK),
             targetPokemon.getBattleStatValue(Stat.SPECIAL_DEFENSE));
-    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name() + " against " + targetPokemon.getName());
+    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name());
     System.out.println("DMG: "+dmg);
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
 
     targetPokemon.setStage(lifeStageStats);
     update(targetPokemon);
+
+    sourcePokemon.reducePP(moveAction.getMove());
+    update(sourcePokemon);
 
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
@@ -109,7 +114,11 @@ when
     targetPokemon : Pokemon(targetPokemon.owner.equals(moveAction.getTarget()))
 then
     Utility.helper(drools);
-    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name() + " against " + targetPokemon.getName());
+    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name());
+
+    sourcePokemon.reducePP(moveAction.getMove());
+    update(sourcePokemon);
+
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
 end
@@ -121,7 +130,7 @@ end
 rule "StageEffect"
     salience 40
 when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsStageSideEffect())
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, !moveAction.stageEffectDone, moveAction.move.containsStageSideEffect())
     sourcePokemon : Pokemon(sourcePokemon.owner.equals(moveAction.getSource()))
     targetPokemon : Pokemon(targetPokemon.owner.equals(moveAction.getTarget()))
 then
@@ -137,25 +146,16 @@ then
                 sourcePokemon.getStageValue(stat) + stageSideEffect.getNumberOfStages()));
         }
     });
-    moveAction.setStatus(ActionStatus.DONE);
+    moveAction.setStageEffectDone(true);
     update(moveAction);
     update(targetPokemon);
     update(sourcePokemon);
 end;
 
-rule "MoveEnding"
-    salience 39
-when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED)
-then
-    moveAction.setStatus(ActionStatus.DONE);
-    update(moveAction);
- end
-
 rule "StatusEffect"
     salience 40
 when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, moveAction.move.containsStatusSideEffect())
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, !moveAction.statusEffectDone, moveAction.move.containsStatusSideEffect())
     sourcePokemon : Pokemon(sourcePokemon.owner.equals(moveAction.getSource()))
     targetPokemon : Pokemon(targetPokemon.owner.equals(moveAction.getTarget()))
 then
@@ -180,13 +180,22 @@ then
                                 break;
                         }
                 System.out.println(target.getName() + " has now a condition: " + target.getStatus() + " for " + target.getStatusDuration() + " turns");
+                update(target);
             } else {
                 System.out.println(target.getName() + " has already a condition: " + target.getStatus());
             }
         }
     });
-    moveAction.setStatus(ActionStatus.DONE);
+    moveAction.setStatusEffectDone(true);
     update(moveAction);
-    update(targetPokemon);
 end
 
+rule "MoveEnding"
+    salience 39
+when
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED)
+then
+    Utility.helper(drools);
+    moveAction.setStatus(ActionStatus.DONE);
+    update(moveAction);
+ end

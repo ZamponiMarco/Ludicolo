@@ -25,7 +25,7 @@ public class Main {
 
             Utility.createEventListener(kSession);
 
-            List<Move> moves = Lists.newArrayList(Move.POUND, Move.RAZOR_WIND, Move.SNARL, Move.SUCKER_PUNCH);
+            List<Move> moves = Lists.newArrayList(Move.POUND, Move.PROTECT, Move.SNARL, Move.CONFUSE_RAY);
 
             Map<Stat, Integer> pokeOneStats = Maps.newEnumMap(Stat.class);
             pokeOneStats.put(Stat.LIFE, 100);
@@ -54,7 +54,7 @@ public class Main {
             kSession.insert(pokeOne);
             kSession.insert(pokeTwo);
 
-            Action moveAction = new MoveAction(playerOne, Move.SNARL, playerTwo);
+            Action moveAction = new MoveAction(playerOne, Move.PROTECT, playerTwo);
             Action moveActionTwo = new MoveAction(playerTwo, Move.CONFUSE_RAY, playerOne);
 
             kSession.insert(moveAction);

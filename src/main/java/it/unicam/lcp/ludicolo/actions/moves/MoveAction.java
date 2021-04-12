@@ -8,10 +8,15 @@ public class MoveAction extends Action {
     private final Move move;
     private final Player target;
 
+    private boolean stageEffectDone;
+    private boolean statusEffectDone;
+
     public MoveAction(Player player, Move move, Player target) {
         super(player);
         this.move = move;
         this.target = target;
+        this.stageEffectDone = false;
+        this.statusEffectDone = false;
     }
 
     @Override
@@ -25,6 +30,22 @@ public class MoveAction extends Action {
 
     public Player getTarget() {
         return target;
+    }
+
+    public boolean isStageEffectDone() {
+        return stageEffectDone;
+    }
+
+    public void setStageEffectDone(boolean stageEffectDone) {
+        this.stageEffectDone = stageEffectDone;
+    }
+
+    public boolean isStatusEffectDone() {
+        return statusEffectDone;
+    }
+
+    public void setStatusEffectDone(boolean statusEffectDone) {
+        this.statusEffectDone = statusEffectDone;
     }
 
     @Override

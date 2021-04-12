@@ -33,7 +33,7 @@ then
 end
 
 rule "EffectTimeUp"
-    salience 108
+    salience 109
 when
     not Action()
     pokemon : Pokemon(pokemon.status != null, pokemon.statusDuration == 0)

@@ -72,6 +72,9 @@ public class Pokemon {
         return learnedMoves;
     }
 
+    public void reducePP(Move move){
+        this.learnedMoves.put(move, Math.max(this.learnedMoves.get(move) - 1,0));
+    }
     public int getLevel() {
         return level;
     }
@@ -139,10 +142,11 @@ public class Pokemon {
                         "\tSP. DEF: %d → %d [%d]\n" +
                         "\tSPEED:   %d → %d [%d]\n" +
                         "\tSTATUS:  %s [%d]\n" +
-                        "\tOWNER: %s", name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
+                        "\tOWNER: %s\n" +
+                        "\tMOVES: %s - [%s]\n", name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
                 stats.get(Stat.ATTACK).getBaseValue(), stats.get(Stat.ATTACK).getBattleValue(), stats.get(Stat.ATTACK).getStage(), stats.get(Stat.DEFENSE).getBaseValue(),
                 stats.get(Stat.DEFENSE).getBattleValue(), stats.get(Stat.DEFENSE).getStage(), stats.get(Stat.SPECIAL_ATTACK).getBaseValue(), stats.get(Stat.SPECIAL_ATTACK).getBattleValue(), stats.get(Stat.SPECIAL_ATTACK).getStage(),
                 stats.get(Stat.SPECIAL_DEFENSE).getBaseValue(), stats.get(Stat.SPECIAL_DEFENSE).getBattleValue(), stats.get(Stat.SPECIAL_DEFENSE).getStage(), stats.get(Stat.SPEED).getBaseValue(),
-                stats.get(Stat.SPEED).getBattleValue(), stats.get(Stat.SPEED).getStage(), this.status, this.statusDuration, this.owner.getName());
+                stats.get(Stat.SPEED).getBattleValue(), stats.get(Stat.SPEED).getStage(), this.status, this.statusDuration, this.owner.getName(), this.learnedMoves.keySet(), this.learnedMoves.values());
     }
 }
