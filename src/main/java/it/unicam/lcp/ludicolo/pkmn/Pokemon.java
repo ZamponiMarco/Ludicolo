@@ -3,7 +3,9 @@ package it.unicam.lcp.ludicolo.pkmn;
 
 import com.google.common.collect.Maps;
 import it.unicam.lcp.ludicolo.Player;
+import it.unicam.lcp.ludicolo.Type;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
+import it.unicam.lcp.ludicolo.actions.moves.MoveType;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,7 @@ import java.util.stream.Collectors;
 public class Pokemon {
 
     private Player owner;
-
+    private final List<Type> type;
     private final String name;
     private final Map<Move, Integer> learnedMoves;
     private final int level;
@@ -41,7 +43,8 @@ public class Pokemon {
         this.statusDuration = statusDuration;
     }
 
-    public Pokemon(String name, List<Move> learnedMoves, int level, Map<Stat, Integer> baseStats) {
+    public Pokemon(String name, List<Type> type, List<Move> learnedMoves, int level, Map<Stat, Integer> baseStats) {
+        this.type = type;
         this.name = name;
         this.learnedMoves = learnedMoves.stream().collect(Collectors.toMap(move -> move, Move::getMaxPp));
         this.level = level;
@@ -77,6 +80,11 @@ public class Pokemon {
     }
     public int getLevel() {
         return level;
+    }
+
+
+    public List<Type> getType() {
+        return type;
     }
 
     public int getBaseStatValue(Stat stat) {
