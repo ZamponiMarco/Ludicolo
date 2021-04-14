@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import it.unicam.lcp.ludicolo.Player;
 import it.unicam.lcp.ludicolo.Type;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
-import it.unicam.lcp.ludicolo.actions.moves.MoveType;
 
 import java.util.List;
 import java.util.Map;
@@ -13,35 +12,19 @@ import java.util.stream.Collectors;
 
 public class Pokemon {
 
-    private Player owner;
     private final List<Type> type;
     private final String name;
     private final Map<Move, Integer> learnedMoves;
     private final int level;
     private final StatValues life;
     private final Map<Stat, StatValues> stats;
+    private Player owner;
     private boolean battleStatsComputed;
 
     private boolean statusReductionDone;
 
     private PokemonStatus status;
     private int statusDuration;
-
-    public PokemonStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(PokemonStatus status) {
-        this.status = status;
-    }
-
-    public int getStatusDuration() {
-        return statusDuration;
-    }
-
-    public void setStatusDuration(int statusDuration) {
-        this.statusDuration = statusDuration;
-    }
 
     public Pokemon(String name, List<Type> type, List<Move> learnedMoves, int level, Map<Stat, Integer> baseStats) {
         this.type = type;
@@ -59,12 +42,28 @@ public class Pokemon {
         this.statusReductionDone = false;
     }
 
-    public void setOwner(Player owner){
-        this.owner = owner;
+    public PokemonStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PokemonStatus status) {
+        this.status = status;
+    }
+
+    public int getStatusDuration() {
+        return statusDuration;
+    }
+
+    public void setStatusDuration(int statusDuration) {
+        this.statusDuration = statusDuration;
     }
 
     public Player getOwner() {
         return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
     public String getName() {
@@ -75,9 +74,10 @@ public class Pokemon {
         return learnedMoves;
     }
 
-    public void reducePP(Move move){
-        this.learnedMoves.put(move, Math.max(this.learnedMoves.get(move) - 1,0));
+    public void reducePP(Move move) {
+        this.learnedMoves.put(move, Math.max(this.learnedMoves.get(move) - 1, 0));
     }
+
     public int getLevel() {
         return level;
     }
@@ -91,7 +91,11 @@ public class Pokemon {
         return stat == Stat.LIFE ? this.life.getBaseValue() : this.stats.get(stat).getBaseValue();
     }
 
-    // TODO Marco: Add method to get battle stats with stage calculation
+    public int getBattleStatValueWithStage(Stat stat) {
+        int stage = getStageValue(stat);
+        float multiplier = stage > 0 ? (2.0f + stage) / 2.0f : 2.0f / (2.0f + Math.abs(stage));
+        return Math.round(getBattleStatValue(stat) * multiplier);
+    }
 
     public int getBattleStatValue(Stat stat) {
         return stat == Stat.LIFE ? this.life.getBattleValue() : this.stats.get(stat).getBattleValue();
@@ -136,7 +140,6 @@ public class Pokemon {
     public void setStatusReductionDone(boolean statusReductionDone) {
         this.statusReductionDone = statusReductionDone;
     }
-
 
     @Override
     public String toString() {

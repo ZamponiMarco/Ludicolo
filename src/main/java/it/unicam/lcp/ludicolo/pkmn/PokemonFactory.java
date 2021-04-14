@@ -14,7 +14,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "CHARIZARD";
         List<Type> types = Lists.newArrayList(Type.FIRE, Type.FLYING);
-        List<Move> moves = new ArrayList<Move>();
+        List<Move> moves = Lists.newArrayList(Move.SUCKER_PUNCH, Move.POUND);
         int level = 100;
         stats.put(Stat.LIFE, 78);
         stats.put(Stat.ATTACK, 84);
@@ -29,7 +29,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "VENUSAUR";
         List<Type> types = Lists.newArrayList(Type.GRASS, Type.POISON);
-        List<Move> moves = new ArrayList<Move>();
+        List<Move> moves = Lists.newArrayList(Move.PROTECT, Move.RAZOR_WIND);
         int level = 100;
         stats.put(Stat.LIFE, 80);
         stats.put(Stat.ATTACK, 82);

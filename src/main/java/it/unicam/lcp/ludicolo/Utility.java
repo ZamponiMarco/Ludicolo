@@ -17,7 +17,7 @@ public class Utility {
             // Listen to the update event
             public void objectUpdated(ObjectUpdatedEvent arg0) {
                 System.out.println("_______Object Updated__________________________________________________________\n"
-                        +arg0.getObject().toString());
+                        + arg0.getObject().toString());
                 System.out.println();
             }
 
@@ -41,37 +41,30 @@ public class Utility {
 
     }
 
-    public static void help(final KnowledgeHelper drools, final String message){
+    public static void help(final KnowledgeHelper drools, final String message) {
         System.out.println(message);
         System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName());
         System.out.println();
     }
-    public static void helper(final KnowledgeHelper drools){
+
+    public static void helper(final KnowledgeHelper drools) {
         System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName());
         System.out.println();
     }
 
-    public static int calculateBattleLife (int baseLife, int level){
-        return ((2*baseLife * level)/100) + level + 10;
+    public static int calculateBattleLife(int baseLife, int level) {
+        return ((2 * baseLife * level) / 100) + level + 10;
     }
 
-    public static int calculateBattleStat(int baseStat, int level){
-        return Math.round(((2 * baseStat * level)/100.0f) + 10);
+    public static int calculateBattleStat(int baseStat, int level) {
+        return Math.round(((2 * baseStat * level) / 100.0f) + 10);
     }
 
-
-/*static int multiplier(int stage){
-    float fStage = (float) stage;
-    return Math.round((1.0 + fStage*(1.0/2.0)));
-}*/
-
-    // TODO Marco: Add stub modifiers
-
-    public static int calculateDamage(int level, int power, int attack, int defense){
-        return Math.round(((((((2*level)/5.0f)+2)*power)*(attack/defense))/50)+2);
+    public static int calculateDamage(int level, int power, int attack, int defense, double modifier) {
+        return (int) Math.round((((((((2 * level) / 5.0f) + 2) * power) * (attack / defense)) / 50) + 2) * modifier);
     }
 
-    public static boolean probabilityCheck(int probability){
+    public static boolean probabilityCheck(int probability) {
         int randomValue = new Random().nextInt(100);
         System.out.println(randomValue + "/" + probability);
         return randomValue < probability;

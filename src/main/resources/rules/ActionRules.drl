@@ -1,6 +1,5 @@
 package rules
 
-//list any import classes here.
 import java.util.Comparator
 import it.unicam.lcp.ludicolo.pkmn.Pokemon
 import it.unicam.lcp.ludicolo.Utility
@@ -23,8 +22,8 @@ then
     Action priorityAction;
     int i = playerOneMoveAction.compareTo(playerTwoMoveAction);
     if (i == 0) {
-        priorityAction = playerOnePokemon.getBattleStatValue(Stat.SPEED) > playerTwoPokemon.
-            getBattleStatValue(Stat.SPEED) ? playerOneMoveAction : playerTwoMoveAction;
+        priorityAction = playerOnePokemon.getBattleStatValueWithStage(Stat.SPEED) > playerTwoPokemon.
+            getBattleStatValueWithStage(Stat.SPEED) ? playerOneMoveAction : playerTwoMoveAction;
     } else {
         priorityAction = i > 0 ? playerOneMoveAction : playerTwoMoveAction;
     }

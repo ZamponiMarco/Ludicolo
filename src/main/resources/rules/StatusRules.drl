@@ -92,7 +92,8 @@ then
                     pokemon.getLevel(),
                     40,
                     pokemon.getBattleStatValue(Stat.ATTACK),
-                    pokemon.getBattleStatValue(Stat.DEFENSE));
+                    pokemon.getBattleStatValue(Stat.DEFENSE),
+                    moveAction.getModifier());
             lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
 
 

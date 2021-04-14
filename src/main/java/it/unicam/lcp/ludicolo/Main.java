@@ -1,19 +1,13 @@
 package it.unicam.lcp.ludicolo;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import it.unicam.lcp.ludicolo.actions.Action;
-import it.unicam.lcp.ludicolo.actions.items.ItemAction;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
 import it.unicam.lcp.ludicolo.actions.moves.MoveAction;
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
-import it.unicam.lcp.ludicolo.pkmn.Stat;
+import it.unicam.lcp.ludicolo.pkmn.PokemonFactory;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-
-import java.util.List;
-import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,25 +19,8 @@ public class Main {
 
             Utility.createEventListener(kSession);
 
-            List<Move> moves = Lists.newArrayList(Move.POUND, Move.PROTECT, Move.SNARL, Move.CONFUSE_RAY);
-
-            Map<Stat, Integer> pokeOneStats = Maps.newEnumMap(Stat.class);
-            pokeOneStats.put(Stat.LIFE, 100);
-            pokeOneStats.put(Stat.ATTACK, 10);
-            pokeOneStats.put(Stat.DEFENSE, 10);
-            pokeOneStats.put(Stat.SPECIAL_ATTACK, 10);
-            pokeOneStats.put(Stat.SPECIAL_DEFENSE, 10);
-            pokeOneStats.put(Stat.SPEED, 10);
-            Pokemon pokeOne = new Pokemon("NIDORINO", Lists.newArrayList(Type.POISON), moves, 5, pokeOneStats);
-
-            Map<Stat, Integer> pokeTwoStats = Maps.newEnumMap(Stat.class);
-            pokeTwoStats.put(Stat.LIFE, 100);
-            pokeTwoStats.put(Stat.ATTACK, 12);
-            pokeTwoStats.put(Stat.DEFENSE, 8);
-            pokeTwoStats.put(Stat.SPECIAL_ATTACK, 12);
-            pokeTwoStats.put(Stat.SPECIAL_DEFENSE, 8);
-            pokeTwoStats.put(Stat.SPEED, 200);
-            Pokemon pokeTwo = new Pokemon("GENGAR",Lists.newArrayList(Type.GHOST, Type.POISON), moves, 5, pokeTwoStats);
+            Pokemon pokeOne = PokemonFactory.getCharizard();
+            Pokemon pokeTwo = PokemonFactory.getVenusaur();
 
             Player playerOne = new Player("Red", Lists.newArrayList(pokeOne));
             Player playerTwo = new Player("Blue", Lists.newArrayList(pokeTwo));
@@ -54,13 +31,6 @@ public class Main {
             kSession.insert(pokeOne);
             kSession.insert(pokeTwo);
 
-            Action moveAction = new MoveAction(playerOne, Move.PROTECT, playerTwo);
-            Action moveActionTwo = new MoveAction(playerTwo, Move.CONFUSE_RAY, playerOne);
-
-            kSession.insert(moveAction);
-            kSession.insert(moveActionTwo);
-
-
             Battle battle = new Battle();
             battle.setPlayerOne(playerOne);
             battle.setPlayerTwo(playerTwo);
@@ -69,7 +39,13 @@ public class Main {
 
             kSession.fireAllRules();
 
-            // TODO Marco: Simulazione finchè uno dei due pokemon non muore
+            while (!playerOne.areAllFainted() && !playerTwo.areAllFainted()) {
+                MoveAction moveActionOne = new MoveAction(playerOne, Move.POUND, playerTwo);
+                MoveAction moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne);
+                kSession.insert(moveActionOne);
+                kSession.insert(moveActionTwo);
+                kSession.fireAllRules();
+            }
 
         } catch (Throwable t) {
             t.printStackTrace();
