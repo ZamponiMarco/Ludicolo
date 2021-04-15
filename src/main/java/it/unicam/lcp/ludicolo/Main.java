@@ -9,6 +9,12 @@ import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
+// TODO Francesco: Implement agenda-groups ("setup-battle", "turn", "before-actions", "execute-actions", "after-actions", "check-status")
+// TODO Francesco: Implement items
+// TODO Marco: Implement pokemon swap (retract old and add new)
+// TODO Marco: Implement simple view
+// TODO Marco: Implement moves
+
 public class Main {
     public static void main(String[] args) {
         try {
