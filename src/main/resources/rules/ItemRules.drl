@@ -1,0 +1,107 @@
+
+package rules
+
+//list any import classes here.
+import java.util.Comparator
+import it.unicam.lcp.ludicolo.Utility
+import it.unicam.lcp.ludicolo.Player
+import it.unicam.lcp.ludicolo.pkmn.Stat
+import it.unicam.lcp.ludicolo.actions.moves.MoveAction
+import it.unicam.lcp.ludicolo.actions.moves.MoveType
+import it.unicam.lcp.ludicolo.actions.ActionStatus
+import it.unicam.lcp.ludicolo.pkmn.Pokemon
+import it.unicam.lcp.ludicolo.pkmn.PokemonStatus
+import it.unicam.lcp.ludicolo.actions.items.ItemAction
+import it.unicam.lcp.ludicolo.actions.Action
+import java.util.HashMap
+import java.util.Map
+import java.util.Random
+import it.unicam.lcp.ludicolo.actions.moves.Move
+import it.unicam.lcp.ludicolo.actions.moves.MoveType
+import it.unicam.lcp.ludicolo.actions.moves.MoveEffectTarget
+import it.unicam.lcp.ludicolo.actions.moves.StageMoveEffect
+import it.unicam.lcp.ludicolo.actions.moves.StatusMoveEffect
+import java.util.List
+import java.util.Collections
+import it.unicam.lcp.ludicolo.Type
+
+rule "HealItemActionFire"
+    salience 50
+when
+    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE, itemAction.item.containsHealItemEffect())
+    pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
+then
+    Utility.helper(drools);
+    System.out.println("Item used: " + itemAction.getItem().name() + " - " + itemAction.getItem().getDescription());
+    itemAction.getItem().getHealItemEffects().forEach(healItemEffect -> {
+        Map<Stat, Integer> lifeStats = new HashMap<>();
+
+        int oldLife = pokemon.getStageValue(Stat.LIFE);
+        int wholeLife = pokemon.getBattleStatValue(Stat.LIFE);
+        if(healItemEffect.isPercentage()){
+            int newLifeOne = Math.min(oldLife + wholeLife*healItemEffect.getValue()/100, wholeLife);
+            lifeStats.put(Stat.LIFE, newLifeOne);
+            System.out.println(oldLife + " -> " + newLifeOne);
+        } else {
+            int newLifeTwo = Math.min(oldLife + healItemEffect.getValue(), wholeLife);
+            lifeStats.put(Stat.LIFE, newLifeTwo);
+            System.out.println(oldLife + " -> " + newLifeTwo);
+        }
+        pokemon.setStage(lifeStats);
+    });
+    update(pokemon);
+
+    itemAction.setStatus(ActionStatus.DONE);
+    update(itemAction);
+end
+
+rule "StatusItemActionFire"
+    salience 50
+when
+    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE, itemAction.item.containsStatusItemEffect())
+    pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
+then
+    Utility.helper(drools);
+    System.out.println("Item used: " + itemAction.getItem().name() + " - " + itemAction.getItem().getDescription());
+    itemAction.getItem().getStatusItemEffects().forEach(statusItemEffect -> {
+        if(pokemon.getStatus().equals(statusItemEffect.getStatus())){
+            if(statusItemEffect.getStatus().equals(PokemonStatus.PARALYZED)){
+                Map<Stat, Integer> parBattleStats = new HashMap<>();
+                parBattleStats.put(Stat.SPEED, Utility.calculateBattleStat(pokemon.getBaseStatValue(Stat.SPEED), pokemon.getLevel()));
+                pokemon.setBattleStat(parBattleStats);
+            }
+            pokemon.setStatus(null);
+            pokemon.setStatusDuration(0);
+        }
+    });
+    update(pokemon);
+    itemAction.setStatus(ActionStatus.DONE);
+    update(itemAction);
+end
+
+rule "RestoreItemActionFire"
+    salience 50
+when
+    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE, itemAction.item.containsRestoreItemEffect())
+    pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
+then
+    Utility.helper(drools);
+    System.out.println("Item used: " + itemAction.getItem().name() + " - " + itemAction.getItem().getDescription());
+    itemAction.getItem().getRestoreItemEffects().forEach(statusItemEffect -> {
+            pokemon.getLearnedMoves().forEach((move, oldPPValue) -> {
+                int wholePPValue = move.getMaxPp();
+                if(statusItemEffect.isPercentage()){
+                    int newPPOne =  Math.min(oldPPValue + wholePPValue*statusItemEffect.getValue()/100, wholePPValue);
+                    pokemon.setPP(move, newPPOne);
+                    System.out.println(move.name() + " - " + oldPPValue + " -> " + newPPOne);
+                 } else {
+                    int newPPTwo =  Math.min(oldPPValue + statusItemEffect.getValue(), wholePPValue);
+                    pokemon.setPP(move, newPPTwo);
+                    System.out.println(move.name() + " - " + oldPPValue + " -> " + newPPTwo);
+                }
+            });
+    });
+    update(pokemon);
+    itemAction.setStatus(ActionStatus.DONE);
+    update(itemAction);
+end

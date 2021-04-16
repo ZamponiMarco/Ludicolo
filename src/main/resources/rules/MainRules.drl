@@ -22,7 +22,7 @@ import java.util.Map
 
 
 rule "SetBattleStats"
-salience 100
+salience 300
 when
     pkmn: Pokemon(!pkmn.battleStatsComputed)
 then

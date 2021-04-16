@@ -1,23 +1,23 @@
 package it.unicam.lcp.ludicolo.actions.moves;
 
-public abstract class SideEffect {
-    protected final SideEffectTarget target;
+public abstract class MoveEffect {
+    protected final MoveEffectTarget target;
     protected final int chance;
 
-    public SideEffect(int chance, SideEffectTarget target) {
+    public MoveEffect(int chance, MoveEffectTarget target) {
         this.chance = chance;
         this.target = target;
     }
 
     @Override
     public String toString() {
-        return "SideEffect{" +
+        return "MoveEffect{" +
                 "target=" + target +
                 ", chance=" + chance +
                 '}';
     }
 
-    public SideEffectTarget getTarget() {
+    public MoveEffectTarget getTarget() {
         return target;
     }
 

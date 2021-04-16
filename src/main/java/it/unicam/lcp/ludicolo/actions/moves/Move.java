@@ -12,18 +12,18 @@ import java.util.stream.Collectors;
 public enum Move {
 
     BUG_BUZZ(MoveType.SPECIAL, Type.BUG, 10, 90, 100, 0),
-    STRUGGLE_BUG(MoveType.SPECIAL, Type.BUG, 20, 50, 100, 0, new StageSideEffect(100, SideEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
-    QUIVER_DANCE(MoveType.STATUS, Type.BUG, 20, 0, 100, 0, new StageSideEffect(100, SideEffectTarget.SOURCE, 1, Stat.SPECIAL_ATTACK), new StageSideEffect(100, SideEffectTarget.SOURCE, 1, Stat.SPECIAL_DEFENSE), new StageSideEffect(100, SideEffectTarget.SOURCE, 1, Stat.SPEED)),
+    STRUGGLE_BUG(MoveType.SPECIAL, Type.BUG, 20, 50, 100, 0, new StageMoveEffect(100, MoveEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
+    QUIVER_DANCE(MoveType.STATUS, Type.BUG, 20, 0, 100, 0, new StageMoveEffect(100, MoveEffectTarget.SOURCE, 1, Stat.SPECIAL_ATTACK), new StageMoveEffect(100, MoveEffectTarget.SOURCE, 1, Stat.SPECIAL_DEFENSE), new StageMoveEffect(100, MoveEffectTarget.SOURCE, 1, Stat.SPEED)),
 
     POUND(MoveType.PHYSICAL, Type.NORMAL, 35, 40, 100, 0),
     RAZOR_WIND(MoveType.SPECIAL, Type.NORMAL, 10, 80, 100, 0),
-    PROTECT(MoveType.STATUS, Type.NORMAL, 10, 0, 100, 4, new StatusSideEffect(100, SideEffectTarget.SOURCE, PokemonStatus.PROTECTED)),
+    PROTECT(MoveType.STATUS, Type.NORMAL, 10, 0, 100, 4, new StatusMoveEffect(100, MoveEffectTarget.SOURCE, PokemonStatus.PROTECTED)),
 
     SUCKER_PUNCH(MoveType.PHYSICAL, Type.DARK, 5, 70, 100, 1),
-    SNARL(MoveType.SPECIAL, Type.DARK, 20, 55, 95, 0, new StageSideEffect(100, SideEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
-    DARK_VOID(MoveType.STATUS, Type.DARK, 10, 0, 50, 0, new StatusSideEffect(100, SideEffectTarget.TARGET, PokemonStatus.ASLEEP)),
+    SNARL(MoveType.SPECIAL, Type.DARK, 20, 55, 95, 0, new StageMoveEffect(100, MoveEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
+    DARK_VOID(MoveType.STATUS, Type.DARK, 10, 0, 50, 0, new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.ASLEEP)),
 
-    CONFUSE_RAY(MoveType.STATUS, Type.GHOST, 10, 0, 100, 0, new StatusSideEffect(100, SideEffectTarget.TARGET, PokemonStatus.CONFUSED));
+    CONFUSE_RAY(MoveType.STATUS, Type.GHOST, 10, 0, 100, 0, new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.CONFUSED));
 
     private final MoveType moveType;
     private final Type type;
@@ -31,37 +31,37 @@ public enum Move {
     private final int power;
     private final int accuracy;
     private final int priority;
-    private final List<SideEffect> sideEffectList;
+    private final List<MoveEffect> moveEffectList;
 
-    Move(MoveType moveType, Type type, int pp, int power, int accuracy, int priority, SideEffect... sideEffects) {
+    Move(MoveType moveType, Type type, int pp, int power, int accuracy, int priority, MoveEffect... moveEffects) {
         this.moveType = moveType;
         this.type = type;
         this.maxPp = pp;
         this.power = power;
         this.accuracy = accuracy;
         this.priority = priority;
-        this.sideEffectList = Lists.newArrayList(sideEffects);
+        this.moveEffectList = Lists.newArrayList(moveEffects);
     }
 
-    public List<SideEffect> getSideEffectList() {
-        return sideEffectList;
+    public List<MoveEffect> getSideEffectList() {
+        return moveEffectList;
     }
 
-    public boolean containsStageSideEffect(){
-        return this.sideEffectList.stream().anyMatch(sideEffect -> sideEffect instanceof StageSideEffect);
+    public boolean containsStageMoveEffect(){
+        return this.moveEffectList.stream().anyMatch(moveEffect -> moveEffect instanceof StageMoveEffect);
     }
-    public boolean containsStatusSideEffect(){
-        return this.sideEffectList.stream().anyMatch(sideEffect -> sideEffect instanceof StatusSideEffect);
-    }
-
-    public List<StageSideEffect> getStageSideEffects() {
-        return this.sideEffectList.stream().filter(sideEffect -> sideEffect instanceof StageSideEffect).
-                map(sideEffect -> (StageSideEffect) sideEffect).collect(Collectors.toList());
+    public boolean containsStatusMoveEffect(){
+        return this.moveEffectList.stream().anyMatch(moveEffect -> moveEffect instanceof StatusMoveEffect);
     }
 
-    public List<StatusSideEffect> getStatusSideEffects() {
-        return this.sideEffectList.stream().filter(sideEffect -> sideEffect instanceof StatusSideEffect).
-                map(sideEffect -> (StatusSideEffect) sideEffect).collect(Collectors.toList());
+    public List<StageMoveEffect> getStageMoveEffects() {
+        return this.moveEffectList.stream().filter(moveEffect -> moveEffect instanceof StageMoveEffect).
+                map(moveEffect -> (StageMoveEffect) moveEffect).collect(Collectors.toList());
+    }
+
+    public List<StatusMoveEffect> getStatusMoveEffects() {
+        return this.moveEffectList.stream().filter(moveEffect -> moveEffect instanceof StatusMoveEffect).
+                map(moveEffect -> (StatusMoveEffect) moveEffect).collect(Collectors.toList());
     }
 
     public MoveType getMoveType() {

@@ -9,6 +9,6 @@ public class SwapAction extends Action {
 
     @Override
     protected int getActionPriority() {
-        return 9;
+        return 10;
     }
 }

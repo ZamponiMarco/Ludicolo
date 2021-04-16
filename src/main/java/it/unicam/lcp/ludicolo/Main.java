@@ -1,6 +1,8 @@
 package it.unicam.lcp.ludicolo;
 
 import com.google.common.collect.Lists;
+import it.unicam.lcp.ludicolo.actions.items.Item;
+import it.unicam.lcp.ludicolo.actions.items.ItemAction;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
 import it.unicam.lcp.ludicolo.actions.moves.MoveAction;
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
@@ -10,7 +12,6 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
 // TODO Francesco: Implement agenda-groups ("setup-battle", "turn", "before-actions", "execute-actions", "after-actions", "check-status")
-// TODO Francesco: Implement items
 // TODO Marco: Implement pokemon swap (retract old and add new)
 // TODO Marco: Implement simple view
 // TODO Marco: Implement moves
@@ -45,13 +46,33 @@ public class Main {
 
             kSession.fireAllRules();
 
-            while (!playerOne.areAllFainted() && !playerTwo.areAllFainted()) {
+            kSession.insert(new MoveAction(playerOne, Move.POUND, playerTwo));
+            kSession.insert(new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne));
+
+            kSession.fireAllRules();
+
+            kSession.insert(new MoveAction(playerOne, Move.POUND, playerTwo));
+            kSession.insert(new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne));
+
+            kSession.fireAllRules();
+
+
+            kSession.insert(new MoveAction(playerOne, Move.POUND, playerTwo));
+            kSession.insert(new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne));
+
+            kSession.fireAllRules();
+
+            kSession.insert(new ItemAction(playerTwo, Item.ELIXIR));
+            kSession.insert(new ItemAction(playerOne, Item.MAX_POTION));
+            kSession.fireAllRules();
+
+            /*while (!playerOne.areAllFainted() && !playerTwo.areAllFainted()) {
                 MoveAction moveActionOne = new MoveAction(playerOne, Move.POUND, playerTwo);
                 MoveAction moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne);
                 kSession.insert(moveActionOne);
                 kSession.insert(moveActionTwo);
                 kSession.fireAllRules();
-            }
+            }*/
 
         } catch (Throwable t) {
             t.printStackTrace();

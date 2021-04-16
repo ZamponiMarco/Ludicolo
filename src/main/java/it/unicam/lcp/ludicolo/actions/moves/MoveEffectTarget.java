@@ -1,5 +1,5 @@
 package it.unicam.lcp.ludicolo.actions.moves;
 
-public enum SideEffectTarget {
+public enum MoveEffectTarget {
     TARGET, SOURCE
 }

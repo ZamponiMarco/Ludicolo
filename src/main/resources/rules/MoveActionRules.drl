@@ -18,9 +18,9 @@ import java.util.Map
 import java.util.Random
 import it.unicam.lcp.ludicolo.actions.moves.Move
 import it.unicam.lcp.ludicolo.actions.moves.MoveType
-import it.unicam.lcp.ludicolo.actions.moves.SideEffectTarget
-import it.unicam.lcp.ludicolo.actions.moves.StageSideEffect
-import it.unicam.lcp.ludicolo.actions.moves.StatusSideEffect
+import it.unicam.lcp.ludicolo.actions.moves.MoveEffectTarget
+import it.unicam.lcp.ludicolo.actions.moves.StageMoveEffect
+import it.unicam.lcp.ludicolo.actions.moves.StatusMoveEffect
 import java.util.List
 import java.util.Collections
 import it.unicam.lcp.ludicolo.Type
@@ -154,15 +154,15 @@ end
 rule "StageEffect"
     salience 40
 when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, !moveAction.stageEffectDone, moveAction.move.containsStageSideEffect())
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, !moveAction.stageEffectDone, moveAction.move.containsStageMoveEffect())
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
     targetPokemon : Pokemon(targetPokemon.getOwner().equals(moveAction.getTarget()))
 then
     Utility.helper(drools);
-    moveAction.getMove().getStageSideEffects().forEach(stageSideEffect -> {
-        SideEffectTarget target = stageSideEffect.getTarget();
+    moveAction.getMove().getStageMoveEffects().forEach(stageSideEffect -> {
+        MoveEffectTarget target = stageSideEffect.getTarget();
         Stat stat = stageSideEffect.getTargetStat();
-        if (target.equals(SideEffectTarget.TARGET)) {
+        if (target.equals(MoveEffectTarget.TARGET)) {
             targetPokemon.setStage(Collections.singletonMap(stat,
                 targetPokemon.getStageValue(stat) + stageSideEffect.getNumberOfStages()));
         } else {
@@ -179,14 +179,14 @@ end;
 rule "StatusEffect"
     salience 40
 when
-    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, !moveAction.statusEffectDone, moveAction.move.containsStatusSideEffect())
+    moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, !moveAction.statusEffectDone, moveAction.move.containsStatusMoveEffect())
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
     targetPokemon : Pokemon(targetPokemon.getOwner().equals(moveAction.getTarget()))
 then
     Utility.helper(drools);
-    moveAction.getMove().getStatusSideEffects().forEach(effect -> {
+    moveAction.getMove().getStatusMoveEffects().forEach(effect -> {
         if(Utility.probabilityCheck(effect.getChance())){
-            Pokemon target = effect.getTarget() == SideEffectTarget.SOURCE ? sourcePokemon : effect.getTarget() == SideEffectTarget.TARGET ? targetPokemon : null;
+            Pokemon target = effect.getTarget() == MoveEffectTarget.SOURCE ? sourcePokemon : effect.getTarget() == MoveEffectTarget.TARGET ? targetPokemon : null;
             if(target.getStatus() == null){
                  target.setStatus(effect.getStatus());
                         switch (effect.getStatus()){

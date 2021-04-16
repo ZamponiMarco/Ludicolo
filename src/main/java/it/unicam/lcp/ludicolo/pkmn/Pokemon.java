@@ -78,6 +78,14 @@ public class Pokemon {
         this.learnedMoves.put(move, Math.max(this.learnedMoves.get(move) - 1, 0));
     }
 
+    public int getPP(Move move){
+        return this.learnedMoves.get(move);
+    }
+
+    public void setPP(Move move, int value){
+        this.learnedMoves.put(move, value);
+    }
+
     public int getLevel() {
         return level;
     }

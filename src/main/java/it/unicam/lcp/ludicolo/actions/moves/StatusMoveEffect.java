@@ -2,20 +2,20 @@ package it.unicam.lcp.ludicolo.actions.moves;
 
 import it.unicam.lcp.ludicolo.pkmn.PokemonStatus;
 
-public class StatusSideEffect extends SideEffect {
+public class StatusMoveEffect extends MoveEffect {
 
     private final PokemonStatus status;
     private final int duration;
     private final boolean random;
 
-    public StatusSideEffect(int chance, SideEffectTarget target, PokemonStatus status, int duration, boolean random) {
+    public StatusMoveEffect(int chance, MoveEffectTarget target, PokemonStatus status, int duration, boolean random) {
         super(chance, target);
         this.status = status;
         this.duration = duration;
         this.random = random;
     }
 
-    public StatusSideEffect(int chance, SideEffectTarget target, PokemonStatus status) {
+    public StatusMoveEffect(int chance, MoveEffectTarget target, PokemonStatus status) {
         super(chance, target);
         this.status = status;
         this.duration = status.getDuration();
@@ -36,7 +36,7 @@ public class StatusSideEffect extends SideEffect {
 
     @Override
     public String toString() {
-        return "StatusSideEffect{" +
+        return "StatusMoveEffect{" +
                 "status=" + status +
                 ", duration=" + duration +
                 ", random=" + random +
