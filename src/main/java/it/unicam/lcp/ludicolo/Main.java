@@ -47,23 +47,13 @@ public class Main {
             kSession.fireAllRules();
 
             kSession.insert(new MoveAction(playerOne, Move.POUND, playerTwo));
-            kSession.insert(new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne));
+            kSession.insert(new MoveAction(playerTwo, Move.CONFUSE_RAY, playerOne));
 
             kSession.fireAllRules();
 
-            kSession.insert(new MoveAction(playerOne, Move.POUND, playerTwo));
-            kSession.insert(new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne));
+            kSession.insert(new MoveAction(playerTwo, Move.CONFUSE_RAY, playerOne));
+            kSession.insert(new ItemAction(playerOne, Item.FULL_RESTORE));
 
-            kSession.fireAllRules();
-
-
-            kSession.insert(new MoveAction(playerOne, Move.POUND, playerTwo));
-            kSession.insert(new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne));
-
-            kSession.fireAllRules();
-
-            kSession.insert(new ItemAction(playerTwo, Item.ELIXIR));
-            kSession.insert(new ItemAction(playerOne, Item.MAX_POTION));
             kSession.fireAllRules();
 
             /*while (!playerOne.areAllFainted() && !playerTwo.areAllFainted()) {

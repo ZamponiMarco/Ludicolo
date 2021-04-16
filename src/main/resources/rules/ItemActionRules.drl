@@ -25,14 +25,26 @@ import java.util.List
 import java.util.Collections
 import it.unicam.lcp.ludicolo.Type
 
-rule "HealItemActionFire"
+rule "ItemActionFire"
     salience 50
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE, itemAction.item.containsHealItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
 then
     Utility.helper(drools);
+
     System.out.println("Item used: " + itemAction.getItem().name() + " - " + itemAction.getItem().getDescription());
+    itemAction.setStatus(ActionStatus.FIRED);
+    update(itemAction);
+end
+
+rule "HealItemActionFire"
+    salience 40
+when
+    itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isHealItemDone(),itemAction.item.containsHealItemEffect())
+    pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
+then
+    Utility.helper(drools);
     itemAction.getItem().getHealItemEffects().forEach(healItemEffect -> {
         Map<Stat, Integer> lifeStats = new HashMap<>();
 
@@ -51,20 +63,19 @@ then
     });
     update(pokemon);
 
-    itemAction.setStatus(ActionStatus.DONE);
+    itemAction.setHealItemDone(true);
     update(itemAction);
 end
 
 rule "StatusItemActionFire"
-    salience 50
+    salience 40
 when
-    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE, itemAction.item.containsStatusItemEffect())
+    itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isStatusItemDone(),itemAction.item.containsStatusItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
 then
     Utility.helper(drools);
-    System.out.println("Item used: " + itemAction.getItem().name() + " - " + itemAction.getItem().getDescription());
     itemAction.getItem().getStatusItemEffects().forEach(statusItemEffect -> {
-        if(pokemon.getStatus().equals(statusItemEffect.getStatus())){
+        if(pokemon.getStatus() != null && pokemon.getStatus().equals(statusItemEffect.getStatus())){
             if(statusItemEffect.getStatus().equals(PokemonStatus.PARALYZED)){
                 Map<Stat, Integer> parBattleStats = new HashMap<>();
                 parBattleStats.put(Stat.SPEED, Utility.calculateBattleStat(pokemon.getBaseStatValue(Stat.SPEED), pokemon.getLevel()));
@@ -75,18 +86,17 @@ then
         }
     });
     update(pokemon);
-    itemAction.setStatus(ActionStatus.DONE);
+    itemAction.setStatusItemDone(true);
     update(itemAction);
 end
 
 rule "RestoreItemActionFire"
-    salience 50
+    salience 40
 when
-    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE, itemAction.item.containsRestoreItemEffect())
+    itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isRestoreItemDone(), itemAction.item.containsRestoreItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
 then
     Utility.helper(drools);
-    System.out.println("Item used: " + itemAction.getItem().name() + " - " + itemAction.getItem().getDescription());
     itemAction.getItem().getRestoreItemEffects().forEach(statusItemEffect -> {
             pokemon.getLearnedMoves().forEach((move, oldPPValue) -> {
                 int wholePPValue = move.getMaxPp();
@@ -102,6 +112,16 @@ then
             });
     });
     update(pokemon);
-    itemAction.setStatus(ActionStatus.DONE);
+    itemAction.setRestoreItemDone(true);
     update(itemAction);
 end
+
+rule "ItemEnding"
+    salience 39
+when
+    itemAction : ItemAction(itemAction.status == ActionStatus.FIRED)
+then
+    Utility.helper(drools);
+    itemAction.setStatus(ActionStatus.DONE);
+    update(itemAction);
+ end

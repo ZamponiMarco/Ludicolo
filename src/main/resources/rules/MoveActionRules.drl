@@ -188,7 +188,6 @@ then
         if(Utility.probabilityCheck(effect.getChance())){
             Pokemon target = effect.getTarget() == MoveEffectTarget.SOURCE ? sourcePokemon : effect.getTarget() == MoveEffectTarget.TARGET ? targetPokemon : null;
             if(target.getStatus() == null){
-                 target.setStatus(effect.getStatus());
                         switch (effect.getStatus()){
                             case PARALYZED:
                                 Map<Stat, Integer> battleStats = new HashMap<>();
@@ -199,11 +198,16 @@ then
                             case POISONED:
                             case ASLEEP:
                             case CONFUSED:
-                            case PROTECTED:
+                                target.setStatus(effect.getStatus());
                                 target.setStatusDuration(effect.isRandom() ? new Random().nextInt(effect.getDuration()) + 1 : effect.getDuration());
+
+                                System.out.println(target.getName() + " has now a condition: " + target.getStatus() + " for " + target.getStatusDuration() + " turns");
+                                break;
+                            case PROTECTED:
+                                target.setProtectedFromAttacks(true);
+                                System.out.println(target.getName() + " has now protection from attacks.");
                                 break;
                         }
-                System.out.println(target.getName() + " has now a condition: " + target.getStatus() + " for " + target.getStatusDuration() + " turns");
                 update(target);
             } else {
                 System.out.println(target.getName() + " has already a condition: " + target.getStatus());

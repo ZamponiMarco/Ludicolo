@@ -29,7 +29,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "VENUSAUR";
         List<Type> types = Lists.newArrayList(Type.GRASS, Type.POISON);
-        List<Move> moves = Lists.newArrayList(Move.PROTECT, Move.RAZOR_WIND);
+        List<Move> moves = Lists.newArrayList(Move.PROTECT, Move.RAZOR_WIND, Move.CONFUSE_RAY);
         int level = 100;
         stats.put(Stat.LIFE, 80);
         stats.put(Stat.ATTACK, 82);

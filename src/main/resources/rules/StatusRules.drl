@@ -29,6 +29,19 @@ then
     Utility.helper(drools);
     pokemon.setStatusDuration(Math.max((pokemon.getStatusDuration() - 1),0));
     pokemon.setStatusReductionDone(true);
+
+    pokemon.setProtectedFromAttacks(false);
+    update(pokemon);
+end
+
+rule "ProtectionTimeUp"
+    salience 110
+when
+    not Action()
+    pokemon: Pokemon(pokemon.protectedFromAttacks)
+then
+    Utility.helper(drools);
+    pokemon.setProtectedFromAttacks(false);
     update(pokemon);
 end
 
@@ -156,10 +169,10 @@ then
       salience 61
   when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
-      pokemon : Pokemon(pokemon.status == PokemonStatus.PROTECTED, pokemon.owner.equals(moveAction.getSource()))
+      pokemon : Pokemon(pokemon.isProtectedFromAttacks(), pokemon.owner.equals(moveAction.getSource()))
   then
       Utility.helper(drools);
-      System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+      System.out.println(pokemon.getName() +  " is protected.");
 
       moveAction.setStatus(ActionStatus.DONE);
       System.out.println(pokemon.getName() + " failed to throw its move");
@@ -171,13 +184,14 @@ then
  when
 
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
-      pokemonTarget : Pokemon(pokemonTarget.status == PokemonStatus.PROTECTED, pokemonTarget.owner.equals(moveAction.getTarget()))
+      pokemonTarget : Pokemon(pokemonTarget.isProtectedFromAttacks(), pokemonTarget.owner.equals(moveAction.getTarget()))
       pokemonSource : Pokemon(pokemonSource.owner.equals(moveAction.getSource()))
  then
-      Utility.helper(drools);
-      System.out.println(pokemonTarget.getName() + " is " + pokemonTarget.getStatus());
+     Utility.helper(drools);
+     System.out.println(pokemonTarget.getName() + " is protected.");
 
      moveAction.setStatus(ActionStatus.DONE);
      System.out.println(pokemonSource.getName() + " failed to throw its move");
+
      update(moveAction);
 end

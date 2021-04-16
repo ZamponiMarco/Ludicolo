@@ -71,18 +71,6 @@ Utility.helper(drools);
     retract(toRemove);
  end
 
-
-rule "ItemActionFire"
-when
-    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE)
-then
-    Utility.helper(drools);
-    System.out.println("Item action fired");
-
-    itemAction.setStatus(ActionStatus.FIRED);
-    update(itemAction)
-end
-
 rule "SwapActionFire"
 
 when
@@ -107,10 +95,23 @@ when
      retract(leftAction);
 end
 
+/*rule "StatusReductionReset"
+    salience 109
+when
+    not Action()
+    pokemon: Pokemon(pokemon.statusReductionDone)
+then
+    Utility.helper(drools);
+
+    pokemon.setStatusReductionDone(false);
+    update(pokemon);
+ end*/
+
 rule "TurnReady"
     salience 108
 when
     not Action()
+
 then
     Utility.helper(drools);
     System.out.println("There are no actions left: ready for the next turn");
