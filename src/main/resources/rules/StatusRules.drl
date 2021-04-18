@@ -21,21 +21,41 @@ import it.unicam.lcp.ludicolo.actions.moves.StatusMoveEffect
 import java.util.List
 
 rule "StatusDurationReduction"
-    salience 110
+    agenda-group "action fire"
+    salience 4
 when
-    not Action()
-    pokemon: Pokemon(pokemon.status != null, !pokemon.statusReductionDone)
+    playerAction : Action(playerAction.status == ActionStatus.READY_TO_FIRE)
+    pokemon: Pokemon(pokemon.status != null, !pokemon.isStatusReductionDone(), pokemon.owner.equals(playerAction.getSource()))
 then
     Utility.helper(drools);
     pokemon.setStatusDuration(Math.max((pokemon.getStatusDuration() - 1),0));
     pokemon.setStatusReductionDone(true);
-
-    pokemon.setProtectedFromAttacks(false);
     update(pokemon);
 end
 
+rule "EffectTimeUp"
+    agenda-group "action fire"
+    salience 5
+when
+    pokemon : Pokemon(pokemon.status != null, pokemon.statusDuration == 0)
+then
+    Utility.helper(drools);
+
+    if(pokemon.getStatus().equals(PokemonStatus.PARALYZED)){
+        Map<Stat, Integer> parBattleStats = new HashMap<>();
+        parBattleStats.put(Stat.SPEED, Utility.calculateBattleStat(pokemon.getBaseStatValue(Stat.SPEED), pokemon.getLevel()));
+        pokemon.setBattleStat(parBattleStats);
+    }
+
+    System.out.println(pokemon.getName() + "'s " + pokemon.getStatus() + " status wore off");
+    pokemon.setStatus(null);
+    update(pokemon);
+
+end
+
 rule "ProtectionTimeUp"
-    salience 110
+    agenda-group "turn ending"
+    salience 0
 when
     not Action()
     pokemon: Pokemon(pokemon.protectedFromAttacks)
@@ -45,21 +65,11 @@ then
     update(pokemon);
 end
 
-rule "EffectTimeUp"
-    salience 109
-when
-    not Action()
-    pokemon : Pokemon(pokemon.status != null, pokemon.statusDuration == 0)
-then
-    Utility.helper(drools);
-    System.out.println(pokemon.getName() + "'s " + pokemon.getStatus() + " status wore off");
 
-    pokemon.setStatus(null);
-    update(pokemon);
-end
 
 rule "BurnedEffect"
-    salience 110
+    agenda-group "turn ending"
+    salience 0
 when
     not Action()
     pokemon : Pokemon(pokemon.status == PokemonStatus.BURNED)
@@ -75,7 +85,8 @@ then
  end
 
  rule "PoisonedEffect"
-     salience 110
+     agenda-group "turn ending"
+     salience 0
  when
      not Action()
      pokemon : Pokemon(pokemon.status == PokemonStatus.POISONED)
@@ -91,7 +102,8 @@ then
   end
 
 rule "ConfusedEffect"
-    salience 61
+    agenda-group "move action fire"
+    salience 3
 when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.CONFUSED, pokemon.owner.equals(moveAction.getSource()))
@@ -123,7 +135,8 @@ then
  end
 
  rule "FrozenEffect"
-     salience 61
+     agenda-group "action fire"
+     salience 3
  when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.FROZEN, pokemon.owner.equals(moveAction.getSource()))
@@ -137,7 +150,8 @@ then
   end
 
  rule "AsleepEffect"
-     salience 61
+     agenda-group "action fire"
+     salience 3
  when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.ASLEEP, pokemon.owner.equals(moveAction.getSource()))
@@ -151,7 +165,8 @@ then
   end
 
 rule "ParalyzedEffect"
-    salience 61
+     agenda-group "action fire"
+     salience 3
 when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.PARALYZED, pokemon.owner.equals(moveAction.getSource()))
@@ -165,24 +180,10 @@ then
     }
  end
 
-  rule "ProtectedEffect"
-      salience 61
-  when
-      moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
-      pokemon : Pokemon(pokemon.isProtectedFromAttacks(), pokemon.owner.equals(moveAction.getSource()))
-  then
-      Utility.helper(drools);
-      System.out.println(pokemon.getName() +  " is protected.");
-
-      moveAction.setStatus(ActionStatus.DONE);
-      System.out.println(pokemon.getName() + " failed to throw its move");
-      update(moveAction);
- end
-
- rule "ProtectedEffectOpponent"
-     salience 59
+ rule "ProtectedEffect"
+    agenda-group "move action fire"
+    salience 2
  when
-
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemonTarget : Pokemon(pokemonTarget.isProtectedFromAttacks(), pokemonTarget.owner.equals(moveAction.getTarget()))
       pokemonSource : Pokemon(pokemonSource.owner.equals(moveAction.getSource()))

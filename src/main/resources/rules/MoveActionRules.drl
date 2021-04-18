@@ -25,8 +25,9 @@ import java.util.List
 import java.util.Collections
 import it.unicam.lcp.ludicolo.Type
 
-rule "AccuracyCheck"
-    salience 60
+rule "MoveActionAccuracyCheck"
+    agenda-group "action fire"
+    salience 2
 when
     moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
@@ -37,13 +38,16 @@ then
         moveAction.setStatus(ActionStatus.DONE);
         System.out.println(sourcePokemon.getName() + " failed to throw its move");
         update(moveAction);
+    } else {
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action fire").setFocus();
     }
 end
 
 // Modifier rules
 
 rule "CalculateModifier"
-    salience 55
+    agenda-group "move action fire"
+    salience 1
 when
     moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
@@ -67,7 +71,8 @@ end
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 rule "PhysicalMoveActionFire"
-    salience 50
+    agenda-group "move action fire"
+    salience 0
 when
     moveAction: MoveAction(moveAction.move.moveType == MoveType.PHYSICAL, moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
@@ -97,10 +102,12 @@ then
 
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action effect").setFocus();
 end
 
 rule "SpecialMoveActionFire"
-    salience 50
+    agenda-group "move action fire"
+    salience 0
 when
     moveAction: MoveAction(moveAction.move.moveType == MoveType.SPECIAL, moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
@@ -128,10 +135,12 @@ then
 
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action effect").setFocus();
 end
 
 rule "StatusMoveActionFire"
-    salience 50
+    agenda-group "move action fire"
+    salience 0
 when
     moveAction: MoveAction(moveAction.move.moveType == MoveType.STATUS, moveAction.status == ActionStatus.READY_TO_FIRE)
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
@@ -145,6 +154,7 @@ then
 
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action effect").setFocus();
 end
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,7 +162,8 @@ end
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 rule "StageEffect"
-    salience 40
+    agenda-group "move action effect"
+    salience 1
 when
     moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, !moveAction.stageEffectDone, moveAction.move.containsStageMoveEffect())
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
@@ -177,7 +188,8 @@ then
 end;
 
 rule "StatusEffect"
-    salience 40
+    agenda-group "move action effect"
+    salience 1
 when
     moveAction : MoveAction(moveAction.status == ActionStatus.FIRED, !moveAction.statusEffectDone, moveAction.move.containsStatusMoveEffect())
     sourcePokemon : Pokemon(sourcePokemon.getOwner().equals(moveAction.getSource()))
@@ -219,7 +231,8 @@ then
 end
 
 rule "MoveEnding"
-    salience 39
+    agenda-group "move action fire"
+    salience -1
 when
     moveAction : MoveAction(moveAction.status == ActionStatus.FIRED)
 then

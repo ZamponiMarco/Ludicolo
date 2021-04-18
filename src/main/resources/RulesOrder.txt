@@ -1,0 +1,58 @@
+AG) battle setup
+    1) SetBattleStats
+    AG) turn setup
+            1) SelectMoves [x2]
+            2) TurnStart
+            AG) turn management
+                    1) ActionsPriority
+                    AG) action fire
+                            1) ItemActionFire
+                            AG) item action effect
+                                    1) HealItemActionFire/StatusItemActionFire/RestoreItemActionFire
+                                    2) ItemEnding
+                            2) StatusDurationReduction
+                            3) EffectTimeUp
+                            4) FrozenEffect/AsleepEffect/ParalyzedEffect
+                            5) MoveActionAccuracyCheck
+                            AG) move action fire
+                                    1) ConfusedEffect
+                                    2) ProtectedEffect
+                                    2) CalculateModifier
+                                    3) PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
+                                    AG) move action effect
+                                            1)StageEffect/StatusEffect
+                                    4) MoveEnding
+                    2) PokemonFaintedWithMove
+                    3) PokemonFainted
+                    4) PlayerLose, halt
+                    // Rule for pokemon change
+                    5) SetupNextAction
+                            AG) action fire
+                            1) ItemActionFire
+                            AG) item action effect
+                                    1) HealItemActionFire/StatusItemActionFire/RestoreItemActionFire
+                                    2) ItemEnding
+                            2) StatusDurationReduction
+                            3) EffectTimeUp
+                            4) FrozenEffect/AsleepEffect/ParalyzedEffect
+                            5) MoveActionAccuracyCheck
+                            AG) move action fire
+                                    1) ConfusedEffect
+                                    2) ProtectedEffect
+                                    2) CalculateModifier
+                                    3) PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
+                                    AG) move action effect
+                                            1)StageEffect/StatusEffect
+                                    4) MoveEnding
+                    6) EndAction
+                    7) NoMoreActions
+                        AG) turn ending
+                            1) PokemonFaintedWithMove
+                            2) PokemonFainted
+                            3) PlayerLose, halt
+                            // Rule for pokemon change
+                            4) ProtectionTimeUp/BurnedEffect/PoisonEffect
+                            5) NewTurn
+
+
+

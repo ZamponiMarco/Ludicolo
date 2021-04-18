@@ -17,12 +17,17 @@ import it.unicam.lcp.ludicolo.actions.items.ItemAction
 import it.unicam.lcp.ludicolo.actions.Action
 import java.util.HashMap
 import java.util.Map
+import java.util.ArrayList
+import it.unicam.lcp.ludicolo.actions.moves.Move
+import java.util.List
+import java.util.Random
 
 
 
 
 rule "SetBattleStats"
-salience 300
+    agenda-group "battle setup"
+    salience 1
 when
     pkmn: Pokemon(!pkmn.battleStatsComputed)
 then
@@ -43,35 +48,78 @@ then
 
     pkmn.setBattleStatsComputed(true);
     update(pkmn);
+
 end
 
-rule "PokemonFaintedWithMove"
-salience 90
+rule "BattleStatsSet"
+    agenda-group "battle setup"
+    salience 0
+when
+then
+ Utility.helper(drools);
+ kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("turn setup").setFocus();
+ end
+
+rule "PokemonFaintedWithMoveDuringTurn"
+    agenda-group "turn management"
+    salience 9
 when
     toRemove: Pokemon(toRemove.getStageValue(Stat.LIFE) == 0)
     toRemovePlayer: Player(toRemovePlayer.equals(toRemove.getOwner()))
     toRemoveAction: Action(toRemoveAction.source == toRemovePlayer)
 then
 Utility.helper(drools);
-    System.out.println(toRemove + "HAS FAINTED");
+    System.out.println(toRemove.getName() + "HAS FAINTED");
     toRemovePlayer.addFainted(toRemove);
     retract(toRemove);
     retract(toRemoveAction);
  end
 
-rule "PokemonFainted"
-salience 89
+ rule "PokemonFaintedWithMoveAfterTurn"
+     agenda-group "turn ending"
+     salience 9
+ when
+     toRemove: Pokemon(toRemove.getStageValue(Stat.LIFE) == 0)
+     toRemovePlayer: Player(toRemovePlayer.equals(toRemove.getOwner()))
+     toRemoveAction: Action(toRemoveAction.source == toRemovePlayer)
+ then
+ Utility.helper(drools);
+     System.out.println(toRemove.getName() + "HAS FAINTED");
+     toRemovePlayer.addFainted(toRemove);
+     retract(toRemove);
+     retract(toRemoveAction);
+  end
+
+rule "PokemonFaintedDuringTurn"
+    agenda-group "turn management"
+    salience 100
 when
     toRemove: Pokemon(toRemove.getStageValue(Stat.LIFE) == 0)
     toRemovePlayer: Player(toRemovePlayer.equals(toRemove.getOwner()))
 then
 Utility.helper(drools);
-    System.out.println(toRemove + "HAS FAINTED");
+    System.out.println(toRemove + " HAS FAINTED");
     toRemovePlayer.addFainted(toRemove);
     retract(toRemove);
+    update(toRemovePlayer);
  end
 
-rule "SwapActionFire"
+rule "PokemonFaintedAfterTurn"
+    agenda-group "turn ending"
+    salience 8
+when
+    toRemove: Pokemon(toRemove.getStageValue(Stat.LIFE) == 0)
+    toRemovePlayer: Player(toRemovePlayer.equals(toRemove.getOwner()))
+then
+Utility.helper(drools);
+    System.out.println(toRemove + " HAS FAINTED");
+    toRemovePlayer.addFainted(toRemove);
+    retract(toRemove);
+    update(toRemovePlayer);
+
+ end
+
+/*rule "SwapActionFire"
 
 when
     swapAction: SwapAction(swapAction.status == ActionStatus.READY_TO_FIRE)
@@ -80,41 +128,73 @@ then
     System.out.println("Swap action fired");
     swapAction.setStatus(ActionStatus.FIRED);
     update(swapAction)
-end
+end*/
 
 
 
-rule "PlayerLose"
-    salience 110
+rule "PlayerLoseDuringTurn"
+    agenda-group "turn management"
+    salience 100
 when
      losingPlayer: Player(losingPlayer.areAllFainted())
      winningPlayer: Player(!winningPlayer.areAllFainted())
-     leftAction: Action()
  then
      Utility.helper(drools);
-     retract(leftAction);
+     System.out.println("WINNER: " + winningPlayer.getName());
+     System.out.println("LOSER: " + losingPlayer.getName());
+     drools.halt();
 end
 
-/*rule "StatusReductionReset"
-    salience 109
+rule "PlayerLoseAfterTurn"
+    agenda-group "turn ending"
+    salience 7
 when
-    not Action()
-    pokemon: Pokemon(pokemon.statusReductionDone)
+     losingPlayer: Player(losingPlayer.areAllFainted())
+     winningPlayer: Player(!winningPlayer.areAllFainted())
+ then
+     Utility.helper(drools);
+     System.out.println("WINNER: " + winningPlayer.getName());
+     System.out.println("LOSER: " + losingPlayer.getName());
+     drools.halt();
+end
+
+rule "SelectMoves"
+    agenda-group "turn setup"
+    salience 1
+when
+    player: Player()
+    not playerAction : Action(playerAction.source == player)
+    target: Player(!target.equals(player))
+    pokemon : Pokemon(pokemon.owner.equals(player))
 then
     Utility.helper(drools);
+    System.out.println("Now moves should be chosen for " + pokemon.getName());
+    List<Move> moves = new ArrayList<Move>(pokemon.getLearnedMoves().keySet());
+    Move playerOneMove = moves.get(new Random().nextInt(moves.size()));
+    insert(new MoveAction(player, playerOneMove, target));
 
     pokemon.setStatusReductionDone(false);
     update(pokemon);
- end*/
+end
 
-rule "TurnReady"
-    salience 108
+rule "TurnStart"
+    agenda-group "turn setup"
+    salience 0
+when
+    playerOneMoveAction: Action(playerOneMoveAction.status == ActionStatus.DEFINED)
+    playerTwoMoveAction: Action(playerTwoMoveAction.status == ActionStatus.DEFINED,
+        playerTwoMoveAction.source != playerOneMoveAction.source)
+then
+Utility.helper(drools);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("turn management").setFocus();
+end
+
+rule "NewTurn"
+    agenda-group "turn ending"
+    salience -1
 when
     not Action()
-
 then
     Utility.helper(drools);
-    System.out.println("There are no actions left: ready for the next turn");
+    System.out.println("Turn has ended: now pokemon must choose new moves");
  end
-
-

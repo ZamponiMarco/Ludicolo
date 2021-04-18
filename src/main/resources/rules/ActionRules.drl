@@ -10,7 +10,8 @@ import it.unicam.lcp.ludicolo.actions.items.ItemAction
 import it.unicam.lcp.ludicolo.actions.Action
 
 rule "ActionsPriority"
-    salience 80
+    agenda-group "turn management"
+    salience 10
 when
     playerOneMoveAction: Action(playerOneMoveAction.status == ActionStatus.DEFINED)
     playerTwoMoveAction: Action(playerTwoMoveAction.status == ActionStatus.DEFINED,
@@ -29,10 +30,12 @@ then
     }
     priorityAction.setStatus(ActionStatus.READY_TO_FIRE);
     update(priorityAction);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("action fire").setFocus();
 end
 
 rule "SetupNextAction"
-    salience 39
+    agenda-group "turn management"
+    salience 5
 when
     firstAction : Action(firstAction.status == ActionStatus.DONE)
     secondAction : Action(secondAction.status == ActionStatus.DEFINED)
@@ -40,13 +43,27 @@ then
     Utility.helper(drools);
     secondAction.setStatus(ActionStatus.READY_TO_FIRE);
     update(secondAction);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("action fire").setFocus();
  end
 
 rule "EndAction"
-    salience 38
+    agenda-group "turn management"
+    salience 4
 when
     actionDone : Action(actionDone.status == ActionStatus.DONE)
 then
     Utility.helper(drools);
     retract(actionDone);
  end
+
+ rule "NoMoreActions"
+     agenda-group "turn management"
+     salience 6
+ when
+     not Action()
+ then
+     Utility.helper(drools);
+     System.out.println("There are no actions left: ending the turn");
+
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("turn ending").setFocus();
+  end

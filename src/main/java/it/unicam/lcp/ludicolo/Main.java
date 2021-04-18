@@ -11,11 +11,18 @@ import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // TODO Francesco: Implement agenda-groups ("setup-battle", "turn", "before-actions", "execute-actions", "after-actions", "check-status")
 // TODO Marco: Implement pokemon swap (retract old and add new)
 // TODO Marco: Implement simple view
 // TODO Marco: Implement moves
 
+
+/*Agenda groups:
+battle setup -> turn setup <-> turn management <->
+*/
 public class Main {
     public static void main(String[] args) {
         try {
@@ -43,26 +50,9 @@ public class Main {
             battle.setPlayerTwo(playerTwo);
 
             kSession.insert(battle);
-
+            kSession.getAgenda().getAgendaGroup("battle setup").setFocus();
             kSession.fireAllRules();
-
-            kSession.insert(new MoveAction(playerOne, Move.POUND, playerTwo));
-            kSession.insert(new MoveAction(playerTwo, Move.CONFUSE_RAY, playerOne));
-
-            kSession.fireAllRules();
-
-            kSession.insert(new MoveAction(playerTwo, Move.CONFUSE_RAY, playerOne));
-            kSession.insert(new ItemAction(playerOne, Item.FULL_RESTORE));
-
-            kSession.fireAllRules();
-
-            /*while (!playerOne.areAllFainted() && !playerTwo.areAllFainted()) {
-                MoveAction moveActionOne = new MoveAction(playerOne, Move.POUND, playerTwo);
-                MoveAction moveActionTwo = new MoveAction(playerTwo, Move.RAZOR_WIND, playerOne);
-                kSession.insert(moveActionOne);
-                kSession.insert(moveActionTwo);
-                kSession.fireAllRules();
-            }*/
+            
 
         } catch (Throwable t) {
             t.printStackTrace();

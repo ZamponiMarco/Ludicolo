@@ -26,9 +26,10 @@ import java.util.Collections
 import it.unicam.lcp.ludicolo.Type
 
 rule "ItemActionFire"
-    salience 50
+    agenda-group "action fire"
+    salience 10
 when
-    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE, itemAction.item.containsHealItemEffect())
+    itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE)
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
 then
     Utility.helper(drools);
@@ -36,10 +37,12 @@ then
     System.out.println("Item used: " + itemAction.getItem().name() + " - " + itemAction.getItem().getDescription());
     itemAction.setStatus(ActionStatus.FIRED);
     update(itemAction);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("item action effect").setFocus();
 end
 
 rule "HealItemActionFire"
-    salience 40
+    agenda-group "item action effect"
+    salience 1
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isHealItemDone(),itemAction.item.containsHealItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
@@ -68,7 +71,8 @@ then
 end
 
 rule "StatusItemActionFire"
-    salience 40
+    agenda-group "item action effect"
+    salience 1
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isStatusItemDone(),itemAction.item.containsStatusItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
@@ -91,7 +95,8 @@ then
 end
 
 rule "RestoreItemActionFire"
-    salience 40
+    agenda-group "item action effect"
+    salience 1
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isRestoreItemDone(), itemAction.item.containsRestoreItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
@@ -117,7 +122,8 @@ then
 end
 
 rule "ItemEnding"
-    salience 39
+    agenda-group "item action execution"
+    salience 0
 when
     itemAction : ItemAction(itemAction.status == ActionStatus.FIRED)
 then
