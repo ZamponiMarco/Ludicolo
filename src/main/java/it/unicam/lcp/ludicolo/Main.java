@@ -14,8 +14,9 @@ import org.kie.api.runtime.KieSession;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO Marco: Implement pokemon swap (retract old and add new)
-// TODO Marco: Implement simple view
+
+// TODO Battle stats non sono calcolate per nuovi pokemon
+// TODO Marco: Implement simple view javafx vuole java 11
 // TODO Marco: Implement moves
 
 
@@ -31,9 +32,10 @@ public class Main {
             Utility.createEventListener(kSession);
 
             Pokemon pokeOne = PokemonFactory.getCharizard();
+            Pokemon altPokeOne = PokemonFactory.getAlakazam();
             Pokemon pokeTwo = PokemonFactory.getVenusaur();
 
-            Player playerOne = new Player("Red", Lists.newArrayList(pokeOne));
+            Player playerOne = new Player("Red", Lists.newArrayList(pokeOne, altPokeOne));
             Player playerTwo = new Player("Blue", Lists.newArrayList(pokeTwo));
 
             kSession.insert(playerOne);

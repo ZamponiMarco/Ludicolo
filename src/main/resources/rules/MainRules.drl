@@ -119,18 +119,6 @@ Utility.helper(drools);
 
  end
 
-/*rule "SwapActionFire"
-
-when
-    swapAction: SwapAction(swapAction.status == ActionStatus.READY_TO_FIRE)
-then
-    Utility.helper(drools);
-    System.out.println("Swap action fired");
-    swapAction.setStatus(ActionStatus.FIRED);
-    update(swapAction)
-end*/
-
-
 
 rule "PlayerLoseDuringTurn"
     agenda-group "turn management"
