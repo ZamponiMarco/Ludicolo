@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-// TODO Battle stats non sono calcolate per nuovi pokemon
 // TODO Marco: Implement simple view javafx vuole java 11
 // TODO Marco: Implement moves
 
@@ -31,24 +30,10 @@ public class Main {
 
             Utility.createEventListener(kSession);
 
-            Pokemon pokeOne = PokemonFactory.getCharizard();
-            Pokemon altPokeOne = PokemonFactory.getAlakazam();
-            Pokemon pokeTwo = PokemonFactory.getVenusaur();
-
-            Player playerOne = new Player("Red", Lists.newArrayList(pokeOne, altPokeOne));
-            Player playerTwo = new Player("Blue", Lists.newArrayList(pokeTwo));
-
-            kSession.insert(playerOne);
-            kSession.insert(playerTwo);
-
-            kSession.insert(pokeOne);
-            kSession.insert(pokeTwo);
-
-            Battle battle = new Battle();
-            battle.setPlayerOne(playerOne);
-            battle.setPlayerTwo(playerTwo);
-
-            kSession.insert(battle);
+            kSession.insert(new Battle(
+                    new Player("Red", Lists.newArrayList(PokemonFactory.getCharizard())),
+                    new Player("Blue", Lists.newArrayList(PokemonFactory.getVenusaur()))
+            ));
             kSession.getAgenda().getAgendaGroup("battle setup").setFocus();
             kSession.fireAllRules();
             

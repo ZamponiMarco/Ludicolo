@@ -239,4 +239,5 @@ then
     Utility.helper(drools);
     moveAction.setStatus(ActionStatus.DONE);
     update(moveAction);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
  end

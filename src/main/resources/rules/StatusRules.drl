@@ -82,6 +82,7 @@ then
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - (pokemon.getBattleStatValue(Stat.LIFE)/16)),0));
     System.out.println(pokemon.getName() + " gets damaged by burn");
     update(pokemon);
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
  end
 
  rule "PoisonedEffect"
@@ -99,6 +100,7 @@ then
      lifeStageStats.put(Stat.LIFE, Math.max((targetLife - (pokemon.getBattleStatValue(Stat.LIFE)/8)),0));
      System.out.println(pokemon.getName() + " gets damaged by poison");
      update(pokemon);
+     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
   end
 
 rule "ConfusedEffect"
@@ -131,6 +133,8 @@ then
             moveAction.setStatus(ActionStatus.DONE);
             System.out.println(pokemon.getName() + " failed to throw its move");
             update(moveAction);
+
+            kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
      }
  end
 

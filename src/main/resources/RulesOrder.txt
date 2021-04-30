@@ -1,7 +1,9 @@
 AG) battle setup
-    1) SetBattleStats
+    1) InitiateBattle
+    AG) pokemon setup
+            1) SetBattleStats
     AG) turn setup
-            1) SelectMoves [x2]
+            1) SelectMoves
             2) TurnStart
             AG) turn management
                     1) ActionsPriority
@@ -16,15 +18,18 @@ AG) battle setup
                             5) MoveActionAccuracyCheck
                             AG) move action fire
                                     1) ConfusedEffect
+                                    AG) winning conditions
+                                            1) PokemonFaintedWithMove/PokemonFainted
+                                            4) PlayerLose, halt
                                     2) ProtectedEffect
                                     2) CalculateModifier
                                     3) PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
                                     AG) move action effect
                                             1)StageEffect/StatusEffect
                                     4) MoveEnding
-                    2) PokemonFaintedWithMove
-                    3) PokemonFainted
-                    4) PlayerLose, halt
+                                    AG) winning conditions
+                                            1) PokemonFaintedWithMove/PokemonFainted
+                                            4) PlayerLose, halt
                     // Rule for pokemon change
                     5) SetupNextAction
                             AG) action fire
@@ -38,21 +43,27 @@ AG) battle setup
                             5) MoveActionAccuracyCheck
                             AG) move action fire
                                     1) ConfusedEffect
+                                    AG) winning conditions
+                                            1) PokemonFaintedWithMove/PokemonFainted
+                                            4) PlayerLose, halt
                                     2) ProtectedEffect
                                     2) CalculateModifier
                                     3) PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
                                     AG) move action effect
                                             1)StageEffect/StatusEffect
                                     4) MoveEnding
+                                    AG) winning conditions
+                                            1) PokemonFaintedWithMove/PokemonFainted
+                                            4) PlayerLose, halt
                     6) EndAction
                     7) NoMoreActions
                         AG) turn ending
-                            1) PokemonFaintedWithMove
-                            2) PokemonFainted
-                            3) PlayerLose, halt
-                            // Rule for pokemon change
-                            4) ProtectionTimeUp/BurnedEffect/PoisonEffect
-                            5) NewTurn
+                            1) ProtectionTimeUp
+                            2) BurnedEffect/PoisonEffect
+                            AG) winning conditions
+                                    1) PokemonFaintedWithMove/PokemonFainted
+                                    4) PlayerLose, halt
+                            3) NewTurn
 
 
 

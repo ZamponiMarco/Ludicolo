@@ -11,6 +11,11 @@ public class Battle {
         return playerOne;
     }
 
+    public Battle(Player playerOne, Player playerTwo) {
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
+    }
+
     public void setPlayerOne(Player playerOne) {
         this.playerOne = playerOne;
     }

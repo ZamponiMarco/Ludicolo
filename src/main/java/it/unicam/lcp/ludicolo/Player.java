@@ -1,9 +1,11 @@
 package it.unicam.lcp.ludicolo;
 
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
+import it.unicam.lcp.ludicolo.pkmn.Stat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Player {
     private String name;
@@ -29,24 +31,24 @@ public class Player {
         return pokemonTeam;
     }
 
+    public List<Pokemon> getPokemonTeamNotFainted() {
+        return pokemonTeam.stream().filter(pokemon -> pokemon.getStageValue(Stat.LIFE) > 0).collect(Collectors.toList());
+    }
+
     public void setPokemonTeam(List<Pokemon> pokemonTeam) {
         this.pokemonTeam = pokemonTeam;
     }
 
-
-    public void addFainted(Pokemon fainted){
-        this.faintedPokemon.add(fainted);
-    }
-
     public boolean areAllFainted(){
-        return this.faintedPokemon.containsAll(this.pokemonTeam);
+        int fainted = (int) this.pokemonTeam.stream().filter(pokemon -> pokemon.getStageValue(Stat.LIFE) == 0).count();
+        return fainted == this.pokemonTeam.size();
     }
 
     @Override
     public String toString() {
         return "Player{" +
                 "name='" + name + '\'' +
-                ", pokemonTeam=" + pokemonTeam +
+                ", pokemonTeam=" + pokemonTeam + ", all fainted=" + this.areAllFainted()+
                 '}';
     }
 }

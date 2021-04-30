@@ -23,7 +23,7 @@ public enum Move {
     SNARL(MoveType.SPECIAL, Type.DARK, 20, 55, 95, 0, new StageMoveEffect(100, MoveEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
     DARK_VOID(MoveType.STATUS, Type.DARK, 10, 0, 50, 0, new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.ASLEEP)),
 
-    CONFUSE_RAY(MoveType.STATUS, Type.GHOST, 10, 0, 100, 0, new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.CONFUSED), new StageMoveEffect(100, MoveEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK));
+    CONFUSE_RAY(MoveType.STATUS, Type.GHOST, 10, 0, 100, 0, new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.CONFUSED));
 
     private final MoveType moveType;
     private final Type type;

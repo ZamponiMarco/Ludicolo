@@ -4,8 +4,10 @@ package it.unicam.lcp.ludicolo.pkmn;
 import com.google.common.collect.Maps;
 import it.unicam.lcp.ludicolo.Player;
 import it.unicam.lcp.ludicolo.Type;
+import it.unicam.lcp.ludicolo.Utility;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,7 +23,6 @@ public class Pokemon {
     private Player owner;
     private boolean battleStatsComputed;
     private boolean statusReductionDone;
-
 
     private boolean protectedFromAttacks;
 
@@ -41,6 +42,10 @@ public class Pokemon {
                 this.stats.put(entry.getKey(), new StatValues(entry.getValue()));
             }
         }
+        Map<Stat, Integer> lifeStats = new HashMap<>();
+        lifeStats.put(Stat.LIFE, Utility.calculateBattleLife(this.getBaseStatValue(Stat.LIFE), this.getLevel()));
+        this.setBattleStat(lifeStats);
+        this.setStage(lifeStats);
         this.statusReductionDone = false;
     }
 

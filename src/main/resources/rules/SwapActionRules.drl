@@ -1,3 +1,5 @@
+package rules
+
 import it.unicam.lcp.ludicolo.SwapAction
 import it.unicam.lcp.ludicolo.actions.ActionStatus
 import it.unicam.lcp.ludicolo.Utility
