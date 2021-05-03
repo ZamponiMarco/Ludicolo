@@ -21,6 +21,7 @@ AG) battle setup
                                     AG) winning conditions
                                             1) PokemonFaintedWithMove/PokemonFainted
                                             4) PlayerLose, halt
+                                            5) NextPokemonInBattle
                                     2) ProtectedEffect
                                     2) CalculateModifier
                                     3) PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
@@ -30,6 +31,7 @@ AG) battle setup
                                     AG) winning conditions
                                             1) PokemonFaintedWithMove/PokemonFainted
                                             4) PlayerLose, halt
+                                            5) NextPokemonInBattle
                     // Rule for pokemon change
                     5) SetupNextAction
                             AG) action fire
@@ -46,6 +48,7 @@ AG) battle setup
                                     AG) winning conditions
                                             1) PokemonFaintedWithMove/PokemonFainted
                                             4) PlayerLose, halt
+                                            5) NextPokemonInBattle
                                     2) ProtectedEffect
                                     2) CalculateModifier
                                     3) PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
@@ -55,6 +58,7 @@ AG) battle setup
                                     AG) winning conditions
                                             1) PokemonFaintedWithMove/PokemonFainted
                                             4) PlayerLose, halt
+                                            5) NextPokemonInBattle
                     6) EndAction
                     7) NoMoreActions
                         AG) turn ending
@@ -63,6 +67,7 @@ AG) battle setup
                             AG) winning conditions
                                     1) PokemonFaintedWithMove/PokemonFainted
                                     4) PlayerLose, halt
+                                    5) NextPokemonInBattle
                             3) NewTurn
 
 

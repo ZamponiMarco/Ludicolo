@@ -4,10 +4,11 @@ import it.unicam.lcp.ludicolo.actions.Action;
 
 public class SwapAction extends Action {
 
-    private int newPokemonIndex;
+    private final int newPokemonIndex;
 
-    public SwapAction(Player source) {
+    public SwapAction(Player source, int newPokemonIndex) {
         super(source);
+        this.newPokemonIndex = newPokemonIndex;
     }
 
     @Override
@@ -17,9 +18,5 @@ public class SwapAction extends Action {
 
     public int getNewPokemonIndex() {
         return newPokemonIndex;
-    }
-
-    public void setNewPokemonIndex(int newPokemonIndex) {
-        this.newPokemonIndex = newPokemonIndex;
     }
 }

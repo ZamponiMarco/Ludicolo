@@ -9,21 +9,24 @@ import it.unicam.lcp.ludicolo.pkmn.Pokemon
 
 rule "SwapActionFire"
     agenda-group "action fire"
-    salience 9 // ?
+    salience 11
 when
     swapAction: SwapAction(swapAction.status == ActionStatus.READY_TO_FIRE)
     oldPokemon: Pokemon(oldPokemon.getOwner().equals(swapAction.getSource()))
 then
     Utility.helper(drools);
-
     Player p = swapAction.getSource();
-
     retract(oldPokemon);
     System.out.println(p.getName() + " retracted " + oldPokemon.getName());
-    Pokemon newPokemon = swapAction.getSource().getPokemonTeam().get(swapAction.getNewPokemonIndex());
+    Pokemon newPokemon = swapAction.getSource().getPokemonTeamNotFainted().get(swapAction.getNewPokemonIndex());
     System.out.println(p.getName() + " sent into battle " + newPokemon.getName());
     insert(newPokemon);
 
-    swapAction.setStatus(ActionStatus.FIRED);
+    swapAction.setStatus(ActionStatus.DONE);
+
+    p.setSwapRequired(false);
+    update(p);
     update(swapAction)
+
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("pokemon setup").setFocus();
 end

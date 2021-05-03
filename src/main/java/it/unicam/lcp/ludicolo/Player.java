@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 public class Player {
     private String name;
     private List<Pokemon> pokemonTeam;
-    private List<Pokemon> faintedPokemon;
+    private boolean swapRequired;
 
     public Player(String name, List<Pokemon> pokemonTeam) {
         this.name = name;
         this.pokemonTeam = pokemonTeam;
         this.pokemonTeam.forEach(pkmn -> pkmn.setOwner(this));
-        this.faintedPokemon = new ArrayList<>();
+        this.swapRequired = false;
     }
 
     public String getName() {
@@ -42,6 +42,14 @@ public class Player {
     public boolean areAllFainted(){
         int fainted = (int) this.pokemonTeam.stream().filter(pokemon -> pokemon.getStageValue(Stat.LIFE) == 0).count();
         return fainted == this.pokemonTeam.size();
+    }
+
+    public boolean isSwapRequired() {
+        return swapRequired;
+    }
+
+    public void setSwapRequired(boolean swapRequired) {
+        this.swapRequired = swapRequired;
     }
 
     @Override

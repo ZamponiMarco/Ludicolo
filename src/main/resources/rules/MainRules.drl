@@ -65,13 +65,13 @@ end
      salience 2
  when
      toRemovePokemon: Pokemon(toRemovePokemon.getStageValue(Stat.LIFE) == 0)
-     toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()))
+     toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()), !toRemovePlayer.isSwapRequired())
      toRemoveAction: Action(toRemoveAction.source == toRemovePlayer)
  then
  Utility.helper(drools);
      System.out.println(toRemovePokemon.getName() + " HAS FAINTED");
      toRemoveAction.setStatus(ActionStatus.DONE);
-     retract(toRemovePokemon);
+     toRemovePlayer.setSwapRequired(true);
      retract(toRemoveAction);
      update(toRemovePlayer);
   end
@@ -81,12 +81,11 @@ rule "PokemonFainted"
     salience 2
 when
     toRemovePokemon: Pokemon(toRemovePokemon.getStageValue(Stat.LIFE) == 0)
-    toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()))
+    toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()), !toRemovePlayer.isSwapRequired())
 then
 Utility.helper(drools);
     System.out.println(toRemovePokemon + " HAS FAINTED");
-    System.out.println(toRemovePlayer);
-    retract(toRemovePokemon);
+    toRemovePlayer.setSwapRequired(true);
     update(toRemovePlayer);
  end
 
@@ -104,15 +103,20 @@ when
      drools.halt();
 end
 
-/*rule "NextPokemonInBattle"
+
+rule "NextPokemonInBattle"
     agenda-group "winning conditions"
     salience 0
 when
-    player: Player()
-    not pokemon: Pokemon(pokemon.owner.equals(player))
+    toRemovePokemon: Pokemon(toRemovePokemon.getStageValue(Stat.LIFE) == 0)
+    toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()), toRemovePlayer.isSwapRequired())
 then
      Utility.helper(drools);
- end*/
+     SwapAction swapAction = new SwapAction(toRemovePlayer, 0);
+     swapAction.setStatus(ActionStatus.READY_TO_FIRE);
+     insert(swapAction);
+     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("action fire").setFocus();
+ end
 
 
 rule "SelectMoves"
