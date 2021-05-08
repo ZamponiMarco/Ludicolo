@@ -60,7 +60,7 @@ public class Utility {
         return Math.round(((2 * baseStat * level) / 100.0f) + 10);
     }
 
-    public static int calculateDamage(int level, int power, int attack, int defense, double modifier) {
+    public static int calculateDamage(int level, int power, double attack, double defense, double modifier) {
         return (int) Math.round((((((((2 * level) / 5.0f) + 2) * power) * (attack / defense)) / 50) + 2) * modifier);
     }
 
