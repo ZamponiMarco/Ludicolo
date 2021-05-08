@@ -19,4 +19,12 @@ public class SwapAction extends Action {
     public int getNewPokemonIndex() {
         return newPokemonIndex;
     }
+
+    @Override
+    public String toString() {
+        return "SwapAction{" +
+                "source=" + this.getSource().getName() +
+                "newPokemonIndex=" + newPokemonIndex +
+                '}';
+    }
 }

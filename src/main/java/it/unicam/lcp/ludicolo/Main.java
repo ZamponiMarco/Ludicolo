@@ -31,8 +31,8 @@ public class Main {
             Utility.createEventListener(kSession);
 
             kSession.insert(new Battle(
-                    new Player("Red", Lists.newArrayList(PokemonFactory.getCharizard(), PokemonFactory.getVenusaur())),
-                    new Player("Blue", Lists.newArrayList(PokemonFactory.getVenusaur(), PokemonFactory.getCharizard()))
+                    new Player("Red", Lists.newArrayList(PokemonFactory.getCharizard(), PokemonFactory.getPikachu())),
+                    new Player("Blue", Lists.newArrayList(PokemonFactory.getVenusaur(), PokemonFactory.getBlastoise()))
             ));
             kSession.getAgenda().getAgendaGroup("battle setup").setFocus();
             kSession.fireAllRules();

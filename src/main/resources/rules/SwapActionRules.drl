@@ -13,19 +13,17 @@ rule "SwapActionFire"
 when
     swapAction: SwapAction(swapAction.status == ActionStatus.READY_TO_FIRE)
     oldPokemon: Pokemon(oldPokemon.getOwner().equals(swapAction.getSource()))
+    player: Player(player.equals(swapAction.getSource()))
 then
     Utility.helper(drools);
-    Player p = swapAction.getSource();
     retract(oldPokemon);
-    System.out.println(p.getName() + " retracted " + oldPokemon.getName());
+    System.out.println(player.getName() + " retracted " + oldPokemon.getName());
     Pokemon newPokemon = swapAction.getSource().getPokemonTeamNotFainted().get(swapAction.getNewPokemonIndex());
-    System.out.println(p.getName() + " sent into battle " + newPokemon.getName());
+    System.out.println(player.getName() + " sent into battle " + newPokemon.getName());
     insert(newPokemon);
 
     swapAction.setStatus(ActionStatus.DONE);
 
-    p.setSwapRequired(false);
-    update(p);
     update(swapAction)
 
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("pokemon setup").setFocus();

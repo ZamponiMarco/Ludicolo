@@ -14,7 +14,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "CHARIZARD";
         List<Type> types = Lists.newArrayList(Type.FIRE, Type.FLYING);
-        List<Move> moves = Lists.newArrayList(Move.SUCKER_PUNCH, Move.POUND);
+        List<Move> moves = Lists.newArrayList(Move.PROTECT, Move.EMBER, Move.FIRE_PUNCH, Move.QUICK_ATTACK);
         int level = 100;
         stats.put(Stat.LIFE, 78);
         stats.put(Stat.ATTACK, 84);
@@ -29,7 +29,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "VENUSAUR";
         List<Type> types = Lists.newArrayList(Type.GRASS, Type.POISON);
-        List<Move> moves = Lists.newArrayList(Move.CONFUSE_RAY);
+        List<Move> moves = Lists.newArrayList(Move.QUICK_ATTACK, Move.COTTON_SPORE, Move.MAGICAL_LEAF, Move.SLEEP_POWDER);
         int level = 100;
         stats.put(Stat.LIFE, 80);
         stats.put(Stat.ATTACK, 82);
@@ -44,7 +44,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "BLASTOISE";
         List<Type> types = Lists.newArrayList(Type.WATER);
-        List<Move> moves = new ArrayList<Move>();
+        List<Move> moves = Lists.newArrayList(Move.POUND, Move.ICE_PUNCH, Move.SURF, Move.WATER_GUN);
         int level = 100;
         stats.put(Stat.LIFE, 79);
         stats.put(Stat.ATTACK, 83);
@@ -59,7 +59,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "PIKACHU";
         List<Type> types = Lists.newArrayList(Type.ELECTRIC);
-        List<Move> moves = new ArrayList<Move>();
+        List<Move> moves = Lists.newArrayList(Move.QUICK_ATTACK, Move.SURF, Move.THUNDER_PUNCH, Move.THUNDER_WAVE);
         int level = 100;
         stats.put(Stat.LIFE, 35);
         stats.put(Stat.ATTACK, 55);
@@ -70,27 +70,11 @@ public class PokemonFactory {
         return new Pokemon(name,types, moves, level, stats);
     }
 
-    public static Pokemon getAlolanExeggutor(){
-        Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
-        String name = "ALOLAN EXEGGUTOR";
-        List<Type> types = Lists.newArrayList(Type.GRASS, Type.DRAGON);
-        List<Move> moves = new ArrayList<Move>();
-        int level = 100;
-        stats.put(Stat.LIFE, 95);
-        stats.put(Stat.ATTACK, 105);
-        stats.put(Stat.DEFENSE, 85);
-        stats.put(Stat.SPECIAL_ATTACK, 125);
-        stats.put(Stat.SPECIAL_DEFENSE, 75);
-        stats.put(Stat.SPEED, 45);
-        return new Pokemon(name,types, moves, level, stats);
-    }
-
-
     public static Pokemon getMewtwo(){
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "MEWTWO";
         List<Type> types = Lists.newArrayList(Type.PSYCHIC);
-        List<Move> moves = new ArrayList<Move>();
+        List<Move> moves = Lists.newArrayList(Move.PROTECT, Move.PSYCHIC, Move.HYPNOSIS, Move.QUICK_ATTACK);
         int level = 100;
         stats.put(Stat.LIFE, 106);
         stats.put(Stat.ATTACK, 110);

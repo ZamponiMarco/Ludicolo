@@ -43,12 +43,12 @@ public class Utility {
 
     public static void help(final KnowledgeHelper drools, final String message) {
         System.out.println(message);
-        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName());
+        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName() + "\n" + "[Agenda Group: "+drools.getRule().getAgendaGroup()+"]");
         System.out.println();
     }
 
     public static void helper(final KnowledgeHelper drools) {
-        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName());
+        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName() + "\n" + "[Agenda Group: "+drools.getRule().getAgendaGroup()+"]");
         System.out.println();
     }
 
