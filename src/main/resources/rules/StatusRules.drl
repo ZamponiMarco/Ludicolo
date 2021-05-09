@@ -23,21 +23,22 @@ import java.util.List
 rule "StatusDurationReduction"
     agenda-group "action fire"
     salience 4
+    no-loop true
 when
     playerAction : Action(playerAction.status == ActionStatus.READY_TO_FIRE)
-    pokemon: Pokemon(pokemon.status != null, !pokemon.isStatusReductionDone(), pokemon.owner.equals(playerAction.getSource()))
+    pokemon: Pokemon(pokemon.status != null, pokemon.owner.equals(playerAction.getSource()))
 then
     Utility.helper(drools);
-    pokemon.setStatusDuration(Math.max((pokemon.getStatusDuration() - 1),0));
-    pokemon.setStatusReductionDone(true);
+    pokemon.setStatusDuration(Math.max((pokemon.getStatusDuration() - 1),-1));
     update(pokemon);
 end
 
 rule "EffectTimeUp"
     agenda-group "action fire"
     salience 5
+    no-loop true
 when
-    pokemon : Pokemon(pokemon.status != null, pokemon.statusDuration == 0)
+    pokemon : Pokemon(pokemon.status != null, pokemon.statusDuration < 0)
 then
     Utility.helper(drools);
 
@@ -56,12 +57,14 @@ end
 rule "ProtectionTimeUp"
     agenda-group "turn ending"
     salience 0
+    no-loop true
 when
     not Action()
     pokemon: Pokemon(pokemon.protectedFromAttacks)
 then
     Utility.helper(drools);
     pokemon.setProtectedFromAttacks(false);
+    System.out.println(pokemon.getName() + " is no longer protected from attacks");
     update(pokemon);
 end
 
@@ -70,6 +73,7 @@ end
 rule "BurnedEffect"
     agenda-group "turn ending"
     salience 0
+    no-loop true
 when
     not Action()
     pokemon : Pokemon(pokemon.status == PokemonStatus.BURNED)
@@ -78,9 +82,13 @@ then
     System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
     Map<Stat, Integer> lifeStageStats = new HashMap<>();
     int targetLife = pokemon.getStageValue(Stat.LIFE);
+     int damage = pokemon.getBattleStatValue(Stat.LIFE)/16;
+    System.out.println("Target life: " + targetLife);
+    System.out.println("Damage: " + damage);
 
-    lifeStageStats.put(Stat.LIFE, Math.max((targetLife - (pokemon.getBattleStatValue(Stat.LIFE)/16)),0));
+    lifeStageStats.put(Stat.LIFE, Math.max((targetLife - damage),0));
     System.out.println(pokemon.getName() + " gets damaged by burn");
+    pokemon.setStage(lifeStageStats);
     update(pokemon);
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
  end
@@ -88,6 +96,7 @@ then
  rule "PoisonedEffect"
      agenda-group "turn ending"
      salience 0
+     no-loop true
  when
      not Action()
      pokemon : Pokemon(pokemon.status == PokemonStatus.POISONED)
@@ -96,9 +105,13 @@ then
      System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
      Map<Stat, Integer> lifeStageStats = new HashMap<>();
      int targetLife = pokemon.getStageValue(Stat.LIFE);
+     int damage = pokemon.getBattleStatValue(Stat.LIFE)/8;
+     System.out.println("Target life: " + targetLife);
+     System.out.println("Damage: " + damage);
 
-     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - (pokemon.getBattleStatValue(Stat.LIFE)/8)),0));
+     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - damage),0));
      System.out.println(pokemon.getName() + " gets damaged by poison");
+     pokemon.setStage(lifeStageStats);
      update(pokemon);
      kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
   end
@@ -106,6 +119,7 @@ then
 rule "ConfusedEffect"
     agenda-group "move action fire"
     salience 3
+    no-loop true
 when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.CONFUSED, pokemon.owner.equals(moveAction.getSource()))
@@ -120,7 +134,7 @@ then
                     40,
                     pokemon.getBattleStatValue(Stat.ATTACK),
                     pokemon.getBattleStatValue(Stat.DEFENSE),
-                    moveAction.getModifier());
+                    1.0);
             lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
 
 
@@ -141,6 +155,7 @@ then
  rule "FrozenEffect"
      agenda-group "action fire"
      salience 3
+     no-loop true
  when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.FROZEN, pokemon.owner.equals(moveAction.getSource()))
@@ -156,6 +171,7 @@ then
  rule "AsleepEffect"
      agenda-group "action fire"
      salience 3
+     no-loop true
  when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.ASLEEP, pokemon.owner.equals(moveAction.getSource()))
@@ -171,6 +187,7 @@ then
 rule "ParalyzedEffect"
      agenda-group "action fire"
      salience 3
+     no-loop true
 when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemon : Pokemon(pokemon.status == PokemonStatus.PARALYZED, pokemon.owner.equals(moveAction.getSource()))
@@ -187,6 +204,7 @@ then
  rule "ProtectedEffect"
     agenda-group "move action fire"
     salience 2
+    no-loop true
  when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
       pokemonTarget : Pokemon(pokemonTarget.isProtectedFromAttacks(), pokemonTarget.owner.equals(moveAction.getTarget()))

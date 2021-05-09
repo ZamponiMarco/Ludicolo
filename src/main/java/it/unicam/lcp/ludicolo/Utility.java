@@ -60,8 +60,8 @@ public class Utility {
         return Math.round(((2 * baseStat * level) / 100.0f) + 10);
     }
 
-    public static int calculateDamage(int level, int power, double attack, double defense, double modifier) {
-        return (int) Math.round((((((((2 * level) / 5.0f) + 2) * power) * (attack / defense)) / 50) + 2) * modifier);
+    public static int calculateDamage(int level, int power, double attack, double defense, double modifiers) {
+        return (int) Math.round((((((((2 * level) / 5.0f) + 2) * power) * (attack / defense)) / 50) + 2) * modifiers);
     }
 
     public static boolean probabilityCheck(int probability) {

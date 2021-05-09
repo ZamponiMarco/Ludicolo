@@ -130,9 +130,6 @@ then
     List<Move> moves = new ArrayList<Move>(pokemon.getLearnedMoves().keySet());
     Move playerOneMove = moves.get(new Random().nextInt(moves.size()));
     insert(new MoveAction(player, playerOneMove, target));
-
-    pokemon.setStatusReductionDone(false);
-    update(pokemon);
 end
 
 rule "TurnStart"

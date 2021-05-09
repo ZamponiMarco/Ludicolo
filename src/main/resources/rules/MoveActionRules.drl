@@ -24,6 +24,7 @@ import it.unicam.lcp.ludicolo.actions.moves.StatusMoveEffect
 import java.util.List
 import java.util.Collections
 import it.unicam.lcp.ludicolo.Type
+import it.unicam.lcp.ludicolo.actions.moves.MoveActionModifiers
 
 rule "MoveActionAccuracyCheck"
     agenda-group "action fire"
@@ -60,10 +61,10 @@ then
     double type = targetPokemon.getType().stream().reduce(1.0, (i, t2) ->
         i * Type.damageMatrix[moveAction.getMove().getType().ordinal()][t2.ordinal()], (n,m) -> n * m);
     double burn = sourcePokemon.getStatus() != null && sourcePokemon.getStatus().equals(PokemonStatus.BURNED) ? .5 : 1;
-    double modifier = critical * random * stab * type * burn;
+    MoveActionModifiers modifiers = new MoveActionModifiers(critical, random, stab, type, burn);
     System.out.printf("Modifiers: \n\tCRITICAL: %f\n\tRANDOM: %f\n\tSTAB: %f\n\tTYPE: %f\n\tBURN: %f\n\nFinal modifier: %f%n",
-        critical, random, stab, type, burn, modifier);
-    moveAction.setModifier(modifier);
+        modifiers.getCritical(), modifiers.getRandom(), modifiers.getStab(), modifiers.getType(), modifiers.getBurn(), modifiers.getFinalValue());
+    moveAction.setModifiers(modifiers);
 end
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,12 +88,18 @@ then
             moveAction.getMove().getPower(),
             sourcePokemon.getBattleStatValueWithStage(Stat.ATTACK),
             targetPokemon.getBattleStatValueWithStage(Stat.DEFENSE),
-            moveAction.getModifier());
+            moveAction.getModifiers().getFinalValue());
 
 
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
     System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name());
     System.out.println(moveAction.getMove().getDescription());
+    if(moveAction.getModifiers().getType() == 0.25 || moveAction.getModifiers().getType() == 0.5){
+        System.out.println("The move is not very effective");
+    }
+    if(moveAction.getModifiers().getType() == 2.0 || moveAction.getModifiers().getType() == 4.0){
+        System.out.println("The move is super effective");
+    }
     System.out.println("DMG: " + dmg);
 
     targetPokemon.setStage(lifeStageStats);
@@ -123,9 +130,15 @@ then
             moveAction.getMove().getPower(),
             sourcePokemon.getBattleStatValueWithStage(Stat.SPECIAL_ATTACK),
             targetPokemon.getBattleStatValueWithStage(Stat.SPECIAL_DEFENSE),
-            moveAction.getModifier());
+            moveAction.getModifiers().getFinalValue());
     System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name());
     System.out.println(moveAction.getMove().getDescription());
+    if(moveAction.getModifiers().getType() == 0.25 || moveAction.getModifiers().getType() == 0.5){
+        System.out.println("The move is not very effective");
+    }
+    if(moveAction.getModifiers().getType() == 2.0 || moveAction.getModifiers().getType() == 4.0){
+        System.out.println("The move is super effective");
+    }
     System.out.println("DMG: "+dmg);
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
 

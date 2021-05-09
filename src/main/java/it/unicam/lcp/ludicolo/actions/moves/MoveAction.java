@@ -8,7 +8,7 @@ public class MoveAction extends Action {
     private final Move move;
     private final Player target;
 
-    private double modifier;
+    private MoveActionModifiers modifiers;
 
     private boolean stageEffectDone;
     private boolean statusEffectDone;
@@ -19,7 +19,6 @@ public class MoveAction extends Action {
         this.target = target;
         this.stageEffectDone = false;
         this.statusEffectDone = false;
-        this.modifier = 1;
     }
 
     @Override
@@ -35,13 +34,18 @@ public class MoveAction extends Action {
         return target;
     }
 
-    public double getModifier() {
-        return modifier;
+    public MoveActionModifiers getModifiers() {
+        return modifiers;
     }
 
-    public void setModifier(double modifier) {
-        this.modifier = modifier;
+    public void setModifiers(MoveActionModifiers modifiers) {
+        this.modifiers = modifiers;
     }
+
+    public void setModifiers(double critical, double random, double stab, double type, double burn) {
+        this.modifiers = new MoveActionModifiers(critical, random, stab, type, burn);
+    }
+
 
     public boolean isStageEffectDone() {
         return stageEffectDone;

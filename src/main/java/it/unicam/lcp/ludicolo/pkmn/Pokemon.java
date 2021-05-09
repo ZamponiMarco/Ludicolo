@@ -22,7 +22,6 @@ public class Pokemon {
     private final Map<Stat, StatValues> stats;
     private Player owner;
     private boolean battleStatsComputed;
-    private boolean statusReductionDone;
 
     private boolean protectedFromAttacks;
 
@@ -46,7 +45,6 @@ public class Pokemon {
         lifeStats.put(Stat.LIFE, Utility.calculateBattleLife(this.getBaseStatValue(Stat.LIFE), this.getLevel()));
         this.setBattleStat(lifeStats);
         this.setStage(lifeStats);
-        this.statusReductionDone = false;
     }
 
     public PokemonStatus getStatus() {
@@ -156,14 +154,6 @@ public class Pokemon {
         }
     }
 
-    public boolean isStatusReductionDone() {
-        return statusReductionDone;
-    }
-
-    public void setStatusReductionDone(boolean statusReductionDone) {
-        this.statusReductionDone = statusReductionDone;
-    }
-
     @Override
     public String toString() {
         return String.format(
@@ -178,11 +168,10 @@ public class Pokemon {
                         "\tSTATUS:  %s [%d]\n" +
                         "\tOWNER: %s\n" +
                         "\tMOVES: %s - [%s]\n" +
-                        "\tPROTECTED: %b" +
-                        "\tSTATUS REDUCTION DONE: %b", name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
+                        "\tPROTECTED: %b" , name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
                 stats.get(Stat.ATTACK).getBaseValue(), stats.get(Stat.ATTACK).getBattleValue(), stats.get(Stat.ATTACK).getStage(), stats.get(Stat.DEFENSE).getBaseValue(),
                 stats.get(Stat.DEFENSE).getBattleValue(), stats.get(Stat.DEFENSE).getStage(), stats.get(Stat.SPECIAL_ATTACK).getBaseValue(), stats.get(Stat.SPECIAL_ATTACK).getBattleValue(), stats.get(Stat.SPECIAL_ATTACK).getStage(),
                 stats.get(Stat.SPECIAL_DEFENSE).getBaseValue(), stats.get(Stat.SPECIAL_DEFENSE).getBattleValue(), stats.get(Stat.SPECIAL_DEFENSE).getStage(), stats.get(Stat.SPEED).getBaseValue(),
-                stats.get(Stat.SPEED).getBattleValue(), stats.get(Stat.SPEED).getStage(), this.status, this.statusDuration, this.owner.getName(), this.learnedMoves.keySet(), this.learnedMoves.values(), this.protectedFromAttacks, this.statusReductionDone);
+                stats.get(Stat.SPEED).getBattleValue(), stats.get(Stat.SPEED).getStage(), this.status, this.statusDuration, this.owner.getName(), this.learnedMoves.keySet(), this.learnedMoves.values(), this.protectedFromAttacks);
     }
 }
