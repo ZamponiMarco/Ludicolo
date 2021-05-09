@@ -5,7 +5,7 @@ import it.unicam.lcp.ludicolo.actions.ActionStatus
 import it.unicam.lcp.ludicolo.Utility
 import it.unicam.lcp.ludicolo.Player
 import it.unicam.lcp.ludicolo.pkmn.Pokemon
-
+import it.unicam.lcp.ludicolo.view.App
 
 rule "SwapActionFire"
     agenda-group "action fire"
@@ -17,9 +17,9 @@ when
 then
     Utility.helper(drools);
     retract(oldPokemon);
-    System.out.println(player.getName() + " retracted " + oldPokemon.getName());
+    App.log(player.getName() + " retracted " + oldPokemon.getName());
     Pokemon newPokemon = swapAction.getSource().getPokemonTeamNotFainted().get(swapAction.getNewPokemonIndex());
-    System.out.println(player.getName() + " sent into battle " + newPokemon.getName());
+    App.log(newPokemon.getName() + " is sent into battle!");
     insert(newPokemon);
 
     swapAction.setStatus(ActionStatus.DONE);

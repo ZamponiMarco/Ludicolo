@@ -8,6 +8,7 @@ import it.unicam.lcp.ludicolo.actions.moves.MoveAction
 import it.unicam.lcp.ludicolo.actions.ActionStatus
 import it.unicam.lcp.ludicolo.actions.items.ItemAction
 import it.unicam.lcp.ludicolo.actions.Action
+import it.unicam.lcp.ludicolo.view.App
 
 rule "ActionsPriority"
     agenda-group "turn management"

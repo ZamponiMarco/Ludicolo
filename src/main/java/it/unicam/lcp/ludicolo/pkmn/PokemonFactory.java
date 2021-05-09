@@ -70,6 +70,21 @@ public class PokemonFactory {
         return new Pokemon(name,types, moves, level, stats);
     }
 
+    public static Pokemon getEevee(){
+        Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
+        String name = "EEVEE";
+        List<Type> types = Lists.newArrayList(Type.NORMAL);
+        List<Move> moves = Lists.newArrayList(Move.TRI_ATTACK, Move.WATER_GUN, Move.EMBER, Move.THUNDER_WAVE);
+        int level = 100;
+        stats.put(Stat.LIFE, 55);
+        stats.put(Stat.ATTACK, 55);
+        stats.put(Stat.DEFENSE, 50);
+        stats.put(Stat.SPECIAL_ATTACK, 45);
+        stats.put(Stat.SPECIAL_DEFENSE, 65);
+        stats.put(Stat.SPEED, 55);
+        return new Pokemon(name,types, moves, level, stats);
+    }
+
     public static Pokemon getMewtwo(){
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "MEWTWO";

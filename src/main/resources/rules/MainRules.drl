@@ -34,8 +34,11 @@ then
     Utility.helper(drools);
     insert(battle.getPlayerOne());
     insert(battle.getPlayerTwo());
-    insert(battle.getPlayerOne().getPokemonTeamNotFainted().get(0));
-    insert(battle.getPlayerTwo().getPokemonTeamNotFainted().get(0));
+    Pokemon pkmnOne = battle.getPlayerOne().getPokemonTeamNotFainted().get(0);
+    Pokemon pkmnTwo = battle.getPlayerTwo().getPokemonTeamNotFainted().get(0);
+    insert(pkmnOne);
+    insert(pkmnTwo);
+
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("turn setup").setFocus();
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("pokemon setup").setFocus();
 end
@@ -59,6 +62,7 @@ then
 
     pkmn.setBattleStatsComputed(true);
     update(pkmn);
+    App.log(pkmn.getName() + " is sent out!");
     update(player);
 end
 
@@ -84,7 +88,7 @@ when
     toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()))
 then
 Utility.helper(drools);
-    System.out.println(toRemovePokemon.getName() + " HAS FAINTED");
+    App.log(toRemovePokemon.getName() + " has fainted!");
     update(toRemovePlayer);
  end
 
@@ -97,8 +101,8 @@ when
      winningPlayer: Player(!winningPlayer.equals(losingPlayer))
  then
      Utility.helper(drools);
-     System.out.println("WINNER: " + winningPlayer.getName());
-     System.out.println("LOSER: " + losingPlayer.getName());
+     App.log(winningPlayer.getName() + " is the winner!");
+     App.log(losingPlayer.getName() + " lost this battle!");
      drools.halt();
 end
 

@@ -24,6 +24,7 @@ import it.unicam.lcp.ludicolo.actions.moves.StatusMoveEffect
 import java.util.List
 import java.util.Collections
 import it.unicam.lcp.ludicolo.Type
+import it.unicam.lcp.ludicolo.view.App
 
 rule "ItemActionFire"
     agenda-group "action fire"
@@ -31,11 +32,15 @@ rule "ItemActionFire"
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.READY_TO_FIRE)
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
+    player : Player(player.equals(itemAction.getSource()))
 then
     Utility.helper(drools);
 
-    System.out.println("Item used: " + itemAction.getItem().name() + " - " + itemAction.getItem().getDescription());
+    App.log(player.getName() + " used: " + itemAction.getItem().name() + " for " + pokemon.getName());
+    App.log(itemAction.getItem().getDescription());
     itemAction.setStatus(ActionStatus.FIRED);
+    player.consumeItem(itemAction.getItem());
+    update(player);
     update(itemAction);
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("item action effect").setFocus();
 end

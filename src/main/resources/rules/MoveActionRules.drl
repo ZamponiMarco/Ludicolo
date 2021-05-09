@@ -25,6 +25,7 @@ import java.util.List
 import java.util.Collections
 import it.unicam.lcp.ludicolo.Type
 import it.unicam.lcp.ludicolo.actions.moves.MoveActionModifiers
+import it.unicam.lcp.ludicolo.view.App
 
 rule "MoveActionAccuracyCheck"
     agenda-group "action fire"
@@ -37,7 +38,7 @@ then
     int accuracy = moveAction.getMove().getAccuracy();
     if(!Utility.probabilityCheck(accuracy)) {
         moveAction.setStatus(ActionStatus.DONE);
-        System.out.println(sourcePokemon.getName() + " failed to throw its move");
+        App.log(sourcePokemon.getName() + " failed to throw its move");
         update(moveAction);
     } else {
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action fire").setFocus();
@@ -92,15 +93,15 @@ then
 
 
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
-    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name());
-    System.out.println(moveAction.getMove().getDescription());
+    App.log(sourcePokemon.getName() + " uses " + moveAction.getMove().name()+"!");
+    App.log(moveAction.getMove().getDescription());
     if(moveAction.getModifiers().getType() == 0.25 || moveAction.getModifiers().getType() == 0.5){
-        System.out.println("The move is not very effective");
+        App.log("The move is not very effective");
     }
     if(moveAction.getModifiers().getType() == 2.0 || moveAction.getModifiers().getType() == 4.0){
-        System.out.println("The move is super effective");
+        App.log("The move is super effective");
     }
-    System.out.println("DMG: " + dmg);
+    App.log("The move deals " + dmg + " HP of damage!");
 
     targetPokemon.setStage(lifeStageStats);
     update(targetPokemon);
@@ -131,15 +132,15 @@ then
             sourcePokemon.getBattleStatValueWithStage(Stat.SPECIAL_ATTACK),
             targetPokemon.getBattleStatValueWithStage(Stat.SPECIAL_DEFENSE),
             moveAction.getModifiers().getFinalValue());
-    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name());
-    System.out.println(moveAction.getMove().getDescription());
+    App.log(sourcePokemon.getName() + " uses " + moveAction.getMove().name()+"!");
+    App.log(moveAction.getMove().getDescription());
     if(moveAction.getModifiers().getType() == 0.25 || moveAction.getModifiers().getType() == 0.5){
-        System.out.println("The move is not very effective");
+        App.log("The move is not very effective");
     }
     if(moveAction.getModifiers().getType() == 2.0 || moveAction.getModifiers().getType() == 4.0){
-        System.out.println("The move is super effective");
+        App.log("The move is super effective");
     }
-    System.out.println("DMG: "+dmg);
+    App.log("The move deals " + dmg + " HP of damage!");
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
 
     targetPokemon.setStage(lifeStageStats);
@@ -162,7 +163,7 @@ when
     targetPokemon : Pokemon(targetPokemon.getOwner().equals(moveAction.getTarget()))
 then
     Utility.helper(drools);
-    System.out.println(sourcePokemon.getName() + " uses " + moveAction.getMove().name());
+    App.log(sourcePokemon.getName() + " uses " + moveAction.getMove().name()+"!");
     System.out.println(moveAction.getMove().getDescription());
 
     sourcePokemon.reducePP(moveAction.getMove());
@@ -193,12 +194,12 @@ then
         if (target.equals(MoveEffectTarget.TARGET)) {
             targetPokemon.setStage(Collections.singletonMap(stat,
                 targetPokemon.getStageValue(stat) + stageSideEffect.getNumberOfStages()));
-            System.out.println(targetPokemon.getName() +"'s "+stat.name()+ " stat has been modified by " + stageSideEffect.getNumberOfStages() + " stages");
+            App.log(targetPokemon.getName() +"'s "+stat.name()+ " stat has been modified by " + stageSideEffect.getNumberOfStages() + " stages");
             update(targetPokemon);
         } else {
             sourcePokemon.setStage(Collections.singletonMap(stat,
                 sourcePokemon.getStageValue(stat) + stageSideEffect.getNumberOfStages()));
-            System.out.println(sourcePokemon.getName() +"'s "+stat.name()+ " stat has been modified by " + stageSideEffect.getNumberOfStages() + " stages");
+            App.log(sourcePokemon.getName() +"'s "+stat.name()+ " stat has been modified by " + stageSideEffect.getNumberOfStages() + " stages");
             update(sourcePokemon);
 
         }
@@ -234,16 +235,16 @@ then
                                 target.setStatus(effect.getStatus());
                                 target.setStatusDuration(effect.isRandom() ? new Random().nextInt(effect.getDuration()) + 1 : effect.getDuration());
 
-                                System.out.println(target.getName() + " has now a condition: " + target.getStatus() + " for " + target.getStatusDuration() + " turns");
+                                App.log(target.getName() + " has now a condition: " + target.getStatus() + " for " + target.getStatusDuration() + " turns");
                                 break;
                             case PROTECTED:
                                 target.setProtectedFromAttacks(true);
-                                System.out.println(target.getName() + " has now protection from attacks.");
+                                App.log(target.getName() + " has now protection from attacks.");
                                 break;
                         }
                 update(target);
             } else {
-                System.out.println(target.getName() + " has already a condition: " + target.getStatus());
+                App.log(target.getName() + " has already a condition: " + target.getStatus());
             }
         }
     });

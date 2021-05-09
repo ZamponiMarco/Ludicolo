@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import it.unicam.lcp.ludicolo.Battle;
 import it.unicam.lcp.ludicolo.Player;
 import it.unicam.lcp.ludicolo.Utility;
+import it.unicam.lcp.ludicolo.actions.items.Item;
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
 import it.unicam.lcp.ludicolo.pkmn.PokemonFactory;
 import it.unicam.lcp.ludicolo.pkmn.Stat;
@@ -29,6 +30,8 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class App extends Application {
 
@@ -69,9 +72,16 @@ public class App extends Application {
             KieContainer kContainer = ks.getKieClasspathContainer();
             KieSession kSession = kContainer.newKieSession("ksession-rules");
 
+            Map<Item, Integer> playerOneBackpack = new HashMap<>();
+            Map<Item, Integer> playerTwoBackpack = new HashMap<>();
+            for (Item singleItem: Item.values()) {
+                playerOneBackpack.put(singleItem, 5);
+                playerTwoBackpack.put(singleItem, 5);
+            }
+
             battle = new Battle(
-                    new Player("Red", Lists.newArrayList(PokemonFactory.getCharizard(), PokemonFactory.getVenusaur())),
-                    new Player("Blue", Lists.newArrayList(PokemonFactory.getVenusaur(), PokemonFactory.getCharizard()))
+                    new Player("Red", Lists.newArrayList(PokemonFactory.getCharizard(), PokemonFactory.getVenusaur(), PokemonFactory.getEevee()), playerOneBackpack),
+                    new Player("Blue", Lists.newArrayList(PokemonFactory.getPikachu(), PokemonFactory.getBlastoise(), PokemonFactory.getMewtwo()), playerTwoBackpack)
             );
 
             kSession.insert(battle);
