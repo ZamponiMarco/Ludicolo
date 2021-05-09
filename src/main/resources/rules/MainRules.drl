@@ -21,6 +21,8 @@ import java.util.ArrayList
 import it.unicam.lcp.ludicolo.actions.moves.Move
 import java.util.List
 import java.util.Random
+import it.unicam.lcp.ludicolo.view.App
+import it.unicam.lcp.ludicolo.actions.SwapAction
 
 
 rule "InitiateBattle"
@@ -149,7 +151,10 @@ rule "NewTurn"
     salience -1
 when
     not Action()
+    pokemonA : Pokemon()
+    pokemonB : Pokemon(!pokemonA.getOwner().equals(pokemonB.getOwner()))
 then
     Utility.helper(drools);
+    App.refresh(pokemonA, pokemonB);
     System.out.println("Turn has ended: now pokemon must choose new moves");
- end
+end

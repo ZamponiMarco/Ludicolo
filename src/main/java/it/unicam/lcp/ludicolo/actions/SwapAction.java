@@ -1,5 +1,6 @@
-package it.unicam.lcp.ludicolo;
+package it.unicam.lcp.ludicolo.actions;
 
+import it.unicam.lcp.ludicolo.Player;
 import it.unicam.lcp.ludicolo.actions.Action;
 
 public class SwapAction extends Action {

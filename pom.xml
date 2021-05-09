@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <runtime.version>7.51.0.Final</runtime.version>
     </properties>
 
@@ -36,11 +36,13 @@
             <artifactId>kie-api</artifactId>
             <version>${runtime.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.drools</groupId>
             <artifactId>drools-core</artifactId>
             <version>${runtime.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.drools</groupId>
             <artifactId>drools-decisiontables</artifactId>
@@ -53,14 +55,24 @@
             <version>${runtime.version}</version>
         </dependency>
 
-
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
-            <scope>provided</scope>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>16</version>
         </dependency>
+
     </dependencies>
 
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.6</version>
+                <configuration>
+                    <mainClass>it.unicam.lcp.ludicolo.view.App</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
