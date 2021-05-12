@@ -61,7 +61,7 @@ public class App extends Application {
         scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
-
+        primaryStage.setResizable(false);
         new Thread(() -> {
             KieServices ks = KieServices.Factory.get();
             KieContainer kContainer = ks.getKieClasspathContainer();
