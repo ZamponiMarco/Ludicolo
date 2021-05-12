@@ -87,7 +87,7 @@ when
     toRemovePokemon: Pokemon(toRemovePokemon.getStageValue(Stat.LIFE) == 0)
     toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()))
 then
-Utility.helper(drools);
+    Utility.helper(drools);
     App.log(toRemovePokemon.getName() + " has fainted!");
     update(toRemovePlayer);
  end
@@ -135,6 +135,7 @@ then
     System.out.println("Now moves should be chosen for " + pokemon.getName());
     List<Move> moves = new ArrayList<Move>(pokemon.getLearnedMoves().keySet());
     Move playerOneMove = moves.get(new Random().nextInt(moves.size()));
+    Thread.sleep(500);
     insert(new MoveAction(player, playerOneMove, target));
 end
 
