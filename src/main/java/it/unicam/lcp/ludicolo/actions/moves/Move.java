@@ -12,98 +12,98 @@ import java.util.stream.Collectors;
 
 public enum Move {
 
-    BUG_BUZZ("The user generates a damaging sound wave by vibration. This may also lower the target's Sp. Def stat.",
+    BUG_BUZZ("The user generates a damaging sound wave by vibration. This may also lower the target's Sp. Def stat.", "Bug Buzz",
             MoveType.SPECIAL, Type.BUG, 10, 90, 100, 0),
 
-    STRUGGLE_BUG("While resisting, the user attacks opposing Pokémon. This lowers the Sp. Atk stats of those hit.",
+    STRUGGLE_BUG("While resisting, the user attacks opposing Pokémon. This lowers the Sp. Atk stats of those hit.", "Struggle Bug",
             MoveType.SPECIAL, Type.BUG, 20, 50, 100, 0,
             new StageMoveEffect(100, MoveEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
 
-    QUIVER_DANCE("The user lightly performs a beautiful, mystic dance. This boosts the user's Sp. Atk, Sp. Def, and Speed stats.",
+    QUIVER_DANCE("The user lightly performs a beautiful, mystic dance. This boosts the user's Sp. Atk, Sp. Def, and Speed stats.", "Quiver Dance",
             MoveType.STATUS, Type.BUG, 20, 0, 100, 0,
             new StageMoveEffect(100, MoveEffectTarget.SOURCE, 1, Stat.SPECIAL_ATTACK),
             new StageMoveEffect(100, MoveEffectTarget.SOURCE, 1, Stat.SPECIAL_DEFENSE),
             new StageMoveEffect(100, MoveEffectTarget.SOURCE, 1, Stat.SPEED)),
 
-    POUND("The target is physically pounded with a long tail, a foreleg, or the like.",
+    POUND("The target is physically pounded with a long tail, a foreleg, or the like.", "Pound",
             MoveType.PHYSICAL, Type.NORMAL, 35, 40, 100, 0),
 
-    PROTECT("This move enables the user to protect itself from all attacks.",
+    PROTECT("This move enables the user to protect itself from all attacks.", "Protect",
             MoveType.STATUS, Type.NORMAL, 10, 0, 100, 4,
             new StatusMoveEffect(100, MoveEffectTarget.SOURCE, PokemonStatus.PROTECTED)),
 
-    SUCKER_PUNCH("This move enables the user to attack first. This move fails if the target is not readying an attack.",
+    SUCKER_PUNCH("This move enables the user to attack first. This move fails if the target is not readying an attack.", "Sucker Punch",
             MoveType.PHYSICAL, Type.DARK, 5, 70, 100, 1),
 
-    SNARL("\tThe user yells as if it's ranting about something, which lowers the Sp. Atk stats of opposing Pokémon.",
+    SNARL("\tThe user yells as if it's ranting about something, which lowers the Sp. Atk stats of opposing Pokémon.", "Snarl",
             MoveType.SPECIAL, Type.DARK, 20, 55, 95, 0,
             new StageMoveEffect(100, MoveEffectTarget.TARGET, -1, Stat.SPECIAL_ATTACK)),
 
-    DARK_VOID("Opposing Pokémon are dragged into a world of total darkness that makes them sleep.",
+    DARK_VOID("Opposing Pokémon are dragged into a world of total darkness that makes them sleep.", "Dark Void",
             MoveType.STATUS, Type.DARK, 10, 0, 50, 0,
             new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.ASLEEP)),
 
-    CONFUSE_RAY("The target is exposed to a sinister ray that triggers confusion.",
+    CONFUSE_RAY("The target is exposed to a sinister ray that triggers confusion.", "Confuse Ray",
             MoveType.STATUS, Type.GHOST, 10, 0, 100, 0,
             new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.CONFUSED)),
 
-    FIRE_PUNCH("The target is punched with a fiery fist. This may also leave the target with a burn.",
+    FIRE_PUNCH("The target is punched with a fiery fist. This may also leave the target with a burn.", "Fire Punch",
             MoveType.PHYSICAL, Type.FIRE, 15, 75, 100, 0,
             new StatusMoveEffect(10, MoveEffectTarget.TARGET, PokemonStatus.BURNED)),
 
-    EMBER("The target is attacked with small flames. This may also leave the target with a burn.",
+    EMBER("The target is attacked with small flames. This may also leave the target with a burn.", "Ember",
             MoveType.SPECIAL, Type.FIRE, 25, 40, 100, 0,
             new StatusMoveEffect(10, MoveEffectTarget.TARGET, PokemonStatus.BURNED)),
 
-    ICE_BEAM("The target is struck with an icy-cold beam of energy. This may also leave the target frozen.",
+    ICE_BEAM("The target is struck with an icy-cold beam of energy. This may also leave the target frozen.", "Ice Beam",
             MoveType.SPECIAL, Type.ICE, 10, 90, 100, 0,
             new StatusMoveEffect(10, MoveEffectTarget.TARGET, PokemonStatus.FROZEN)),
 
-    ICE_PUNCH("The target is punched with an icy fist. This may also leave the target frozen.",
+    ICE_PUNCH("The target is punched with an icy fist. This may also leave the target frozen.", "Ice Punch",
             MoveType.PHYSICAL, Type.ICE, 15, 75, 100, 0,
             new StatusMoveEffect(10, MoveEffectTarget.TARGET, PokemonStatus.FROZEN)),
 
-    QUICK_ATTACK("The user lunges at the target at a speed that makes it almost invisible. This move always goes first.",
+    QUICK_ATTACK("The user lunges at the target at a speed that makes it almost invisible. This move always goes first.", "Quick Attack",
             MoveType.PHYSICAL, Type.NORMAL, 30, 40, 100, 1),
 
-    THUNDER_PUNCH("The target is punched with an electrified fist. This may also leave the target with paralysis.",
+    THUNDER_PUNCH("The target is punched with an electrified fist. This may also leave the target with paralysis.", "Thunder Punch",
             MoveType.PHYSICAL, Type.ELECTRIC, 15, 75, 100, 0,
             new StatusMoveEffect(10, MoveEffectTarget.TARGET, PokemonStatus.PARALYZED)),
 
-    THUNDER_WAVE("The user launches a weak jolt of electricity that paralyzes the target.",
+    THUNDER_WAVE("The user launches a weak jolt of electricity that paralyzes the target.", "Thunder Wave",
             MoveType.STATUS, Type.ELECTRIC, 20, 0, 90, 0,
             new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.PARALYZED)),
 
-    WATER_GUN("The target is blasted with a forceful shot of water.",
+    WATER_GUN("The target is blasted with a forceful shot of water.", "Water Gun",
             MoveType.SPECIAL, Type.WATER, 25, 40, 100, 0),
 
-    SURF("The user attacks everything around it by swamping its surroundings with a giant wave.",
+    SURF("The user attacks everything around it by swamping its surroundings with a giant wave.", "Surf",
             MoveType.SPECIAL, Type.WATER, 15, 90, 100, 0),
 
-    SLEEP_POWDER("The user scatters a big cloud of sleep-inducing dust around the target.",
+    SLEEP_POWDER("The user scatters a big cloud of sleep-inducing dust around the target.", "Sleep Powder",
             MoveType.STATUS, Type.GRASS, 15, 0, 75, 0,
             new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.ASLEEP)),
 
-    COTTON_SPORE("The user releases cotton-like spores that cling to opposing Pokémon, which harshly lowers their Speed stats.",
+    COTTON_SPORE("The user releases cotton-like spores that cling to opposing Pokémon, which harshly lowers their Speed stats.", "Cotton Spore",
             MoveType.STATUS, Type.GRASS, 40, 0, 100, 0,
             new StageMoveEffect(85, MoveEffectTarget.TARGET, -2, Stat.SPEED)),
 
-    MAGICAL_LEAF("The user scatters curious leaves that chase the target. This attack never misses.",
+    MAGICAL_LEAF("The user scatters curious leaves that chase the target. This attack never misses.", "Magical Leaf",
             MoveType.SPECIAL, Type.GRASS, 20, 60, 100, 0),
 
-    PSYCHIC("The target is hit by a strong telekinetic force. This may also lower the target's Sp. Def stat.",
+    PSYCHIC("The target is hit by a strong telekinetic force. This may also lower the target's Sp. Def stat.", "Psychic",
             MoveType.SPECIAL, Type.PSYCHIC, 10, 90, 100, 0,
             new StageMoveEffect(10, MoveEffectTarget.TARGET, -1, Stat.SPECIAL_DEFENSE)),
 
-    HYPNOSIS("The user employs hypnotic suggestion to make the target fall into a deep sleep.",
+    HYPNOSIS("The user employs hypnotic suggestion to make the target fall into a deep sleep.", "Hypnosis",
             MoveType.STATUS, Type.PSYCHIC, 20, 0, 60, 0,
             new StatusMoveEffect(100, MoveEffectTarget.TARGET, PokemonStatus.ASLEEP)),
 
-    AMNESIA("The user temporarily empties its mind to forget its concerns. This sharply raises the user's Sp. Def stat.",
+    AMNESIA("The user temporarily empties its mind to forget its concerns. This sharply raises the user's Sp. Def stat.", "Amnesia",
             MoveType.STATUS, Type.PSYCHIC, 20, 0, 100, 0,
             new StageMoveEffect(100, MoveEffectTarget.SOURCE, +2, Stat.SPECIAL_DEFENSE)),
 
-    TRI_ATTACK("The user strikes with a simultaneous three-beam attack. This may also burn, freeze, or paralyze the target.",
+    TRI_ATTACK("The user strikes with a simultaneous three-beam attack. This may also burn, freeze, or paralyze the target.", "Tri Attack",
             MoveType.SPECIAL, Type.NORMAL, 10, 80, 100, 0,
             new StatusMoveEffect(20, MoveEffectTarget.TARGET, PokemonStatus.BURNED),
             new StatusMoveEffect(20, MoveEffectTarget.TARGET, PokemonStatus.PARALYZED),
@@ -117,8 +117,9 @@ public enum Move {
     private final int accuracy;
     private final int priority;
     private final List<MoveEffect> moveEffectList;
+    private final String displayName;
 
-    Move(String description, MoveType moveType, Type type, int pp, int power, int accuracy, int priority, MoveEffect... moveEffects) {
+    Move(String description, String displayName, MoveType moveType, Type type, int pp, int power, int accuracy, int priority, MoveEffect... moveEffects) {
         this.description = description;
         this.moveType = moveType;
         this.type = type;
@@ -127,6 +128,12 @@ public enum Move {
         this.accuracy = accuracy;
         this.priority = priority;
         this.moveEffectList = Lists.newArrayList(moveEffects);
+        this.displayName = displayName;
+    }
+
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public List<MoveEffect> getSideEffectList() {

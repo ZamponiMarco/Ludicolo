@@ -6,9 +6,7 @@ import it.unicam.lcp.ludicolo.PlayerFactory;
 import it.unicam.lcp.ludicolo.Utility;
 import it.unicam.lcp.ludicolo.actions.Action;
 import it.unicam.lcp.ludicolo.actions.SwapAction;
-import it.unicam.lcp.ludicolo.actions.items.Item;
 import it.unicam.lcp.ludicolo.actions.items.ItemAction;
-import it.unicam.lcp.ludicolo.actions.moves.Move;
 import it.unicam.lcp.ludicolo.actions.moves.MoveAction;
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
 import it.unicam.lcp.ludicolo.pkmn.Stat;
@@ -37,6 +35,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 //TODO Francesco: getAvailableMoves, ComboBox, toString delle varie cose, presentazione
 //TODO Marco: icone status, pokemon dentro swapaction, togliere pokemon in campo dal dropdown menu, statistiche a lato del pokemon, bottone submit per la mossa scelta, selezione pokemon dopo fainted
@@ -70,7 +69,7 @@ public class App extends Application {
             KieContainer kContainer = ks.getKieClasspathContainer();
             KieSession kSession = kContainer.newKieSession("ksession-rules");
 
-            battle = new Battle(PlayerFactory.getLudicoloFan("RED"), PlayerFactory.getRandomPlayer("BLUE"));
+            battle = new Battle(PlayerFactory.getLudicoloFan("Red"), PlayerFactory.getRandomPlayer("Blue"));
 
             kSession.insert(battle);
             kSession.getAgenda().getAgendaGroup("battle setup").setFocus();
@@ -82,7 +81,8 @@ public class App extends Application {
     public static void refresh(Pokemon pokemonA, Pokemon pokemonB) {
         Platform.runLater(() -> {
             Pokemon pokemonOne = pokemonA.getOwner().equals(battle.getPlayerOne()) ? pokemonA : pokemonB;
-            ((Text) scene.lookup("#pokemon_one_name")).setText(pokemonOne.getName() + "\nLv. " + pokemonOne.getLevel());
+            String oneStatusString = pokemonOne.getStatus() == null ? "" : "[" + pokemonOne.getStatus().name() + "]";
+            ((Text) scene.lookup("#pokemon_one_name")).setText(pokemonOne.getDisplayName() + " Lv. " + pokemonOne.getLevel()+"\n"+ oneStatusString );
             int pokemonOneCurrentHealth = pokemonOne.getStageValue(Stat.LIFE);
             int pokemonOneMaxHealth = pokemonOne.getBattleStatValue(Stat.LIFE);
             ((ProgressBar) scene.lookup("#pokemon_one_bar")).setProgress((double) pokemonOneCurrentHealth / pokemonOneMaxHealth);
@@ -94,7 +94,8 @@ public class App extends Application {
             }
 
             Pokemon pokemonTwo = pokemonB.getOwner().equals(battle.getPlayerTwo()) ? pokemonB : pokemonA;
-            ((Text) scene.lookup("#pokemon_two_name")).setText(pokemonTwo.getName() + "\nLv. " + pokemonTwo.getLevel());
+            String twoStatusString = pokemonTwo.getStatus() == null ? "" : "[" + pokemonTwo.getStatus().name() + "]";
+            ((Text) scene.lookup("#pokemon_two_name")).setText(pokemonTwo.getDisplayName() + " Lv. " + pokemonTwo.getLevel()+"\n"+twoStatusString);
             int pokemonTwoCurrentHealth = pokemonTwo.getStageValue(Stat.LIFE);
             int pokemonTwoMaxHealth = pokemonTwo.getBattleStatValue(Stat.LIFE);
             ((ProgressBar) scene.lookup("#pokemon_two_bar")).setProgress((double) pokemonTwoCurrentHealth / pokemonTwoMaxHealth);
@@ -112,17 +113,17 @@ public class App extends Application {
             AtomicReference<Action> toReturn = new AtomicReference<>();
 
             Platform.runLater(() -> {
-                ((Text) scene.lookup("#current_player_text")).setText(sourcePlayer.getName() + " is choosing for " + sourcePokemon.getName());
+                ((Text) scene.lookup("#current_player_text")).setText(sourcePlayer.getName() + " is choosing for " + sourcePokemon.getDisplayName());
 
                 ChoiceBox moves = ((ChoiceBox) scene.lookup("#moves_list"));
-                ObservableList list = FXCollections.observableArrayList(sourcePokemon.getLearnedMoves().keySet());
+                ObservableList list = FXCollections.observableArrayList(sourcePokemon.getLearnedMoves().entrySet().stream().map(moveIntegerEntry -> new MoveViewWrapper(moveIntegerEntry.getKey(), moveIntegerEntry.getValue())).collect(Collectors.toList()));
                 moves.setItems(list);
                 moves.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                    toReturn.set(new MoveAction(sourcePlayer, (Move) newValue, targetPlayer));
+                    toReturn.set(new MoveAction(sourcePlayer, ((MoveViewWrapper) newValue).getMove(), targetPlayer));
                 });
 
                 ChoiceBox pokemons = ((ChoiceBox) scene.lookup("#pokemons_list"));
-                ObservableList pokemons_list = FXCollections.observableArrayList(sourcePlayer.getPokemonTeamNotFainted());
+                ObservableList pokemons_list = FXCollections.observableArrayList(sourcePlayer.getPokemonTeamNotFainted().stream().map(pokemon -> new PokemonViewWrapper(pokemon)).collect(Collectors.toList()));
                 pokemons.setItems(pokemons_list);
                 pokemons.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
                     toReturn.set(new SwapAction(sourcePlayer, sourcePlayer.getPokemonTeamNotFainted().indexOf(newValue)));
@@ -130,10 +131,10 @@ public class App extends Application {
 
 
                 ChoiceBox items = ((ChoiceBox) scene.lookup("#items_list"));
-                ObservableList items_list = FXCollections.observableArrayList(sourcePlayer.getBackpack().keySet());
+                ObservableList items_list = FXCollections.observableArrayList(sourcePlayer.getBackpack().entrySet().stream().map(itemIntegerEntry -> new ItemViewWrapper(itemIntegerEntry.getKey(), itemIntegerEntry.getValue())).collect(Collectors.toList()));
                 items.setItems(items_list);
                 items.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                    toReturn.set(new ItemAction(sourcePlayer, (Item) newValue));
+                    toReturn.set(new ItemAction(sourcePlayer, ((ItemViewWrapper) newValue).getItem()));
                 });
             });
 

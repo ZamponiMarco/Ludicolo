@@ -19,7 +19,7 @@ then
     retract(oldPokemon);
     App.log(player.getName() + " retracted " + oldPokemon.getName());
     Pokemon newPokemon = swapAction.getSource().getPokemonTeamNotFainted().get(swapAction.getNewPokemonIndex());
-    App.log(newPokemon.getName() + " is sent into battle!");
+    App.log(newPokemon.getDisplayName() + " is sent into battle!");
     insert(newPokemon);
 
     swapAction.setStatus(ActionStatus.DONE);

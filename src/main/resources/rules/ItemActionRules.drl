@@ -36,7 +36,7 @@ when
 then
     Utility.helper(drools);
 
-    App.log(player.getName() + " used: " + itemAction.getItem().name() + " for " + pokemon.getName());
+    App.log(player.getName() + " used: " + itemAction.getItem().getDisplayName() + " for " + pokemon.getDisplayName());
     App.log(itemAction.getItem().getDescription());
     itemAction.setStatus(ActionStatus.FIRED);
     player.consumeItem(itemAction.getItem());

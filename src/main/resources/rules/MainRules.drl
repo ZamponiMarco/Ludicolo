@@ -81,7 +81,7 @@ then
 
     pkmn.setBattleStatsComputed(true);
     update(pkmn);
-    App.log(pkmn.getName() + " is sent out!");
+    App.log(pkmn.getDisplayName() + " is sent out!");
     update(player);
 end
 
@@ -110,7 +110,7 @@ then
     Utility.helper(drools);
 
     App.refresh(toRemovePokemon, anotherPokemon);
-    App.log(toRemovePokemon.getName() + " has fainted!");
+    App.log(toRemovePokemon.getDisplayName() + " has fainted!");
     update(toRemovePlayer);
  end
 
@@ -158,11 +158,11 @@ when
     pokemonTwo : Pokemon(pokemonTwo.owner.equals(playerTwo))
 then
     Utility.helper(drools);
-    App.log("What should " + pokemonOne.getName() + " do?");
+    App.log("What should " + pokemonOne.getDisplayName() + " do?");
     Action toReturnOne = App.selectMoves(playerOne, playerTwo, pokemonOne).get();
     insert(toReturnOne);
 
-    App.log("What should " + pokemonTwo.getName() + " do?");
+    App.log("What should " + pokemonTwo.getDisplayName() + " do?");
     Action toReturnTwo = App.selectMoves(playerTwo, playerOne, pokemonTwo).get();
     insert(toReturnTwo);
 end
@@ -190,7 +190,7 @@ when
 then
     Utility.helper(drools);
     App.refresh(pokemonA, pokemonB);
-    App.log("Now pokemon must choose new moves");
+    App.log("Now Pokémon must choose new moves");
     battle.setNewTurnStart(false);
     update(battle)
 end

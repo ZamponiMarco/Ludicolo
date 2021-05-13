@@ -16,6 +16,9 @@ public class Pokemon {
 
     private final List<Type> type;
     private final String name;
+
+
+    private final String displayName;
     private final Map<Move, Integer> learnedMoves;
     private final int level;
     private final StatValues life;
@@ -28,9 +31,10 @@ public class Pokemon {
     private PokemonStatus status;
     private int statusDuration;
 
-    public Pokemon(String name, List<Type> type, List<Move> learnedMoves, int level, Map<Stat, Integer> baseStats) {
+    public Pokemon(String name, String displayName, List<Type> type, List<Move> learnedMoves, int level, Map<Stat, Integer> baseStats) {
         this.type = type;
         this.name = name;
+        this.displayName = displayName;
         this.learnedMoves = learnedMoves.stream().collect(Collectors.toMap(move -> move, Move::getMaxPp));
         this.level = level;
         this.battleStatsComputed = false;
@@ -41,6 +45,10 @@ public class Pokemon {
                 this.stats.put(entry.getKey(), new StatValues(entry.getValue()));
             }
         }
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public PokemonStatus getStatus() {

@@ -49,7 +49,7 @@ then
         pokemon.setBattleStat(parBattleStats);
     }
 
-    App.log(pokemon.getName() + "'s " + pokemon.getStatus() + " status wore off");
+    App.log(pokemon.getDisplayName() + "'s " + pokemon.getStatus() + " status wore off");
     pokemon.setStatus(null);
     update(pokemon);
 
@@ -65,7 +65,7 @@ when
 then
     Utility.helper(drools);
     pokemon.setProtectedFromAttacks(false);
-    App.log(pokemon.getName() + " is no longer protected from attacks");
+    App.log(pokemon.getDisplayName() + " is no longer protected from attacks");
     update(pokemon);
 end
 
@@ -80,7 +80,7 @@ when
     pokemon : Pokemon(pokemon.status == PokemonStatus.BURNED)
 then
     Utility.helper(drools);
-    System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+    System.out.println(pokemon.getDisplayName() + " is " + pokemon.getStatus());
     Map<Stat, Integer> lifeStageStats = new HashMap<>();
     int targetLife = pokemon.getStageValue(Stat.LIFE);
      int damage = pokemon.getBattleStatValue(Stat.LIFE)/16;
@@ -88,7 +88,7 @@ then
     System.out.println("Damage: " + damage);
 
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - damage),0));
-    App.log(pokemon.getName() + " gets damaged by burn");
+    App.log(pokemon.getDisplayName() + " gets damaged by burn");
     pokemon.setStage(lifeStageStats);
     update(pokemon);
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
@@ -103,7 +103,7 @@ then
      pokemon : Pokemon(pokemon.status == PokemonStatus.POISONED)
  then
      Utility.helper(drools);
-     System.out.println(pokemon.getName() + " is " + pokemon.getStatus());
+     System.out.println(pokemon.getDisplayName() + " is " + pokemon.getStatus());
      Map<Stat, Integer> lifeStageStats = new HashMap<>();
      int targetLife = pokemon.getStageValue(Stat.LIFE);
      int damage = pokemon.getBattleStatValue(Stat.LIFE)/8;
@@ -111,7 +111,7 @@ then
      System.out.println("Damage: " + damage);
 
      lifeStageStats.put(Stat.LIFE, Math.max((targetLife - damage),0));
-     App.log(pokemon.getName() + " gets damaged by poison");
+     App.log(pokemon.getDisplayName() + " gets damaged by poison");
      pokemon.setStage(lifeStageStats);
      update(pokemon);
      kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
@@ -126,7 +126,7 @@ when
       pokemon : Pokemon(pokemon.status == PokemonStatus.CONFUSED, pokemon.owner.equals(moveAction.getSource()))
 then
      Utility.helper(drools);
-     App.log(pokemon.getName() + " is " + pokemon.getStatus());
+     App.log(pokemon.getDisplayName() + " is " + pokemon.getStatus());
      if(Utility.probabilityCheck(33)){
             Map<Stat, Integer> lifeStageStats = new HashMap<>();
             int targetLife = pokemon.getStageValue(Stat.LIFE);
@@ -141,12 +141,12 @@ then
 
 
             pokemon.setStage(lifeStageStats);
-            App.log(pokemon.getName() + " gets damaged by confusion");
+            App.log(pokemon.getDisplayName() + " gets damaged by confusion");
             System.out.println("DMG: "+dmg);
             update(pokemon);
 
             moveAction.setStatus(ActionStatus.DONE);
-            App.log(pokemon.getName() + " failed to throw its move");
+            App.log(pokemon.getDisplayName() + " failed to throw its move");
             update(moveAction);
 
             kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("winning conditions").setFocus();
@@ -162,10 +162,10 @@ then
       pokemon : Pokemon(pokemon.status == PokemonStatus.FROZEN, pokemon.owner.equals(moveAction.getSource()))
  then
       Utility.helper(drools);
-      App.log(pokemon.getName() + " is " + pokemon.getStatus());
+      App.log(pokemon.getDisplayName() + " is " + pokemon.getStatus());
       moveAction.setStatus(ActionStatus.DONE);
 
-      App.log(pokemon.getName() + " failed to throw its move");
+      App.log(pokemon.getDisplayName() + " failed to throw its move");
       update(moveAction);
   end
 
@@ -178,10 +178,10 @@ then
       pokemon : Pokemon(pokemon.status == PokemonStatus.ASLEEP, pokemon.owner.equals(moveAction.getSource()))
  then
       Utility.helper(drools);
-      App.log(pokemon.getName() + " is " + pokemon.getStatus());
+      App.log(pokemon.getDisplayName() + " is " + pokemon.getStatus());
       moveAction.setStatus(ActionStatus.DONE);
 
-      App.log(pokemon.getName() + " failed to throw its move");
+      App.log(pokemon.getDisplayName() + " failed to throw its move");
       update(moveAction);
   end
 
@@ -194,10 +194,10 @@ when
       pokemon : Pokemon(pokemon.status == PokemonStatus.PARALYZED, pokemon.owner.equals(moveAction.getSource()))
 then
       Utility.helper(drools);
-      App.log(pokemon.getName() + " is " + pokemon.getStatus());
+      App.log(pokemon.getDisplayName() + " is " + pokemon.getStatus());
     if(!Utility.probabilityCheck(25)) {
         moveAction.setStatus(ActionStatus.DONE);
-        App.log(pokemon.getName() + " failed to throw its move");
+        App.log(pokemon.getDisplayName() + " failed to throw its move");
         update(moveAction);
     }
  end
@@ -212,10 +212,10 @@ then
       pokemonSource : Pokemon(pokemonSource.owner.equals(moveAction.getSource()))
  then
      Utility.helper(drools);
-     App.log(pokemonTarget.getName() + " is protected.");
+     App.log(pokemonTarget.getDisplayName() + " is protected.");
 
      moveAction.setStatus(ActionStatus.DONE);
-     App.log(pokemonSource.getName() + " failed to throw its move");
+     App.log(pokemonSource.getDisplayName() + " failed to throw its move");
 
      update(moveAction);
 end

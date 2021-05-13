@@ -38,7 +38,7 @@ then
     int accuracy = moveAction.getMove().getAccuracy();
     if(!Utility.probabilityCheck(accuracy)) {
         moveAction.setStatus(ActionStatus.DONE);
-        App.log(sourcePokemon.getName() + " failed to throw its move");
+        App.log(sourcePokemon.getDisplayName() + " failed to throw its move");
         update(moveAction);
     } else {
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action fire").setFocus();
@@ -93,7 +93,7 @@ then
 
 
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
-    App.log(sourcePokemon.getName() + " uses " + moveAction.getMove().name()+"!");
+    App.log(sourcePokemon.getDisplayName() + " uses " + moveAction.getMove().getDisplayName()+"!");
     App.log(moveAction.getMove().getDescription());
     if(moveAction.getModifiers().getType() == 0.25 || moveAction.getModifiers().getType() == 0.5){
         App.log("The move is not very effective");
@@ -132,7 +132,7 @@ then
             sourcePokemon.getBattleStatValueWithStage(Stat.SPECIAL_ATTACK),
             targetPokemon.getBattleStatValueWithStage(Stat.SPECIAL_DEFENSE),
             moveAction.getModifiers().getFinalValue());
-    App.log(sourcePokemon.getName() + " uses " + moveAction.getMove().name()+"!");
+    App.log(sourcePokemon.getDisplayName() + " uses " + moveAction.getMove().getDisplayName()+"!");
     App.log(moveAction.getMove().getDescription());
     if(moveAction.getModifiers().getType() == 0.25 || moveAction.getModifiers().getType() == 0.5){
         App.log("The move is not very effective");
@@ -163,7 +163,7 @@ when
     targetPokemon : Pokemon(targetPokemon.getOwner().equals(moveAction.getTarget()))
 then
     Utility.helper(drools);
-    App.log(sourcePokemon.getName() + " uses " + moveAction.getMove().name()+"!");
+    App.log(sourcePokemon.getDisplayName() + " uses " + moveAction.getMove().getDisplayName()+"!");
     System.out.println(moveAction.getMove().getDescription());
 
     sourcePokemon.reducePP(moveAction.getMove());
@@ -194,12 +194,12 @@ then
         if (target.equals(MoveEffectTarget.TARGET)) {
             targetPokemon.setStage(Collections.singletonMap(stat,
                 targetPokemon.getStageValue(stat) + stageSideEffect.getNumberOfStages()));
-            App.log(targetPokemon.getName() +"'s "+stat.name()+ " stat has been modified by " + stageSideEffect.getNumberOfStages() + " stages");
+            App.log(targetPokemon.getDisplayName() +"'s "+stat.name()+ " stat has been modified by " + stageSideEffect.getNumberOfStages() + " stages");
             update(targetPokemon);
         } else {
             sourcePokemon.setStage(Collections.singletonMap(stat,
                 sourcePokemon.getStageValue(stat) + stageSideEffect.getNumberOfStages()));
-            App.log(sourcePokemon.getName() +"'s "+stat.name()+ " stat has been modified by " + stageSideEffect.getNumberOfStages() + " stages");
+            App.log(sourcePokemon.getDisplayName() +"'s "+stat.name()+ " stat has been modified by " + stageSideEffect.getNumberOfStages() + " stages");
             update(sourcePokemon);
 
         }
@@ -235,16 +235,16 @@ then
                                 target.setStatus(effect.getStatus());
                                 target.setStatusDuration(effect.isRandom() ? new Random().nextInt(effect.getDuration()) + 1 : effect.getDuration());
 
-                                App.log(target.getName() + " has now a condition: " + target.getStatus() + " for " + target.getStatusDuration() + " turns");
+                                App.log(target.getDisplayName() + " has now a condition: " + target.getStatus() + " for " + target.getStatusDuration() + " turns");
                                 break;
                             case PROTECTED:
                                 target.setProtectedFromAttacks(true);
-                                App.log(target.getName() + " has now protection from attacks.");
+                                App.log(target.getDisplayName() + " has now protection from attacks.");
                                 break;
                         }
                 update(target);
             } else {
-                App.log(target.getName() + " has already a condition: " + target.getStatus());
+                App.log(target.getDisplayName() + " has already a condition: " + target.getStatus());
             }
         }
     });

@@ -9,19 +9,19 @@ import java.util.stream.Collectors;
 public enum Item {
 
     POTION("Restores 20 HP.",
-            new HealItemEffect(20, false)),
+            "Potion", new HealItemEffect(20, false)),
 
     SUPER_POTION("Restores 60 HP.",
-            new HealItemEffect(60, false)),
+            "Super Potion", new HealItemEffect(60, false)),
 
     HYPER_POTION("Restores 120 HP.",
-            new HealItemEffect(120, false)),
+            "Hyper Potion", new HealItemEffect(120, false)),
 
     MAX_POTION("Fully restores HP.",
-            new HealItemEffect(100, true)),
+            "Max Potion", new HealItemEffect(100, true)),
 
     FULL_HEAL("A spray-type medicine. It heals all the status problems of a single Pokémon.",
-            new StatusItemEffect(PokemonStatus.CONFUSED),
+            "Full Heal", new StatusItemEffect(PokemonStatus.CONFUSED),
             new StatusItemEffect(PokemonStatus.ASLEEP),
             new StatusItemEffect(PokemonStatus.BURNED),
             new StatusItemEffect(PokemonStatus.FROZEN),
@@ -29,7 +29,7 @@ public enum Item {
             new StatusItemEffect(PokemonStatus.POISONED)),
 
     FULL_RESTORE("A medicine that fully restores the HP and heals any status problems of a single Pokémon.",
-            new StatusItemEffect(PokemonStatus.CONFUSED),
+            "Full Restore", new StatusItemEffect(PokemonStatus.CONFUSED),
             new StatusItemEffect(PokemonStatus.ASLEEP),
             new StatusItemEffect(PokemonStatus.BURNED),
             new StatusItemEffect(PokemonStatus.FROZEN),
@@ -38,33 +38,40 @@ public enum Item {
             new HealItemEffect(100, true)),
 
     AWAKENING("A spray-type medicine. It awakens a Pokémon from the clutches of sleep.",
-            new StatusItemEffect(PokemonStatus.ASLEEP)),
+            "Awakening", new StatusItemEffect(PokemonStatus.ASLEEP)),
 
     BURN_HEAL("A spray-type medicine. It heals a single Pokémon that is suffering from a burn.",
-            new StatusItemEffect(PokemonStatus.BURNED)),
+            "Burn Heal", new StatusItemEffect(PokemonStatus.BURNED)),
 
     ICE_HEAL("A spray-type medicine. It defrosts a Pokémon that has been frozen solid.",
-            new StatusItemEffect(PokemonStatus.FROZEN)),
+            "Ice Heal", new StatusItemEffect(PokemonStatus.FROZEN)),
 
     PARALYZE_HEAL("A spray-type medicine. It eliminates paralysis from a single Pokémon.",
-            new StatusItemEffect(PokemonStatus.PARALYZED)),
+            "Paralyze Heal", new StatusItemEffect(PokemonStatus.PARALYZED)),
 
     ANTIDOTE("A spray-type medicine. It lifts the effect of poison from one Pokémon.",
-            new StatusItemEffect(PokemonStatus.POISONED)),
+            "Antidote", new StatusItemEffect(PokemonStatus.POISONED)),
 
     MAX_ELIXIR("It fully restores the PP of all the moves learned by the targeted Pokémon.",
-            new RestoreItemEffect(100, true)),
+            "Max Elixir", new RestoreItemEffect(100, true)),
 
     ELIXIR("It restores the PP of all the moves learned by the targeted Pokémon by 10 points each.",
-            new RestoreItemEffect(10, false));
+            "Elixir", new RestoreItemEffect(10, false));
 
     private final String description;
     private final List<ItemEffect> itemEffectList;
+    private final String displayName;
 
-    Item(String description, ItemEffect... itemEffects) {
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    Item(String description, String displayName, ItemEffect... itemEffects) {
         this.description = description;
+        this.displayName = displayName;
         this.itemEffectList = Lists.newArrayList(itemEffects);
     }
+
     public String getDescription() {
         return description;
     }
