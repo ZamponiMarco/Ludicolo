@@ -104,9 +104,12 @@ rule "PokemonFainted"
     no-loop true
 when
     toRemovePokemon: Pokemon(toRemovePokemon.getStageValue(Stat.LIFE) == 0)
+    anotherPokemon: Pokemon(!anotherPokemon.equals(toRemovePokemon))
     toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()))
 then
     Utility.helper(drools);
+
+    App.refresh(toRemovePokemon, anotherPokemon);
     App.log(toRemovePokemon.getName() + " has fainted!");
     update(toRemovePlayer);
  end
