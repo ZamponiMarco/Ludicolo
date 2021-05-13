@@ -70,7 +70,7 @@ public class App extends Application {
             KieContainer kContainer = ks.getKieClasspathContainer();
             KieSession kSession = kContainer.newKieSession("ksession-rules");
 
-            battle = new Battle(PlayerFactory.getLudicoloFan("Red"), PlayerFactory.getRandomPlayer("Blue"));
+            battle = new Battle(PlayerFactory.getRandomPlayer("Red"), PlayerFactory.getLudicoloFan("Blue"));
 
             kSession.insert(battle);
             kSession.getAgenda().getAgendaGroup("battle setup").setFocus();
@@ -235,7 +235,7 @@ public class App extends Application {
         Platform.runLater(() -> ((TextArea) scene.lookup("#log_pane")).appendText(System.lineSeparator() + "> " + s));
         System.out.println(s);
         try {
-            Thread.sleep(1);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
