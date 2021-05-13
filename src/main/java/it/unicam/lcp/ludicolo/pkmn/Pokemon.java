@@ -83,6 +83,10 @@ public class Pokemon {
         return learnedMoves;
     }
 
+    public Map<Move, Integer> getAvailableMoves() {
+        return learnedMoves.entrySet().stream().filter(moveIntegerEntry -> moveIntegerEntry.getValue() > 0).collect(Collectors.toMap(moveIntegerEntry -> moveIntegerEntry.getKey(), moveIntegerEntry -> moveIntegerEntry.getValue()));
+    }
+
     public void reducePP(Move move) {
         this.learnedMoves.put(move, Math.max(this.learnedMoves.get(move) - 1, 0));
     }

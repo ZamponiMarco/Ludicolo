@@ -2,11 +2,11 @@ package it.unicam.lcp.ludicolo.view;
 
 import it.unicam.lcp.ludicolo.actions.moves.Move;
 
-public class MoveViewWrapper {
+public class MoveWrapper {
     private final Move move;
     private final Integer pp;
 
-    public MoveViewWrapper(Move move, Integer pp) {
+    public MoveWrapper(Move move, Integer pp) {
         this.move = move;
         this.pp = pp;
     }

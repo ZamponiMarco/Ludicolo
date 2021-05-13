@@ -48,7 +48,7 @@ public class Player {
     }
 
     public Map<Item, Integer> getBackpack() {
-        return backpack;
+        return backpack.entrySet().stream().filter(entry -> entry.getValue() > 0).collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
     }
 
     public void consumeItem(Item item){

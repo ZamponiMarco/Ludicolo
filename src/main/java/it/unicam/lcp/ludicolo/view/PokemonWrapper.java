@@ -3,18 +3,16 @@ package it.unicam.lcp.ludicolo.view;
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
 import it.unicam.lcp.ludicolo.pkmn.Stat;
 
-public class PokemonViewWrapper {
+public class PokemonWrapper {
     private final Pokemon pkmn;
 
-    public PokemonViewWrapper(Pokemon pkmn) {
+    public PokemonWrapper(Pokemon pkmn) {
         this.pkmn = pkmn;
     }
 
     public Pokemon getPkmn() {
         return pkmn;
     }
-
-
 
     public String toString() {
         String statusString = this.pkmn.getStatus() == null ? "" : "\n[" + this.pkmn.getStatus().name() + "]";

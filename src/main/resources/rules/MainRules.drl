@@ -190,7 +190,7 @@ when
 then
     Utility.helper(drools);
     App.refresh(pokemonA, pokemonB);
-    App.log("Now Pokémon must choose new moves");
+    App.log("Now the Pokemon must choose new moves");
     battle.setNewTurnStart(false);
     update(battle)
 end

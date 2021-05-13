@@ -17,18 +17,19 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -37,8 +38,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-//TODO Francesco: getAvailableMoves, ComboBox, toString delle varie cose, presentazione
-//TODO Marco: icone status, pokemon dentro swapaction, togliere pokemon in campo dal dropdown menu, statistiche a lato del pokemon, bottone submit per la mossa scelta, selezione pokemon dopo fainted
+//TODO Francesco: presentazione
+//TODO Marco: icone status, pokemon dentro swapaction, bottone submit per la mossa scelta, selezione pokemon dopo fainted
 public class App extends Application {
 
     public static Battle battle;
@@ -115,26 +116,109 @@ public class App extends Application {
             Platform.runLater(() -> {
                 ((Text) scene.lookup("#current_player_text")).setText(sourcePlayer.getName() + " is choosing for " + sourcePokemon.getDisplayName());
 
-                ChoiceBox moves = ((ChoiceBox) scene.lookup("#moves_list"));
-                ObservableList list = FXCollections.observableArrayList(sourcePokemon.getLearnedMoves().entrySet().stream().map(moveIntegerEntry -> new MoveViewWrapper(moveIntegerEntry.getKey(), moveIntegerEntry.getValue())).collect(Collectors.toList()));
-                moves.setItems(list);
+                ComboBox moves = ((ComboBox) scene.lookup("#moves_list"));
+                List<MoveWrapper> movesList =  sourcePokemon.getAvailableMoves().entrySet().stream().map(moveIntegerEntry -> new MoveWrapper(moveIntegerEntry.getKey(), moveIntegerEntry.getValue())).collect(Collectors.toList());
+                ObservableList movesObsList = FXCollections.observableArrayList(movesList);
+                moves.setItems(movesObsList);
+
+                moves.setCellFactory(new Callback<ListView<MoveWrapper>, ListCell<MoveWrapper>>() {
+                    @Override public ListCell<MoveWrapper> call(ListView<MoveWrapper> p) {
+                        return new ListCell<MoveWrapper>() {
+                            private final Rectangle rectangle;
+                            {
+                                setContentDisplay(ContentDisplay.LEFT);
+                                rectangle = new Rectangle(5, 5);
+                            }
+
+                            @Override protected void updateItem(MoveWrapper item, boolean empty) {
+                                super.updateItem(item, empty);
+
+                                if (item == null || empty) {
+                                    setGraphic(null);
+                                } else {
+                                    setText(item.toString());
+                                    String boxImage = App.class.getResource("/assets/" + item.getMove().getType().name() + ".png").toExternalForm();
+                                    setGraphic(new ImageView(new Image(boxImage)));
+
+                                }
+                            }
+                        };
+                    }
+                });
+
                 moves.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                    toReturn.set(new MoveAction(sourcePlayer, ((MoveViewWrapper) newValue).getMove(), targetPlayer));
+                    toReturn.set(new MoveAction(sourcePlayer, ((MoveWrapper) newValue).getMove(), targetPlayer));
                 });
 
-                ChoiceBox pokemons = ((ChoiceBox) scene.lookup("#pokemons_list"));
-                ObservableList pokemons_list = FXCollections.observableArrayList(sourcePlayer.getPokemonTeamNotFainted().stream().map(pokemon -> new PokemonViewWrapper(pokemon)).collect(Collectors.toList()));
-                pokemons.setItems(pokemons_list);
+                ComboBox<PokemonWrapper> pokemons = ((ComboBox) scene.lookup("#pokemons_list"));
+                List<PokemonWrapper> pokemonList = sourcePlayer.getPokemonTeamNotFainted().stream().filter(pokemon -> pokemon != sourcePokemon).map(pokemon -> new PokemonWrapper(pokemon)).collect(Collectors.toList());
+                ObservableList<PokemonWrapper> pokemonObsList = FXCollections.observableArrayList(pokemonList);
+                pokemons.setItems(pokemonObsList);
+
+                pokemons.setCellFactory(new Callback<ListView<PokemonWrapper>, ListCell<PokemonWrapper>>() {
+                    @Override public ListCell<PokemonWrapper> call(ListView<PokemonWrapper> p) {
+                        return new ListCell<PokemonWrapper>() {
+                            private final Rectangle rectangle;
+                            {
+                                setContentDisplay(ContentDisplay.LEFT);
+                                rectangle = new Rectangle(5, 5);
+                            }
+
+                            @Override protected void updateItem(PokemonWrapper item, boolean empty) {
+                                super.updateItem(item, empty);
+
+                                if (item == null || empty) {
+                                    setGraphic(null);
+                                } else {
+                                    setText(item.toString());
+                                    String boxImage = App.class.getResource("/assets/" + item.getPkmn().getName() + "_menu.png").toExternalForm();
+                                    setGraphic(new ImageView(new Image(boxImage)));
+
+                                }
+                            }
+                        };
+                    }
+                });
+
                 pokemons.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                    toReturn.set(new SwapAction(sourcePlayer, sourcePlayer.getPokemonTeamNotFainted().indexOf(newValue)));
+                    toReturn.set(new SwapAction(sourcePlayer, sourcePlayer.getPokemonTeamNotFainted().indexOf((newValue.getPkmn()))));
                 });
 
 
-                ChoiceBox items = ((ChoiceBox) scene.lookup("#items_list"));
-                ObservableList items_list = FXCollections.observableArrayList(sourcePlayer.getBackpack().entrySet().stream().map(itemIntegerEntry -> new ItemViewWrapper(itemIntegerEntry.getKey(), itemIntegerEntry.getValue())).collect(Collectors.toList()));
-                items.setItems(items_list);
+                ComboBox<ItemWrapper> items = ((ComboBox) scene.lookup("#items_list"));
+                List<ItemWrapper> itemList = sourcePlayer.getBackpack().entrySet().stream().map(itemIntegerEntry -> new ItemWrapper(itemIntegerEntry.getKey(), itemIntegerEntry.getValue())).collect(Collectors.toList());
+                ObservableList<ItemWrapper> itemObsList = FXCollections.observableArrayList(itemList);
+                items.setItems(itemObsList);
+
+                items.setCellFactory(new Callback<ListView<ItemWrapper>, ListCell<ItemWrapper>>() {
+                    @Override public ListCell<ItemWrapper> call(ListView<ItemWrapper> p) {
+                        return new ListCell<ItemWrapper>() {
+                            private final Rectangle rectangle;
+                            {
+                                setContentDisplay(ContentDisplay.LEFT);
+                                rectangle = new Rectangle(5, 5);
+
+                            }
+
+                            @Override protected void updateItem(ItemWrapper item, boolean empty) {
+                                super.updateItem(item, empty);
+
+                                if (item == null || empty) {
+                                    setGraphic(null);
+                                } else {
+                                    setText(item.toString());
+                                    String boxImage = App.class.getResource("/assets/" + item.getItem().name() + ".png").toExternalForm();
+                                    setGraphic(new ImageView(new Image(boxImage)));
+
+                                }
+                            }
+                        };
+                    }
+                });
+
                 items.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                    toReturn.set(new ItemAction(sourcePlayer, ((ItemViewWrapper) newValue).getItem()));
+
+                    toReturn.set(new ItemAction(sourcePlayer, ((ItemWrapper) newValue).getItem()));
                 });
             });
 
@@ -150,5 +234,10 @@ public class App extends Application {
     public static void log(String s) {
         Platform.runLater(() -> ((TextArea) scene.lookup("#log_pane")).appendText(System.lineSeparator() + "> " + s));
         System.out.println(s);
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
