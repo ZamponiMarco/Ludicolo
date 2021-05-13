@@ -21,4 +21,13 @@ public class PlayerFactory {
         Collections.shuffle(pkmns);
         return new Player(name, pkmns, backpack);
     }
+
+    public static Player getLudicoloFan(String name){
+        Map<Item, Integer> backpack = new HashMap<>();
+        for (Item singleItem : Item.values()) {
+            backpack.put(singleItem, 5);
+        }
+        List<Pokemon> pkmns = Lists.newArrayList(PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo());
+        return new Player(name, pkmns, backpack);
+    }
 }

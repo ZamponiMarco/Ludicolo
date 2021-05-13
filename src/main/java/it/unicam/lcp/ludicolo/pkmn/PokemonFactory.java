@@ -29,7 +29,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "VENUSAUR";
         List<Type> types = Lists.newArrayList(Type.GRASS, Type.POISON);
-        List<Move> moves = Lists.newArrayList(Move.CONFUSE_RAY);
+        List<Move> moves = Lists.newArrayList(Move.CONFUSE_RAY, Move.BUG_BUZZ, Move.MAGICAL_LEAF, Move.SLEEP_POWDER);
         int level = 100;
         stats.put(Stat.LIFE, 80);
         stats.put(Stat.ATTACK, 82);
@@ -44,7 +44,7 @@ public class PokemonFactory {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "BLASTOISE";
         List<Type> types = Lists.newArrayList(Type.WATER);
-        List<Move> moves = Lists.newArrayList(Move.SURF);
+        List<Move> moves = Lists.newArrayList(Move.SURF, Move.WATER_GUN, Move.ICE_PUNCH, Move.POUND);
         int level = 100;
         stats.put(Stat.LIFE, 79);
         stats.put(Stat.ATTACK, 83);
@@ -97,6 +97,21 @@ public class PokemonFactory {
         stats.put(Stat.SPECIAL_ATTACK, 154);
         stats.put(Stat.SPECIAL_DEFENSE, 90);
         stats.put(Stat.SPEED, 130);
+        return new Pokemon(name,types, moves, level, stats);
+    }
+
+    public static Pokemon getLudicolo(){
+        Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
+        String name = "LUDICOLO";
+        List<Type> types = Lists.newArrayList(Type.WATER, Type.GRASS);
+        List<Move> moves = Lists.newArrayList(Move.PROTECT, Move.QUICK_ATTACK, Move.SURF, Move.MAGICAL_LEAF);
+        int level = 100;
+        stats.put(Stat.LIFE, 80);
+        stats.put(Stat.ATTACK, 70);
+        stats.put(Stat.DEFENSE, 70);
+        stats.put(Stat.SPECIAL_ATTACK, 90);
+        stats.put(Stat.SPECIAL_DEFENSE, 100);
+        stats.put(Stat.SPEED, 70);
         return new Pokemon(name,types, moves, level, stats);
     }
 

@@ -148,22 +148,28 @@ rule "SelectMoves"
     agenda-group "turn setup"
     salience 1
 when
-    player: Player()
-    not playerAction : Action(playerAction.source == player)
-    target: Player(!target.equals(player))
-    pokemon : Pokemon(pokemon.owner.equals(player))
+    battle: Battle()
+    playerOne: Player(playerOne.equals(battle.getPlayerOne()))
+    not playerActionOne : Action(playerActionOne.source.equals(playerOne))
+    pokemonOne : Pokemon(pokemonOne.owner.equals(playerOne))
+
+    playerTwo: Player(playerTwo.equals(battle.getPlayerTwo()))
+    not playerActionTwo : Action(playerActionTwo.source.equals(playerTwo))
+    pokemonTwo : Pokemon(pokemonTwo.owner.equals(playerTwo))
 then
     Utility.helper(drools);
-    System.out.println("Now moves should be chosen for " + pokemon.getName());
-    List<Move> moves = new ArrayList<Move>(pokemon.getLearnedMoves().keySet());
-    Move playerOneMove = moves.get(new Random().nextInt(moves.size()));
-    Thread.sleep(500);
-    insert(new MoveAction(player, playerOneMove, target));
+    App.log("What should " + pokemonOne.getName() + " do?");
+    Action toReturnOne = App.selectMoves(playerOne, playerTwo, pokemonOne).get();
+    insert(toReturnOne);
+
+    App.log("What should " + pokemonTwo.getName() + " do?");
+    Action toReturnTwo = App.selectMoves(playerTwo, playerOne, pokemonTwo).get();
+    insert(toReturnTwo);
 end
 
 rule "TurnStart"
     agenda-group "turn setup"
-    salience 0
+    salience -1
 when
     playerOneMoveAction: Action(playerOneMoveAction.status == ActionStatus.DEFINED)
     playerTwoMoveAction: Action(playerTwoMoveAction.status == ActionStatus.DEFINED,
@@ -174,14 +180,28 @@ Utility.helper(drools);
 end
 
 rule "NewTurn"
-    agenda-group "turn ending"
-    salience -1
+    agenda-group "turn setup"
+    salience 2
 when
+    battle: Battle(battle.isNewTurnStart())
     not Action()
     pokemonA : Pokemon()
     pokemonB : Pokemon(!pokemonA.getOwner().equals(pokemonB.getOwner()))
 then
     Utility.helper(drools);
     App.refresh(pokemonA, pokemonB);
-    System.out.println("Turn has ended: now pokemon must choose new moves");
+    App.log("Now pokemon must choose new moves");
+    battle.setNewTurnStart(false);
+    update(battle)
+end
+
+rule "TurnEnding"
+    agenda-group "turn ending"
+    salience -1
+when
+    battle: Battle(!battle.isNewTurnStart())
+then
+    Utility.helper(drools);
+    battle.setNewTurnStart(true);
+    update(battle)
 end

@@ -42,7 +42,7 @@
          </children></AnchorPane>
     <AnchorPane maxHeight="150.0" minHeight="0.0" minWidth="0.0" prefHeight="150.0" prefWidth="600.0">
          <children>
-            <TextArea id="log_pane" editable="false" prefHeight="150.0" prefWidth="260.0" text="This is the start of the log" wrapText="true">
+            <TextArea id="log_pane" editable="false" prefHeight="150.0" prefWidth="260.0" text="The battle is starting" wrapText="true">
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
                </font></TextArea>

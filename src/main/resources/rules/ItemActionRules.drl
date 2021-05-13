@@ -127,7 +127,7 @@ then
 end
 
 rule "ItemEnding"
-    agenda-group "item action execution"
+    agenda-group "item action effect"
     salience 0
 when
     itemAction : ItemAction(itemAction.status == ActionStatus.FIRED)

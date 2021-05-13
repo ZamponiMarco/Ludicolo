@@ -3,6 +3,7 @@ AG) battle setup
     AG) pokemon setup
             1) SetBattleStats
     AG) turn setup
+            3) NewTurn
             1) SelectMoves
             2) TurnStart
             AG) turn management
@@ -73,7 +74,7 @@ AG) battle setup
                                     2) PokemonFaintedMove
                                     3) PlayerLose, halt
                                     4) NextPokemonInBattle
-                            3) NewTurn
+
 
 
 

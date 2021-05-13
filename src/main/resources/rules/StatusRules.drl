@@ -22,11 +22,11 @@ import java.util.List
 import it.unicam.lcp.ludicolo.view.App
 
 rule "StatusDurationReduction"
-    agenda-group "action fire"
-    salience 4
+    agenda-group "turn setup"
+    salience 0
     no-loop true
 when
-    playerAction : Action(playerAction.status == ActionStatus.READY_TO_FIRE)
+    playerAction : Action(playerAction.status == ActionStatus.DEFINED)
     pokemon: Pokemon(pokemon.status != null, pokemon.owner.equals(playerAction.getSource()))
 then
     Utility.helper(drools);
