@@ -41,10 +41,6 @@ public class Pokemon {
                 this.stats.put(entry.getKey(), new StatValues(entry.getValue()));
             }
         }
-        Map<Stat, Integer> lifeStats = new HashMap<>();
-        lifeStats.put(Stat.LIFE, Utility.calculateBattleLife(this.getBaseStatValue(Stat.LIFE), this.getLevel()));
-        this.setBattleStat(lifeStats);
-        this.setStage(lifeStats);
     }
 
     public PokemonStatus getStatus() {

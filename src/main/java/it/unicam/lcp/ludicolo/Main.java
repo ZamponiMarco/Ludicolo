@@ -32,17 +32,7 @@ public class Main {
 
             Utility.createEventListener(kSession);
             
-            Map<Item, Integer> playerOneBackpack = new HashMap<>();
-            Map<Item, Integer> playerTwoBackpack = new HashMap<>();
-            for (Item singleItem: Item.values()) {
-                playerOneBackpack.put(singleItem, 5);
-                playerTwoBackpack.put(singleItem, 5);
-            }
-            
-            kSession.insert(new Battle(
-                    new Player("Red", Lists.newArrayList(PokemonFactory.getCharizard(), PokemonFactory.getPikachu()), playerOneBackpack),
-                    new Player("Blue", Lists.newArrayList(PokemonFactory.getVenusaur(), PokemonFactory.getBlastoise()), playerTwoBackpack)
-            ));
+            kSession.insert(new Battle(PlayerFactory.getRandomPlayer("RED"), PlayerFactory.getRandomPlayer("BLUE")));
             kSession.getAgenda().getAgendaGroup("battle setup").setFocus();
             kSession.fireAllRules();
             

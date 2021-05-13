@@ -34,12 +34,31 @@ then
     Utility.helper(drools);
     insert(battle.getPlayerOne());
     insert(battle.getPlayerTwo());
-    Pokemon pkmnOne = battle.getPlayerOne().getPokemonTeamNotFainted().get(0);
-    Pokemon pkmnTwo = battle.getPlayerTwo().getPokemonTeamNotFainted().get(0);
-    insert(pkmnOne);
-    insert(pkmnTwo);
 
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("turn setup").setFocus();
+    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("player setup").setFocus();
+end
+
+rule "SetupPlayer"
+    agenda-group "player setup"
+    salience 1
+    no-loop true
+when
+    player: Player(!player.setupDone)
+then
+    Utility.helper(drools);
+    for(Pokemon pkmn : player.getPokemonTeam()){
+        Map<Stat, Integer> lifeStats = new HashMap<>();
+        lifeStats.put(Stat.LIFE, Utility.calculateBattleLife(pkmn.getBaseStatValue(Stat.LIFE), pkmn.getLevel()));
+        pkmn.setBattleStat(lifeStats);
+        pkmn.setStage(lifeStats);
+    };
+    player.setSetupDone(true);
+    update(player);
+
+    Pokemon firstPkmn = player.getPokemonTeam().get(0);
+    insert(firstPkmn);
+
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("pokemon setup").setFocus();
 end
 

@@ -13,13 +13,23 @@ public class Player {
     private String name;
     private List<Pokemon> pokemonTeam;
     private Map<Item, Integer> backpack;
+    private boolean setupDone;
 
     public Player(String name, List<Pokemon> pokemonTeam, Map<Item, Integer> backpack) {
         this.name = name;
         this.pokemonTeam = pokemonTeam;
         this.pokemonTeam.forEach(pkmn -> pkmn.setOwner(this));
         this.backpack = backpack;
+        this.setupDone = false;
     }
+    public boolean isSetupDone() {
+        return setupDone;
+    }
+
+    public void setSetupDone(boolean setupDone) {
+        this.setupDone = setupDone;
+    }
+
 
     public String getName() {
         return name;
