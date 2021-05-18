@@ -20,6 +20,7 @@ import it.unicam.lcp.ludicolo.actions.moves.StageMoveEffect
 import it.unicam.lcp.ludicolo.actions.moves.StatusMoveEffect
 import java.util.List
 import it.unicam.lcp.ludicolo.view.App
+import it.unicam.lcp.ludicolo.actions.moves.MoveActionModifiers
 
 rule "StatusDurationReduction"
     agenda-group "turn setup"
@@ -135,7 +136,7 @@ then
                     40,
                     pokemon.getBattleStatValue(Stat.ATTACK),
                     pokemon.getBattleStatValue(Stat.DEFENSE),
-                    1.0);
+                    new MoveActionModifiers(1.0,1.0,1.0,1.0,1.0));
             lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
 
 
@@ -154,8 +155,8 @@ then
  end
 
  rule "FrozenEffect"
-     agenda-group "action fire"
-     salience 3
+     agenda-group "move action fire"
+     salience 4
      no-loop true
  when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
@@ -170,8 +171,8 @@ then
   end
 
  rule "AsleepEffect"
-     agenda-group "action fire"
-     salience 3
+     agenda-group "move action fire"
+     salience 4
      no-loop true
  when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
@@ -186,8 +187,8 @@ then
   end
 
 rule "ParalyzedEffect"
-     agenda-group "action fire"
-     salience 3
+     agenda-group "move action fire"
+     salience 4
      no-loop true
 when
       moveAction: MoveAction(moveAction.status == ActionStatus.READY_TO_FIRE)
