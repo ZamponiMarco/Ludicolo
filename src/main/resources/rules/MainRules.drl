@@ -92,7 +92,7 @@ end
  when
      toRemovePokemon: Pokemon(toRemovePokemon.getStageValue(Stat.LIFE) == 0)
      toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()))
-     toRemoveAction: Action(toRemoveAction.source == toRemovePlayer)
+     toRemoveAction: MoveAction(toRemoveAction.source == toRemovePlayer)
  then
      Utility.helper(drools);
      retract(toRemoveAction);
@@ -140,7 +140,7 @@ then
      SwapAction swapAction = new SwapAction(toRemovePlayer, toRemovePlayer.getPokemonTeamNotFainted().get(0));
      swapAction.setStatus(ActionStatus.READY_TO_FIRE);
      insert(swapAction);
-     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("action fire").setFocus();
+     //kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("action fire").setFocus();
  end
 
 
