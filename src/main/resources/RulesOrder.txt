@@ -1,79 +1,77 @@
 AG) battle setup
-    1) InitiateBattle
+    - InitiateBattle
     AG) pokemon setup
-            1) SetBattleStats
+            - SetBattleStats
     AG) turn setup
-            3) NewTurn
-            1) SelectMoves
-            2) TurnStart
+            - NewTurn
+            - SelectMoves
+            - TurnStart
             AG) turn management
-                    1) ActionsPriority
+                    - ActionsPriority
                     AG) action fire
-                            1) ItemActionFire
+                            - ItemActionFire
                             AG) item action effect
-                                    1) HealItemActionFire/StatusItemActionFire/RestoreItemActionFire
-                                    2) ItemEnding
-                            2) StatusDurationReduction
-                            3) EffectTimeUp
-                            4) FrozenEffect/AsleepEffect/ParalyzedEffect
-                            5) MoveActionAccuracyCheck
+                                    - HealItemActionFire/StatusItemActionFire/RestoreItemActionFire
+                                    - ItemEnding
+                            - StatusDurationReduction
+                            - EffectTimeUp
+                            - MoveActionAccuracyCheck
                             AG) move action fire
-                                    1) ConfusedEffect
+                                    - FrozenEffect/AsleepEffect/ParalyzedEffect/ConfusedEffect
                                     AG) winning conditions
-                                            1) PokemonFainted
-                                            2) PokemonFaintedMove
-                                            3) PlayerLose, halt
-                                            4) NextPokemonInBattle
-                                    2) ProtectedEffect
-                                    2) CalculateModifier
-                                    3) PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
+                                            - PokemonFainted
+                                            - PokemonFaintedMove
+                                            - PlayerLose, halt
+                                            - NextPokemonInBattle
+                                    - ProtectedEffect
+                                    - CalculateModifier
+                                    - PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
                                     AG) move action effect
-                                            1)StageEffect/StatusEffect
-                                    4) MoveEnding
+                                            -StageEffect/StatusEffect
+                                    - MoveEnding
                                     AG) winning conditions
-                                            1) PokemonFainted
-                                            2) PokemonFaintedMove
-                                            3) PlayerLose, halt
-                                            4) NextPokemonInBattle
-                    // Rule for pokemon change
+                                            - PokemonFainted
+                                            - PokemonFaintedMove
+                                            - PlayerLose, halt
+                                            - NextPokemonInBattle
+
                     5) SetupNextAction
                             AG) action fire
-                            1) ItemActionFire
+                            - ItemActionFire
                             AG) item action effect
-                                    1) HealItemActionFire/StatusItemActionFire/RestoreItemActionFire
-                                    2) ItemEnding
-                            2) StatusDurationReduction
-                            3) EffectTimeUp
-                            4) FrozenEffect/AsleepEffect/ParalyzedEffect
-                            5) MoveActionAccuracyCheck
+                                    - HealItemActionFire/StatusItemActionFire/RestoreItemActionFire
+                                    - ItemEnding
+                            - StatusDurationReduction
+                            - EffectTimeUp
+                            - MoveActionAccuracyCheck
                             AG) move action fire
-                                    1) ConfusedEffect
+                                    - FrozenEffect/AsleepEffect/ParalyzedEffect/ConfusedEffect
                                     AG) winning conditions
-                                            1) PokemonFainted
-                                            2) PokemonFaintedMove
-                                            3) PlayerLose, halt
-                                            4) NextPokemonInBattle
-                                    2) ProtectedEffect
-                                    2) CalculateModifier
-                                    3) PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
+                                            - PokemonFainted
+                                            - PokemonFaintedMove
+                                            - PlayerLose, halt
+                                            - NextPokemonInBattle
+                                    - ProtectedEffect
+                                    - CalculateModifier
+                                    - PhysicalMoveActionFire/SpecialMoveActionFire/StatusMoveActionFire
                                     AG) move action effect
-                                            1)StageEffect/StatusEffect
-                                    4) MoveEnding
+                                            - StageEffect/StatusEffect
+                                    - MoveEnding
                                     AG) winning conditions
-                                            1) PokemonFainted
-                                            2) PokemonFaintedMove
-                                            3) PlayerLose, halt
-                                            4) NextPokemonInBattle
-                    6) EndAction
-                    7) NoMoreActions
+                                            - PokemonFainted
+                                            - PokemonFaintedMove
+                                            - PlayerLose, halt
+                                            - NextPokemonInBattle
+                    - EndAction
+                    - NoMoreActions
                         AG) turn ending
-                            1) ProtectionTimeUp
-                            2) BurnedEffect/PoisonEffect
+                            - ProtectionTimeUp
+                            - BurnedEffect/PoisonEffect
                             AG) winning conditions
-                                    1) PokemonFainted
-                                    2) PokemonFaintedMove
-                                    3) PlayerLose, halt
-                                    4) NextPokemonInBattle
+                                    - PokemonFainted
+                                    - PokemonFaintedMove
+                                    - PlayerLose, halt
+                                    - NextPokemonInBattle
 
 
 

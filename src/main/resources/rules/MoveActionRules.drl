@@ -89,7 +89,7 @@ then
             moveAction.getMove().getPower(),
             sourcePokemon.getBattleStatValueWithStage(Stat.ATTACK),
             targetPokemon.getBattleStatValueWithStage(Stat.DEFENSE),
-            moveAction.getModifiers().getFinalValue());
+            moveAction.getModifiers());
 
 
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
@@ -100,6 +100,9 @@ then
     }
     if(moveAction.getModifiers().getType() == 2.0 || moveAction.getModifiers().getType() == 4.0){
         App.log("The move is super effective");
+    }
+    if(moveAction.getModifiers().getCritical() == 1.5){
+            App.log("It's a critical hit!");
     }
     App.log("The move deals " + dmg + " HP of damage!");
 
@@ -132,7 +135,7 @@ then
             moveAction.getMove().getPower(),
             sourcePokemon.getBattleStatValueWithStage(Stat.SPECIAL_ATTACK),
             targetPokemon.getBattleStatValueWithStage(Stat.SPECIAL_DEFENSE),
-            moveAction.getModifiers().getFinalValue());
+            moveAction.getModifiers());
     App.log(sourcePokemon.getDisplayName() + " uses " + moveAction.getMove().getDisplayName()+"!");
     App.log(moveAction.getMove().getDescription());
     if(moveAction.getModifiers().getType() == 0.25 || moveAction.getModifiers().getType() == 0.5){
@@ -140,6 +143,9 @@ then
     }
     if(moveAction.getModifiers().getType() == 2.0 || moveAction.getModifiers().getType() == 4.0){
         App.log("The move is super effective");
+    }
+    if(moveAction.getModifiers().getCritical() == 1.5){
+        App.log("It's a critical hit!");
     }
     App.log("The move deals " + dmg + " HP of damage!");
     lifeStageStats.put(Stat.LIFE, Math.max((targetLife - dmg),0));
