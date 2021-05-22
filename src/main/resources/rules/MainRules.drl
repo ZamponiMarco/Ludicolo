@@ -137,7 +137,7 @@ when
     toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()))
 then
      Utility.helper(drools);
-     SwapAction swapAction = new SwapAction(toRemovePlayer, 0);
+     SwapAction swapAction = new SwapAction(toRemovePlayer, toRemovePlayer.getPokemonTeamNotFainted().get(0));
      swapAction.setStatus(ActionStatus.READY_TO_FIRE);
      insert(swapAction);
      kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("action fire").setFocus();
@@ -175,7 +175,7 @@ when
     playerTwoMoveAction: Action(playerTwoMoveAction.status == ActionStatus.DEFINED,
         playerTwoMoveAction.source != playerOneMoveAction.source)
 then
-Utility.helper(drools);
+    Utility.helper(drools);
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("turn management").setFocus();
 end
 

@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 //TODO Francesco: presentazione
-//TODO Marco: icone status, pokemon dentro swapaction, bottone submit per la mossa scelta, selezione pokemon dopo fainted
+//TODO Marco: bottone submit per la mossa scelta, selezione pokemon dopo fainted
 public class App extends Application {
 
     public static Battle battle;
@@ -47,7 +47,7 @@ public class App extends Application {
 
     private static String usedImageOne = "";
     private static String usedImageTwo = "";
-    private static ExecutorService inputExecutor = Executors.newCachedThreadPool();
+    private static final ExecutorService inputExecutor = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
         launch(args);
@@ -82,8 +82,7 @@ public class App extends Application {
     public static void refresh(Pokemon pokemonA, Pokemon pokemonB) {
         Platform.runLater(() -> {
             Pokemon pokemonOne = pokemonA.getOwner().equals(battle.getPlayerOne()) ? pokemonA : pokemonB;
-            String oneStatusString = pokemonOne.getStatus() == null ? "" : "[" + pokemonOne.getStatus().name() + "]";
-            ((Text) scene.lookup("#pokemon_one_name")).setText(pokemonOne.getDisplayName() + " Lv. " + pokemonOne.getLevel()+"\n"+ oneStatusString );
+            ((Text) scene.lookup("#pokemon_one_name")).setText(pokemonOne.getDisplayName() + " Lv. " + pokemonOne.getLevel());
             int pokemonOneCurrentHealth = pokemonOne.getStageValue(Stat.LIFE);
             int pokemonOneMaxHealth = pokemonOne.getBattleStatValue(Stat.LIFE);
             ((ProgressBar) scene.lookup("#pokemon_one_bar")).setProgress((double) pokemonOneCurrentHealth / pokemonOneMaxHealth);
@@ -93,10 +92,15 @@ public class App extends Application {
                 ((ImageView) scene.lookup("#pokemon_one_img")).setImage(new Image(newImageOne));
                 usedImageOne = newImageOne;
             }
+            if (pokemonOne.getStatus() != null) {
+                ((ImageView) scene.lookup("#pokemon_one_status")).setImage(new Image(App.class.
+                        getResource("/assets/" + pokemonOne.getStatus().name() + ".png").toExternalForm()));
+            } else {
+                ((ImageView) scene.lookup("#pokemon_one_status")).setImage(null);
+            }
 
             Pokemon pokemonTwo = pokemonB.getOwner().equals(battle.getPlayerTwo()) ? pokemonB : pokemonA;
-            String twoStatusString = pokemonTwo.getStatus() == null ? "" : "[" + pokemonTwo.getStatus().name() + "]";
-            ((Text) scene.lookup("#pokemon_two_name")).setText(pokemonTwo.getDisplayName() + " Lv. " + pokemonTwo.getLevel()+"\n"+twoStatusString);
+            ((Text) scene.lookup("#pokemon_two_name")).setText(pokemonTwo.getDisplayName() + " Lv. " + pokemonTwo.getLevel());
             int pokemonTwoCurrentHealth = pokemonTwo.getStageValue(Stat.LIFE);
             int pokemonTwoMaxHealth = pokemonTwo.getBattleStatValue(Stat.LIFE);
             ((ProgressBar) scene.lookup("#pokemon_two_bar")).setProgress((double) pokemonTwoCurrentHealth / pokemonTwoMaxHealth);
@@ -105,6 +109,12 @@ public class App extends Application {
             if (!newImageTwo.equals(usedImageTwo)) {
                 ((ImageView) scene.lookup("#pokemon_two_img")).setImage(new Image(newImageTwo));
                 usedImageTwo = newImageTwo;
+            }
+            if (pokemonTwo.getStatus() != null) {
+                ((ImageView) scene.lookup("#pokemon_two_status")).setImage(new Image(App.class.
+                        getResource("/assets/" + pokemonTwo.getStatus().name() + ".png").toExternalForm()));
+            } else {
+                ((ImageView) scene.lookup("#pokemon_one_status")).setImage(null);
             }
         });
     }
@@ -117,20 +127,21 @@ public class App extends Application {
                 ((Text) scene.lookup("#current_player_text")).setText(sourcePlayer.getName() + " is choosing for " + sourcePokemon.getDisplayName());
 
                 ComboBox moves = ((ComboBox) scene.lookup("#moves_list"));
-                List<MoveWrapper> movesList =  sourcePokemon.getAvailableMoves().entrySet().stream().map(moveIntegerEntry -> new MoveWrapper(moveIntegerEntry.getKey(), moveIntegerEntry.getValue())).collect(Collectors.toList());
+                List<MoveWrapper> movesList = sourcePokemon.getAvailableMoves().entrySet().stream().map(moveIntegerEntry -> new MoveWrapper(moveIntegerEntry.getKey(), moveIntegerEntry.getValue())).collect(Collectors.toList());
                 ObservableList movesObsList = FXCollections.observableArrayList(movesList);
                 moves.setItems(movesObsList);
 
                 moves.setCellFactory(new Callback<ListView<MoveWrapper>, ListCell<MoveWrapper>>() {
-                    @Override public ListCell<MoveWrapper> call(ListView<MoveWrapper> p) {
-                        return new ListCell<MoveWrapper>() {
-                            private final Rectangle rectangle;
+                    @Override
+                    public ListCell<MoveWrapper> call(ListView<MoveWrapper> p) {
+                        return new ListCell<>() {
+
                             {
                                 setContentDisplay(ContentDisplay.LEFT);
-                                rectangle = new Rectangle(5, 5);
                             }
 
-                            @Override protected void updateItem(MoveWrapper item, boolean empty) {
+                            @Override
+                            protected void updateItem(MoveWrapper item, boolean empty) {
                                 super.updateItem(item, empty);
 
                                 if (item == null || empty) {
@@ -155,16 +166,19 @@ public class App extends Application {
                 ObservableList<PokemonWrapper> pokemonObsList = FXCollections.observableArrayList(pokemonList);
                 pokemons.setItems(pokemonObsList);
 
-                pokemons.setCellFactory(new Callback<ListView<PokemonWrapper>, ListCell<PokemonWrapper>>() {
-                    @Override public ListCell<PokemonWrapper> call(ListView<PokemonWrapper> p) {
-                        return new ListCell<PokemonWrapper>() {
+                pokemons.setCellFactory(new Callback<>() {
+                    @Override
+                    public ListCell<PokemonWrapper> call(ListView<PokemonWrapper> p) {
+                        return new ListCell<>() {
                             private final Rectangle rectangle;
+
                             {
                                 setContentDisplay(ContentDisplay.LEFT);
                                 rectangle = new Rectangle(5, 5);
                             }
 
-                            @Override protected void updateItem(PokemonWrapper item, boolean empty) {
+                            @Override
+                            protected void updateItem(PokemonWrapper item, boolean empty) {
                                 super.updateItem(item, empty);
 
                                 if (item == null || empty) {
@@ -181,7 +195,7 @@ public class App extends Application {
                 });
 
                 pokemons.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                    toReturn.set(new SwapAction(sourcePlayer, sourcePlayer.getPokemonTeamNotFainted().indexOf((newValue.getPkmn()))));
+                    toReturn.set(new SwapAction(sourcePlayer, newValue.getPkmn()));
                 });
 
 
@@ -190,17 +204,18 @@ public class App extends Application {
                 ObservableList<ItemWrapper> itemObsList = FXCollections.observableArrayList(itemList);
                 items.setItems(itemObsList);
 
-                items.setCellFactory(new Callback<ListView<ItemWrapper>, ListCell<ItemWrapper>>() {
-                    @Override public ListCell<ItemWrapper> call(ListView<ItemWrapper> p) {
-                        return new ListCell<ItemWrapper>() {
-                            private final Rectangle rectangle;
+                items.setCellFactory(new Callback<>() {
+                    @Override
+                    public ListCell<ItemWrapper> call(ListView<ItemWrapper> p) {
+                        return new ListCell<>() {
+
                             {
                                 setContentDisplay(ContentDisplay.LEFT);
-                                rectangle = new Rectangle(5, 5);
 
                             }
 
-                            @Override protected void updateItem(ItemWrapper item, boolean empty) {
+                            @Override
+                            protected void updateItem(ItemWrapper item, boolean empty) {
                                 super.updateItem(item, empty);
 
                                 if (item == null || empty) {
@@ -209,7 +224,6 @@ public class App extends Application {
                                     setText(item.toString());
                                     String boxImage = App.class.getResource("/assets/" + item.getItem().name() + ".png").toExternalForm();
                                     setGraphic(new ImageView(new Image(boxImage)));
-
                                 }
                             }
                         };
@@ -218,7 +232,7 @@ public class App extends Application {
 
                 items.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
 
-                    toReturn.set(new ItemAction(sourcePlayer, ((ItemWrapper) newValue).getItem()));
+                    toReturn.set(new ItemAction(sourcePlayer, newValue.getItem()));
                 });
             });
 

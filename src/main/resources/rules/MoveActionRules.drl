@@ -41,7 +41,7 @@ then
         App.log(sourcePokemon.getDisplayName() + " failed to throw its move");
         update(moveAction);
     } else {
-    kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action fire").setFocus();
+        kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action fire").setFocus();
     }
 end
 

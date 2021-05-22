@@ -2,14 +2,15 @@ package it.unicam.lcp.ludicolo.actions;
 
 import it.unicam.lcp.ludicolo.Player;
 import it.unicam.lcp.ludicolo.actions.Action;
+import it.unicam.lcp.ludicolo.pkmn.Pokemon;
 
 public class SwapAction extends Action {
 
-    private final int newPokemonIndex;
+    private final Pokemon newPokemon;
 
-    public SwapAction(Player source, int newPokemonIndex) {
+    public SwapAction(Player source, Pokemon newPokemon) {
         super(source);
-        this.newPokemonIndex = newPokemonIndex;
+        this.newPokemon = newPokemon;
     }
 
     @Override
@@ -17,15 +18,15 @@ public class SwapAction extends Action {
         return 10;
     }
 
-    public int getNewPokemonIndex() {
-        return newPokemonIndex;
+    public Pokemon getNewPokemon() {
+        return newPokemon;
     }
 
     @Override
     public String toString() {
         return "SwapAction{" +
                 "source=" + this.getSource().getName() +
-                "newPokemonIndex=" + newPokemonIndex +
+                "newPokemon=" + newPokemon +
                 '}';
     }
 }

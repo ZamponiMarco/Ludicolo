@@ -19,7 +19,7 @@ then
     Utility.helper(drools);
     retract(oldPokemon);
     App.log(oldPokemon.getDisplayName() + " is withdrawn from the battle!");
-    Pokemon newPokemon = swapAction.getSource().getPokemonTeamNotFainted().get(swapAction.getNewPokemonIndex());
+    Pokemon newPokemon = swapAction.getNewPokemon();
     insert(newPokemon);
     App.refresh(newPokemon, enemyPokemon);
     swapAction.setStatus(ActionStatus.DONE);
