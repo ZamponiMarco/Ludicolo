@@ -246,7 +246,7 @@ then
                                 target.setStatus(effect.getStatus());
                                 target.setStatusDuration(effect.isRandom() ? new Random().nextInt(effect.getDuration()) + 1 : effect.getDuration());
 
-                                App.log(target.getDisplayName() + " has now a condition: " + target.getStatus() + " for " + target.getStatusDuration() + " turns");
+                                App.log(target.getDisplayName() + " has now a condition: " + target.getStatus());
                                 break;
                             case PROTECTED:
                                 target.setProtectedFromAttacks(true);

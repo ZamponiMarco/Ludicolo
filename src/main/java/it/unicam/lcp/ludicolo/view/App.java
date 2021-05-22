@@ -70,7 +70,7 @@ public class App extends Application {
             KieContainer kContainer = ks.getKieClasspathContainer();
             KieSession kSession = kContainer.newKieSession("ksession-rules");
 
-            battle = new Battle(PlayerFactory.getRandomPlayer("Red"), PlayerFactory.getLudicoloFan("Blue"));
+            battle = new Battle(PlayerFactory.getRandomPlayer("Red"), PlayerFactory.getRandomPlayer("Blue"));
 
             kSession.insert(battle);
             kSession.getAgenda().getAgendaGroup("battle setup").setFocus();
@@ -114,7 +114,7 @@ public class App extends Application {
                 ((ImageView) scene.lookup("#pokemon_two_status")).setImage(new Image(App.class.
                         getResource("/assets/" + pokemonTwo.getStatus().name() + ".png").toExternalForm()));
             } else {
-                ((ImageView) scene.lookup("#pokemon_one_status")).setImage(null);
+                ((ImageView) scene.lookup("#pokemon_two_status")).setImage(null);
             }
         });
     }
@@ -158,7 +158,12 @@ public class App extends Application {
                 });
 
                 moves.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                    toReturn.set(new MoveAction(sourcePlayer, ((MoveWrapper) newValue).getMove(), targetPlayer));
+                    try{
+                        toReturn.set(new MoveAction(sourcePlayer, ((MoveWrapper) newValue).getMove(), targetPlayer));
+                    } catch (Exception e){
+                        System.out.println("Exception from GUI: " + e.getMessage());
+                    }
+
                 });
 
                 ComboBox<PokemonWrapper> pokemons = ((ComboBox) scene.lookup("#pokemons_list"));
@@ -195,7 +200,11 @@ public class App extends Application {
                 });
 
                 pokemons.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                    toReturn.set(new SwapAction(sourcePlayer, newValue.getPkmn()));
+                    try{
+                        toReturn.set(new SwapAction(sourcePlayer, newValue.getPkmn()));
+                    } catch (Exception e){
+                        System.out.println("Exception from GUI: " + e.getMessage());
+                    }
                 });
 
 
@@ -231,8 +240,12 @@ public class App extends Application {
                 });
 
                 items.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+                    try{
+                        toReturn.set(new ItemAction(sourcePlayer, newValue.getItem()));
+                    } catch (Exception e){
+                        System.out.println("Exception from GUI: " + e.getMessage());
+                    }
 
-                    toReturn.set(new ItemAction(sourcePlayer, newValue.getItem()));
                 });
             });
 
