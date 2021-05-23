@@ -51,7 +51,6 @@ rule "HealItemActionFire"
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isHealItemDone(),itemAction.item.containsHealItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
-    opponentPokemon : Pokemon(!opponentPokemon.getOwner().equals(itemAction.getSource()))
 then
     Utility.helper(drools);
     itemAction.getItem().getHealItemEffects().forEach(healItemEffect -> {
@@ -74,7 +73,7 @@ then
 
     itemAction.setHealItemDone(true);
     update(itemAction);
-    App.refresh(pokemon, opponentPokemon);
+    App.refresh(pokemon);
 end
 
 rule "StatusItemActionFire"
@@ -83,7 +82,6 @@ rule "StatusItemActionFire"
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isStatusItemDone(),itemAction.item.containsStatusItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
-    opponentPokemon : Pokemon(!opponentPokemon.getOwner().equals(itemAction.getSource()))
 then
     Utility.helper(drools);
     itemAction.getItem().getStatusItemEffects().forEach(statusItemEffect -> {
@@ -100,7 +98,7 @@ then
     update(pokemon);
     itemAction.setStatusItemDone(true);
     update(itemAction);
-    App.refresh(pokemon, opponentPokemon);
+    App.refresh(pokemon);
 end
 
 rule "RestoreItemActionFire"
@@ -109,7 +107,6 @@ rule "RestoreItemActionFire"
 when
     itemAction: ItemAction(itemAction.status == ActionStatus.FIRED, !itemAction.isRestoreItemDone(), itemAction.item.containsRestoreItemEffect())
     pokemon : Pokemon(pokemon.getOwner().equals(itemAction.getSource()))
-    opponentPokemon : Pokemon(!opponentPokemon.getOwner().equals(itemAction.getSource()))
 then
     Utility.helper(drools);
     itemAction.getItem().getRestoreItemEffects().forEach(statusItemEffect -> {
@@ -129,7 +126,7 @@ then
     update(pokemon);
     itemAction.setRestoreItemDone(true);
     update(itemAction);
-    App.refresh(pokemon, opponentPokemon);
+    App.refresh(pokemon);
 end
 
 rule "ItemEnding"

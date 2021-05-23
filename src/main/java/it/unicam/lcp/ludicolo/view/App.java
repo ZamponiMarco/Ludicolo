@@ -45,8 +45,6 @@ public class App extends Application {
     public static Battle battle;
     public static Scene scene;
 
-    private static String usedImageOne = "";
-    private static String usedImageTwo = "";
     private static final ExecutorService inputExecutor = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
@@ -79,45 +77,71 @@ public class App extends Application {
         }).start();
     }
 
-    public static void refresh(Pokemon pokemonA, Pokemon pokemonB) {
+    public static void refresh(Pokemon pokemon) {
+        boolean isPokemonOne = pokemon.getOwner().equals(battle.getPlayerOne());
+        String number = isPokemonOne ? "one" : "two";
+        String imageSide = isPokemonOne ? "back" : "front";
         Platform.runLater(() -> {
-            Pokemon pokemonOne = pokemonA.getOwner().equals(battle.getPlayerOne()) ? pokemonA : pokemonB;
-            ((Text) scene.lookup("#pokemon_one_name")).setText(pokemonOne.getDisplayName() + " Lv. " + pokemonOne.getLevel());
-            int pokemonOneCurrentHealth = pokemonOne.getStageValue(Stat.LIFE);
-            int pokemonOneMaxHealth = pokemonOne.getBattleStatValue(Stat.LIFE);
-            ((ProgressBar) scene.lookup("#pokemon_one_bar")).setProgress((double) pokemonOneCurrentHealth / pokemonOneMaxHealth);
-            ((Text) scene.lookup("#pokemon_one_life")).setText(pokemonOneCurrentHealth + "/" + pokemonOneMaxHealth);
-            String newImageOne = App.class.getResource("/assets/" + pokemonOne.getName().toUpperCase() + "_back.gif").toExternalForm();
-            if (!newImageOne.equals(usedImageOne)) {
-                ((ImageView) scene.lookup("#pokemon_one_img")).setImage(new Image(newImageOne));
-                usedImageOne = newImageOne;
+            ((Text) scene.lookup("#pokemon_" + number + "_name")).setText(pokemon.getDisplayName() + " Lv. " + pokemon.getLevel());
+            int currentHealth = pokemon.getStageValue(Stat.LIFE);
+            int maxHealth = pokemon.getBattleStatValue(Stat.LIFE);
+            ((ProgressBar) scene.lookup("#pokemon_" + number + "_bar")).setProgress((double) currentHealth / maxHealth);
+            ((Text) scene.lookup("#pokemon_" + number + "_life")).setText(currentHealth + "/" + maxHealth);
+            String newImage = App.class.getResource("/assets/" + pokemon.getName().toUpperCase() + "_" + imageSide + ".gif").
+                    toExternalForm();
+            ImageView imageView = ((ImageView) scene.lookup("#pokemon_" + number + "_img"));
+            if (imageView.getImage() == null || !imageView.getImage().getUrl().equals(newImage)) {
+                imageView.setImage(new Image(newImage));
             }
-            if (pokemonOne.getStatus() != null) {
-                ((ImageView) scene.lookup("#pokemon_one_status")).setImage(new Image(App.class.
-                        getResource("/assets/" + pokemonOne.getStatus().name() + ".png").toExternalForm()));
+            ImageView statusImageView = ((ImageView) scene.lookup("#pokemon_" + number + "_status"));
+            if (pokemon.getStatus() != null) {
+                statusImageView.setImage(new Image(App.class.
+                        getResource("/assets/" + pokemon.getStatus().name() + ".png").toExternalForm()));
             } else {
-                ((ImageView) scene.lookup("#pokemon_one_status")).setImage(null);
-            }
-
-            Pokemon pokemonTwo = pokemonB.getOwner().equals(battle.getPlayerTwo()) ? pokemonB : pokemonA;
-            ((Text) scene.lookup("#pokemon_two_name")).setText(pokemonTwo.getDisplayName() + " Lv. " + pokemonTwo.getLevel());
-            int pokemonTwoCurrentHealth = pokemonTwo.getStageValue(Stat.LIFE);
-            int pokemonTwoMaxHealth = pokemonTwo.getBattleStatValue(Stat.LIFE);
-            ((ProgressBar) scene.lookup("#pokemon_two_bar")).setProgress((double) pokemonTwoCurrentHealth / pokemonTwoMaxHealth);
-            ((Text) scene.lookup("#pokemon_two_life")).setText(pokemonTwoCurrentHealth + "/" + pokemonTwoMaxHealth);
-            String newImageTwo = App.class.getResource("/assets/" + pokemonTwo.getName().toUpperCase() + "_front.gif").toExternalForm();
-            if (!newImageTwo.equals(usedImageTwo)) {
-                ((ImageView) scene.lookup("#pokemon_two_img")).setImage(new Image(newImageTwo));
-                usedImageTwo = newImageTwo;
-            }
-            if (pokemonTwo.getStatus() != null) {
-                ((ImageView) scene.lookup("#pokemon_two_status")).setImage(new Image(App.class.
-                        getResource("/assets/" + pokemonTwo.getStatus().name() + ".png").toExternalForm()));
-            } else {
-                ((ImageView) scene.lookup("#pokemon_two_status")).setImage(null);
+                statusImageView.setImage(null);
             }
         });
     }
+
+    //public static void refresh(Pokemon pokemonA, Pokemon pokemonB) {
+    //    Platform.runLater(() -> {
+    //        Pokemon pokemonOne = pokemonA.getOwner().equals(battle.getPlayerOne()) ? pokemonA : pokemonB;
+    //        ((Text) scene.lookup("#pokemon_one_name")).setText(pokemonOne.getDisplayName() + " Lv. " + pokemonOne.getLevel());
+    //        int pokemonOneCurrentHealth = pokemonOne.getStageValue(Stat.LIFE);
+    //        int pokemonOneMaxHealth = pokemonOne.getBattleStatValue(Stat.LIFE);
+    //        ((ProgressBar) scene.lookup("#pokemon_one_bar")).setProgress((double) pokemonOneCurrentHealth / pokemonOneMaxHealth);
+    //        ((Text) scene.lookup("#pokemon_one_life")).setText(pokemonOneCurrentHealth + "/" + pokemonOneMaxHealth);
+    //        String newImageOne = App.class.getResource("/assets/" + pokemonOne.getName().toUpperCase() + "_back.gif").toExternalForm();
+    //        if (!newImageOne.equals(usedImageOne)) {
+    //            ((ImageView) scene.lookup("#pokemon_one_img")).setImage(new Image(newImageOne));
+    //            usedImageOne = newImageOne;
+    //        }
+    //        if (pokemonOne.getStatus() != null) {
+    //            ((ImageView) scene.lookup("#pokemon_one_status")).setImage(new Image(App.class.
+    //                    getResource("/assets/" + pokemonOne.getStatus().name() + ".png").toExternalForm()));
+    //        } else {
+    //            ((ImageView) scene.lookup("#pokemon_one_status")).setImage(null);
+    //        }
+//
+    //        Pokemon pokemonTwo = pokemonB.getOwner().equals(battle.getPlayerTwo()) ? pokemonB : pokemonA;
+    //        ((Text) scene.lookup("#pokemon_two_name")).setText(pokemonTwo.getDisplayName() + " Lv. " + pokemonTwo.getLevel());
+    //        int pokemonTwoCurrentHealth = pokemonTwo.getStageValue(Stat.LIFE);
+    //        int pokemonTwoMaxHealth = pokemonTwo.getBattleStatValue(Stat.LIFE);
+    //        ((ProgressBar) scene.lookup("#pokemon_two_bar")).setProgress((double) pokemonTwoCurrentHealth / pokemonTwoMaxHealth);
+    //        ((Text) scene.lookup("#pokemon_two_life")).setText(pokemonTwoCurrentHealth + "/" + pokemonTwoMaxHealth);
+    //        String newImageTwo = App.class.getResource("/assets/" + pokemonTwo.getName().toUpperCase() + "_front.gif").toExternalForm();
+    //        if (!newImageTwo.equals(usedImageTwo)) {
+    //            ((ImageView) scene.lookup("#pokemon_two_img")).setImage(new Image(newImageTwo));
+    //            usedImageTwo = newImageTwo;
+    //        }
+    //        if (pokemonTwo.getStatus() != null) {
+    //            ((ImageView) scene.lookup("#pokemon_two_status")).setImage(new Image(App.class.
+    //                    getResource("/assets/" + pokemonTwo.getStatus().name() + ".png").toExternalForm()));
+    //        } else {
+    //            ((ImageView) scene.lookup("#pokemon_two_status")).setImage(null);
+    //        }
+    //    });
+    //}
 
     public static Future<Action> selectMoves(Player sourcePlayer, Player targetPlayer, Pokemon sourcePokemon) {
         Callable<Action> action = () -> {

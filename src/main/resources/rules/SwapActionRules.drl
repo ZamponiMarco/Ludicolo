@@ -14,14 +14,13 @@ when
     swapAction: SwapAction(swapAction.status == ActionStatus.READY_TO_FIRE)
     oldPokemon: Pokemon(oldPokemon.getOwner().equals(swapAction.getSource()))
     player: Player(player.equals(swapAction.getSource()))
-    enemyPokemon: Pokemon(!enemyPokemon.getOwner().equals(swapAction.getSource()))
 then
     Utility.helper(drools);
     retract(oldPokemon);
     App.log(oldPokemon.getDisplayName() + " is withdrawn from the battle!");
     Pokemon newPokemon = swapAction.getNewPokemon();
     insert(newPokemon);
-    App.refresh(newPokemon, enemyPokemon);
+    App.refresh(newPokemon);
     swapAction.setStatus(ActionStatus.DONE);
 
     update(swapAction)

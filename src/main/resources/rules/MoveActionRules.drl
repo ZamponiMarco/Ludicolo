@@ -114,7 +114,8 @@ then
 
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
-    App.refresh(sourcePokemon, targetPokemon);
+    App.refresh(sourcePokemon);
+    App.refresh(targetPokemon);
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action effect").setFocus();
 end
 
@@ -158,7 +159,8 @@ then
 
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
-    App.refresh(sourcePokemon, targetPokemon);
+    App.refresh(sourcePokemon);
+    App.refresh(targetPokemon);
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action effect").setFocus();
 end
 
@@ -179,7 +181,8 @@ then
 
     moveAction.setStatus(ActionStatus.FIRED);
     update(moveAction);
-    App.refresh(sourcePokemon, targetPokemon);
+    App.refresh(sourcePokemon);
+    App.refresh(targetPokemon);
     kcontext.getKnowledgeRuntime().getAgenda().getAgendaGroup("move action effect").setFocus();
 
 end
@@ -216,7 +219,8 @@ then
     });
     moveAction.setStageEffectDone(true);
     update(moveAction);
-    App.refresh(sourcePokemon, targetPokemon);
+    App.refresh(sourcePokemon);
+    App.refresh(targetPokemon);
 end;
 
 rule "StatusEffect"
@@ -261,7 +265,8 @@ then
     });
     moveAction.setStatusEffectDone(true);
     update(moveAction);
-    App.refresh(sourcePokemon, targetPokemon);
+    App.refresh(sourcePokemon);
+    App.refresh(targetPokemon);
 end
 
 rule "MoveEnding"

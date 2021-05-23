@@ -104,12 +104,11 @@ rule "PokemonFainted"
     no-loop true
 when
     toRemovePokemon: Pokemon(toRemovePokemon.getStageValue(Stat.LIFE) == 0)
-    anotherPokemon: Pokemon(!anotherPokemon.equals(toRemovePokemon))
     toRemovePlayer: Player(toRemovePlayer.equals(toRemovePokemon.getOwner()))
 then
     Utility.helper(drools);
 
-    App.refresh(toRemovePokemon, anotherPokemon);
+    App.refresh(toRemovePokemon);
     App.log(toRemovePokemon.getDisplayName() + " has fainted!");
     update(toRemovePlayer);
  end
@@ -189,7 +188,8 @@ when
     pokemonB : Pokemon(!pokemonA.getOwner().equals(pokemonB.getOwner()))
 then
     Utility.helper(drools);
-    App.refresh(pokemonA, pokemonB);
+    App.refresh(pokemonA);
+    App.refresh(pokemonB);
     App.log("Now the Pokemon must choose new moves");
     battle.setNewTurnStart(false);
     update(battle)
