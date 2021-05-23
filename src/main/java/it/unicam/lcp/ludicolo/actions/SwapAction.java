@@ -18,6 +18,11 @@ public class SwapAction extends Action {
         return 10;
     }
 
+    @Override
+    public String getName() {
+        return "Swap " + newPokemon.getDisplayName();
+    }
+
     public Pokemon getNewPokemon() {
         return newPokemon;
     }

@@ -63,4 +63,9 @@ public class ItemAction extends Action {
     protected int getActionPriority() {
         return 9;
     }
+
+    @Override
+    public String getName() {
+        return "Item " + item.getDisplayName();
+    }
 }

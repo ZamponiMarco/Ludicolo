@@ -26,6 +26,11 @@ public class MoveAction extends Action {
         return move.getPriority();
     }
 
+    @Override
+    public String getName() {
+        return "Move " + move.getDisplayName();
+    }
+
     public Move getMove() {
         return move;
     }

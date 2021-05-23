@@ -26,6 +26,8 @@ public abstract class Action implements Comparable<Action> {
 
     protected abstract int getActionPriority();
 
+    public abstract String getName();
+
     @Override
     public int compareTo(Action action) {
         return getActionPriority() - action.getActionPriority();
