@@ -2,7 +2,7 @@ package it.unicam.lcp.ludicolo.actions.items;
 
 import it.unicam.lcp.ludicolo.pkmn.PokemonStatus;
 
-public class StatusItemEffect extends ItemEffect{
+public class StatusItemEffect extends ItemEffect {
 
     private final PokemonStatus status;
 

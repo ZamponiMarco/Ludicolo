@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class PlayerFactory {
 
-    public static Player getRandomPlayer(String name){
+    public static Player getRandomPlayer(String name) {
         Map<Item, Integer> backpack = new HashMap<>();
         for (Item singleItem : Item.values()) {
             backpack.put(singleItem, 5);
@@ -22,12 +22,12 @@ public class PlayerFactory {
         return new Player(name, pkmns, backpack);
     }
 
-    public static Player getLudicoloFan(String name){
+    public static Player getLudicoloFan(String name) {
         Map<Item, Integer> backpack = new HashMap<>();
         for (Item singleItem : Item.values()) {
             backpack.put(singleItem, 5);
         }
-        List<Pokemon> pkmns = Lists.newArrayList(PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo(),PokemonFactory.getLudicolo());
+        List<Pokemon> pkmns = Lists.newArrayList(PokemonFactory.getLudicolo(), PokemonFactory.getLudicolo(), PokemonFactory.getLudicolo(), PokemonFactory.getLudicolo(), PokemonFactory.getLudicolo(), PokemonFactory.getLudicolo());
         return new Player(name, pkmns, backpack);
     }
 }

@@ -1,6 +1,5 @@
 package it.unicam.lcp.ludicolo;
 
-import it.unicam.lcp.ludicolo.actions.moves.Move;
 import it.unicam.lcp.ludicolo.actions.moves.MoveActionModifiers;
 import org.drools.core.spi.KnowledgeHelper;
 import org.kie.api.event.rule.ObjectDeletedEvent;
@@ -45,12 +44,12 @@ public class Utility {
 
     public static void help(final KnowledgeHelper drools, final String message) {
         System.out.println(message);
-        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName() + "\n" + "[Agenda Group: "+drools.getRule().getAgendaGroup()+"]");
+        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName() + "\n" + "[Agenda Group: " + drools.getRule().getAgendaGroup() + "]");
         System.out.println();
     }
 
     public static void helper(final KnowledgeHelper drools) {
-        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName() + "\n" + "[Agenda Group: "+drools.getRule().getAgendaGroup()+"]");
+        System.out.println("_______Rule Triggered__________________________________________________________\n" + drools.getRule().getName() + "\n" + "[Agenda Group: " + drools.getRule().getAgendaGroup() + "]");
         System.out.println();
     }
 

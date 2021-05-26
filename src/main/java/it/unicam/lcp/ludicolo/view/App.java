@@ -38,7 +38,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-//TODO Marco: selezione pokemon dopo fainted
 public class App extends Application {
 
     private static final ExecutorService inputExecutor = Executors.newCachedThreadPool();

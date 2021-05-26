@@ -5,12 +5,11 @@ import com.google.common.collect.Maps;
 import it.unicam.lcp.ludicolo.Type;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class PokemonFactory {
-    public static Pokemon getCharizard(){
+    public static Pokemon getCharizard() {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "CHARIZARD";
         String displayName = "Charizard";
@@ -24,10 +23,10 @@ public class PokemonFactory {
         stats.put(Stat.SPECIAL_ATTACK, 109);
         stats.put(Stat.SPECIAL_DEFENSE, 85);
         stats.put(Stat.SPEED, 100);
-        return new Pokemon(name,displayName,types, moves, level, stats);
+        return new Pokemon(name, displayName, types, moves, level, stats);
     }
 
-    public static Pokemon getVenusaur(){
+    public static Pokemon getVenusaur() {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "VENUSAUR";
         String displayName = "Venusaur";
@@ -40,10 +39,10 @@ public class PokemonFactory {
         stats.put(Stat.SPECIAL_ATTACK, 100);
         stats.put(Stat.SPECIAL_DEFENSE, 100);
         stats.put(Stat.SPEED, 80);
-        return new Pokemon(name,displayName,types, moves, level, stats);
+        return new Pokemon(name, displayName, types, moves, level, stats);
     }
 
-    public static Pokemon getBlastoise(){
+    public static Pokemon getBlastoise() {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "BLASTOISE";
         String displayName = "Blastoise";
@@ -57,10 +56,10 @@ public class PokemonFactory {
         stats.put(Stat.SPECIAL_ATTACK, 85);
         stats.put(Stat.SPECIAL_DEFENSE, 105);
         stats.put(Stat.SPEED, 78);
-        return new Pokemon(name,displayName,types, moves, level, stats);
+        return new Pokemon(name, displayName, types, moves, level, stats);
     }
 
-    public static Pokemon getPikachu(){
+    public static Pokemon getPikachu() {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "PIKACHU";
         String displayName = "Pikachu";
@@ -74,10 +73,10 @@ public class PokemonFactory {
         stats.put(Stat.SPECIAL_ATTACK, 50);
         stats.put(Stat.SPECIAL_DEFENSE, 40);
         stats.put(Stat.SPEED, 90);
-        return new Pokemon(name,displayName,types, moves, level, stats);
+        return new Pokemon(name, displayName, types, moves, level, stats);
     }
 
-    public static Pokemon getEevee(){
+    public static Pokemon getEevee() {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "EEVEE";
         String displayName = "Eevee";
@@ -91,10 +90,10 @@ public class PokemonFactory {
         stats.put(Stat.SPECIAL_ATTACK, 45);
         stats.put(Stat.SPECIAL_DEFENSE, 65);
         stats.put(Stat.SPEED, 55);
-        return new Pokemon(name,displayName,types, moves, level, stats);
+        return new Pokemon(name, displayName, types, moves, level, stats);
     }
 
-    public static Pokemon getMewtwo(){
+    public static Pokemon getMewtwo() {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "MEWTWO";
         String displayName = "Mewtwo";
@@ -108,10 +107,10 @@ public class PokemonFactory {
         stats.put(Stat.SPECIAL_ATTACK, 154);
         stats.put(Stat.SPECIAL_DEFENSE, 90);
         stats.put(Stat.SPEED, 130);
-        return new Pokemon(name,displayName,types, moves, level, stats);
+        return new Pokemon(name, displayName, types, moves, level, stats);
     }
 
-    public static Pokemon getLudicolo(){
+    public static Pokemon getLudicolo() {
         Map<Stat, Integer> stats = Maps.newEnumMap(Stat.class);
         String name = "LUDICOLO";
         String displayName = "Ludicolo";
@@ -125,7 +124,7 @@ public class PokemonFactory {
         stats.put(Stat.SPECIAL_ATTACK, 90);
         stats.put(Stat.SPECIAL_DEFENSE, 100);
         stats.put(Stat.SPEED, 70);
-        return new Pokemon(name,displayName,types, moves, level, stats);
+        return new Pokemon(name, displayName, types, moves, level, stats);
     }
 
 }

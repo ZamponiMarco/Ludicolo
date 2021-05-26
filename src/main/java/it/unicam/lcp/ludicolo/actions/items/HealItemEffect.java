@@ -1,6 +1,6 @@
 package it.unicam.lcp.ludicolo.actions.items;
 
-public class HealItemEffect extends ItemEffect{
+public class HealItemEffect extends ItemEffect {
 
     private final int value;
     private final boolean percentage;

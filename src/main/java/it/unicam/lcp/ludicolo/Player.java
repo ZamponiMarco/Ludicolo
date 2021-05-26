@@ -4,7 +4,6 @@ import it.unicam.lcp.ludicolo.actions.items.Item;
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
 import it.unicam.lcp.ludicolo.pkmn.Stat;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 public class Player {
     private String name;
     private List<Pokemon> pokemonTeam;
-    private Map<Item, Integer> backpack;
+    private final Map<Item, Integer> backpack;
     private boolean setupDone;
 
     public Player(String name, List<Pokemon> pokemonTeam, Map<Item, Integer> backpack) {
@@ -22,6 +21,7 @@ public class Player {
         this.backpack = backpack;
         this.setupDone = false;
     }
+
     public boolean isSetupDone() {
         return setupDone;
     }
@@ -51,9 +51,9 @@ public class Player {
         return backpack.entrySet().stream().filter(entry -> entry.getValue() > 0).collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
     }
 
-    public void consumeItem(Item item){
+    public void consumeItem(Item item) {
         this.backpack.put(item, this.backpack.get(item) - 1);
-        if(this.backpack.get(item) == 0){
+        if (this.backpack.get(item) == 0) {
             this.backpack.remove(item);
         }
     }
@@ -62,7 +62,7 @@ public class Player {
         this.pokemonTeam = pokemonTeam;
     }
 
-    public boolean areAllFainted(){
+    public boolean areAllFainted() {
         int fainted = (int) this.pokemonTeam.stream().filter(pokemon -> pokemon.getStageValue(Stat.LIFE) == 0).count();
         return fainted == this.pokemonTeam.size();
     }
@@ -71,7 +71,7 @@ public class Player {
     public String toString() {
         return "Player{" +
                 "name='" + name + '\'' +
-                ", pokemonTeam=" + pokemonTeam + ", all fainted=" + this.areAllFainted()+
+                ", pokemonTeam=" + pokemonTeam + ", all fainted=" + this.areAllFainted() +
                 '}';
     }
 }

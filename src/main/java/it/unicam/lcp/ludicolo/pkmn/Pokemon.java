@@ -4,10 +4,8 @@ package it.unicam.lcp.ludicolo.pkmn;
 import com.google.common.collect.Maps;
 import it.unicam.lcp.ludicolo.Player;
 import it.unicam.lcp.ludicolo.Type;
-import it.unicam.lcp.ludicolo.Utility;
 import it.unicam.lcp.ludicolo.actions.moves.Move;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -91,11 +89,11 @@ public class Pokemon {
         this.learnedMoves.put(move, Math.max(this.learnedMoves.get(move) - 1, 0));
     }
 
-    public int getPP(Move move){
+    public int getPP(Move move) {
         return this.learnedMoves.get(move);
     }
 
-    public void setPP(Move move, int value){
+    public void setPP(Move move, int value) {
         this.learnedMoves.put(move, value);
     }
 
@@ -176,7 +174,7 @@ public class Pokemon {
                         "\tSTATUS:  %s [%d]\n" +
                         "\tOWNER: %s\n" +
                         "\tMOVES: %s - [%s]\n" +
-                        "\tPROTECTED: %b" , name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
+                        "\tPROTECTED: %b", name, this.level, life.getStage(), life.getBattleValue(), life.getBaseValue(), life.getBattleValue(),
                 stats.get(Stat.ATTACK).getBaseValue(), stats.get(Stat.ATTACK).getBattleValue(), stats.get(Stat.ATTACK).getStage(), stats.get(Stat.DEFENSE).getBaseValue(),
                 stats.get(Stat.DEFENSE).getBattleValue(), stats.get(Stat.DEFENSE).getStage(), stats.get(Stat.SPECIAL_ATTACK).getBaseValue(), stats.get(Stat.SPECIAL_ATTACK).getBattleValue(), stats.get(Stat.SPECIAL_ATTACK).getStage(),
                 stats.get(Stat.SPECIAL_DEFENSE).getBaseValue(), stats.get(Stat.SPECIAL_DEFENSE).getBattleValue(), stats.get(Stat.SPECIAL_DEFENSE).getStage(), stats.get(Stat.SPEED).getBaseValue(),

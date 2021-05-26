@@ -2,10 +2,9 @@ package it.unicam.lcp.ludicolo.actions.moves;
 
 
 import com.google.common.collect.Lists;
-import it.unicam.lcp.ludicolo.actions.items.HealItemEffect;
+import it.unicam.lcp.ludicolo.Type;
 import it.unicam.lcp.ludicolo.pkmn.PokemonStatus;
 import it.unicam.lcp.ludicolo.pkmn.Stat;
-import it.unicam.lcp.ludicolo.Type;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -140,10 +139,11 @@ public enum Move {
         return moveEffectList;
     }
 
-    public boolean containsStageMoveEffect(){
+    public boolean containsStageMoveEffect() {
         return this.moveEffectList.stream().anyMatch(moveEffect -> moveEffect instanceof StageMoveEffect);
     }
-    public boolean containsStatusMoveEffect(){
+
+    public boolean containsStatusMoveEffect() {
         return this.moveEffectList.stream().anyMatch(moveEffect -> moveEffect instanceof StatusMoveEffect);
     }
 

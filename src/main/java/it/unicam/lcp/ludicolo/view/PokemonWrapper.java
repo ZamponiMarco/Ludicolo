@@ -19,6 +19,6 @@ public class PokemonWrapper {
 
         return String.format(
                 "%s\n" +
-                        "Lv.: %d ♥ %d/%d %s" , this.pkmn.getDisplayName(), this.pkmn.getLevel(), this.pkmn.getStageValue(Stat.LIFE), this.pkmn.getBattleStatValue(Stat.LIFE), statusString);
+                        "Lv.: %d ♥ %d/%d %s", this.pkmn.getDisplayName(), this.pkmn.getLevel(), this.pkmn.getStageValue(Stat.LIFE), this.pkmn.getBattleStatValue(Stat.LIFE), statusString);
     }
 }

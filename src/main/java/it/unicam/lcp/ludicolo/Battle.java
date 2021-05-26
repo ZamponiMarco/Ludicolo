@@ -6,7 +6,6 @@ public class Battle {
     private final Player playerTwo;
 
 
-
     private boolean newTurnStart;
 
     public Player getPlayerOne() {
@@ -36,7 +35,7 @@ public class Battle {
     public String toString() {
         return "Battle{" +
                 "playerOne=" + playerOne +
-                ", playerTwo=" + playerTwo+
+                ", playerTwo=" + playerTwo +
                 '}';
     }
 

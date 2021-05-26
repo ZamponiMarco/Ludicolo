@@ -1,7 +1,6 @@
 package it.unicam.lcp.ludicolo.actions;
 
 import it.unicam.lcp.ludicolo.Player;
-import it.unicam.lcp.ludicolo.actions.Action;
 import it.unicam.lcp.ludicolo.pkmn.Pokemon;
 
 public class SwapAction extends Action {

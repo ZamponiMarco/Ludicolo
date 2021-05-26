@@ -75,15 +75,16 @@ public enum Item {
     public String getDescription() {
         return description;
     }
-    public boolean containsHealItemEffect(){
+
+    public boolean containsHealItemEffect() {
         return this.itemEffectList.stream().anyMatch(itemEffect -> itemEffect instanceof HealItemEffect);
     }
 
-    public boolean containsStatusItemEffect(){
+    public boolean containsStatusItemEffect() {
         return this.itemEffectList.stream().anyMatch(itemEffect -> itemEffect instanceof StatusItemEffect);
     }
 
-    public boolean containsRestoreItemEffect(){
+    public boolean containsRestoreItemEffect() {
         return this.itemEffectList.stream().anyMatch(itemEffect -> itemEffect instanceof RestoreItemEffect);
     }
 
